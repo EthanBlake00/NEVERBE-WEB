@@ -9,6 +9,37 @@ interface Props {
   coupon: Coupon;
 }
 
+const getSafeISOString = (val: any): string => {
+  if (!val) return new Date().toISOString();
+  try {
+    if (typeof val === "string") {
+      const parsed = new Date(val);
+      if (!isNaN(parsed.getTime())) {
+        return parsed.toISOString();
+      }
+    }
+    if (typeof val.toDate === "function") {
+      return val.toDate().toISOString();
+    }
+    if (val instanceof Date && !isNaN(val.getTime())) {
+      return val.toISOString();
+    }
+    if (typeof val === "object") {
+      const sec = val.seconds !== undefined ? val.seconds : val._seconds;
+      if (sec !== undefined && typeof sec === "number") {
+        return new Date(sec * 1000).toISOString();
+      }
+    }
+    const fallback = new Date(val);
+    if (!isNaN(fallback.getTime())) {
+      return fallback.toISOString();
+    }
+  } catch (e) {
+    console.error("Error parsing date in CouponCard:", e);
+  }
+  return new Date().toISOString();
+};
+
 /**
  * CouponCard - NEVERBE Performance Style
  * Promotional coupon cards with branded styling and copy interaction.
@@ -54,13 +85,7 @@ const CouponCard: React.FC<Props> = ({ coupon }) => {
               <div className="text-[10px] text-error font-bold flex items-center gap-1 uppercase tracking-wide">
                 <span className="w-1 h-1 bg-error rounded-full animate-pulse" />
                 <CountdownTimer
-                  targetDate={
-                    typeof coupon.endDate === "string"
-                      ? coupon.endDate
-                      : (coupon.endDate as any)?.toDate
-                      ? (coupon.endDate as any).toDate().toISOString()
-                      : new Date(coupon.endDate as any).toISOString()
-                  }
+                  targetDate={getSafeISOString(coupon.endDate)}
                   labels={false}
                   compact={true}
                 />
