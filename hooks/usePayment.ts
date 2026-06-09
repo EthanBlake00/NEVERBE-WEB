@@ -56,6 +56,7 @@ interface UsePaymentOptions {
   paymentMethodId: string;
   paymentMethodName: string;
   paymentFee: number;
+  merchantFee?: number;
 }
 
 interface UsePaymentReturn {
@@ -151,9 +152,6 @@ export const usePayment = (options: UsePaymentOptions): UsePaymentReturn => {
     cooldown: 0,
   });
 
-  /**
-   * Calculate all order totals
-   */
   const calculateTotals = useCallback(
     (
       bagItems: BagItem[],
@@ -166,16 +164,13 @@ export const usePayment = (options: UsePaymentOptions): UsePaymentReturn => {
         shippingFeeOverride !== undefined
           ? shippingFeeOverride
           : calculateShippingCost(bagItems);
-      const paymentFee = calculateFee(options.paymentFee, bagItems);
-      const subtotal = calculateSubTotal(
-        bagItems,
-        options.paymentFee,
-        shippingFee,
-      );
+      const paymentFee = options.paymentFee || 0; // Flat customer fee
+      const rawSubtotal = calculateTotal(bagItems);
+      const subtotal = rawSubtotal - itemDiscount + shippingFee + paymentFee;
       const total = subtotal - couponDisc - promotionDisc;
 
       return {
-        subtotal: subtotal - couponDisc - promotionDisc,
+        subtotal,
         itemDiscount,
         couponDiscount: couponDisc,
         promotionDiscount: promotionDisc,
@@ -213,7 +208,8 @@ export const usePayment = (options: UsePaymentOptions): UsePaymentReturn => {
       shippingFee: totals.shippingFee,
       transactionFeeCharge: calculateTransactionFeeCharge(
         bagItems,
-        options.paymentFee,
+        options.merchantFee || 0,
+        totals.paymentFee,
         totals.shippingFee,
       ),
       paymentStatus: "Pending",

@@ -37,7 +37,8 @@ export const calculateFee = (fee: number, items: BagItem[]) => {
 
 export const calculateTransactionFeeCharge = (
   items: BagItem[],
-  fee: number,
+  merchantFeePercent: number,
+  flatCustomerFee: number,
   shippingOverride?: number,
 ) => {
   const shipping =
@@ -47,9 +48,9 @@ export const calculateTransactionFeeCharge = (
   const total =
     calculateTotal(items) -
     calculateTotalDiscount(items) +
-    calculateFee(fee, items) +
+    flatCustomerFee +
     shipping;
-  const transactionFee = (total * (fee / 100)).toFixed(2);
+  const transactionFee = (total * (merchantFeePercent / 100)).toFixed(2);
   return parseFloat(transactionFee);
 };
 

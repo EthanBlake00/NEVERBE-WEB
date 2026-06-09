@@ -9,6 +9,7 @@ interface PaymentOptionsProps {
   setPaymentType: React.Dispatch<React.SetStateAction<string>>;
   setPaymentTypeId: React.Dispatch<React.SetStateAction<string>>;
   setPaymentFee: React.Dispatch<React.SetStateAction<number>>;
+  setMerchantFee?: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const PaymentOptions: React.FC<PaymentOptionsProps> = ({
@@ -17,17 +18,20 @@ const PaymentOptions: React.FC<PaymentOptionsProps> = ({
   setPaymentType,
   setPaymentTypeId,
   setPaymentFee,
+  setMerchantFee,
 }) => {
   const handleSelect = (option: PaymentMethod) => {
     setPaymentType(option.name);
     setPaymentTypeId(option.paymentId);
-    setPaymentFee(option.fee);
+    setPaymentFee(option.customerFee || 0);
+    if (setMerchantFee) setMerchantFee(option.fee || 0);
   };
 
   return (
     <div className="flex flex-col gap-3">
       {paymentOptions.map((option) => {
         const isSelected = option.name === paymentType;
+        const hasFee = (option.customerFee || 0) > 0;
 
         return (
           <div
@@ -61,16 +65,27 @@ const PaymentOptions: React.FC<PaymentOptionsProps> = ({
 
               <div className="flex-1">
                 <div className="flex justify-between items-center w-full">
-                  <p
-                    className={`text-sm font-display font-black uppercase tracking-wider ${
-                      isSelected ? "text-primary-dark" : "text-primary-dark"
-                    }`}
-                  >
-                    {option.name}
-                  </p>
+                  <div className="flex items-center gap-3">
+                    {option.imageUrl && (
+                      <div className="relative w-8 h-8 rounded-md overflow-hidden bg-white border border-gray-100 flex items-center justify-center p-0.5 shrink-0 shadow-sm">
+                        <img
+                          src={option.imageUrl}
+                          alt={option.name}
+                          className="w-full h-full object-contain"
+                        />
+                      </div>
+                    )}
+                    <p
+                      className={`text-sm font-display font-black uppercase tracking-wider ${
+                        isSelected ? "text-primary-dark" : "text-primary-dark"
+                      }`}
+                    >
+                      {option.name}
+                    </p>
+                  </div>
 
                   {/* Fee Indicator Tag */}
-                  {option.fee > 0 ? (
+                  {hasFee ? (
                     <span
                       className={`
                         text-[10px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest
@@ -81,7 +96,7 @@ const PaymentOptions: React.FC<PaymentOptionsProps> = ({
                         }
                       `}
                     >
-                      +Rs.{option.fee}%
+                      +Rs.{option.customerFee}
                     </span>
                   ) : (
                     <span

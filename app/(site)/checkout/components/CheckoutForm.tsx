@@ -76,6 +76,7 @@ const CheckoutForm = () => {
   const [paymentType, setPaymentType] = useState<string>("");
   const [paymentTypeId, setPaymentTypeId] = useState<string>("");
   const [paymentFee, setPaymentFee] = useState<number>(0);
+  const [merchantFee, setMerchantFee] = useState<number>(0);
   const [shippingSameAsBilling, setShippingSameAsBilling] = useState(true);
   const [saveAddress, setSaveAddress] = useState(true);
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
@@ -161,6 +162,7 @@ const CheckoutForm = () => {
     paymentMethodId: paymentTypeId,
     paymentMethodName: paymentType,
     paymentFee: paymentFee,
+    merchantFee: merchantFee,
   });
 
   const [otp, setOtp] = useState("");
@@ -334,6 +336,7 @@ const CheckoutForm = () => {
               paymentType={paymentType || ""}
               setPaymentTypeId={setPaymentTypeId}
               setPaymentFee={setPaymentFee}
+              setMerchantFee={setMerchantFee}
               selectedPaymentFee={paymentFee}
               shippingCost={shippingCost}
             />

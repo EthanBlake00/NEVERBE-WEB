@@ -36,6 +36,7 @@ interface PaymentDetailsProps {
   setPaymentType: React.Dispatch<React.SetStateAction<string>>;
   setPaymentTypeId: React.Dispatch<React.SetStateAction<string>>;
   setPaymentFee: React.Dispatch<React.SetStateAction<number>>;
+  setMerchantFee?: React.Dispatch<React.SetStateAction<number>>;
   selectedPaymentFee: number;
   shippingCost: number;
 }
@@ -111,6 +112,7 @@ const PaymentDetails: React.FC<PaymentDetailsProps> = ({
   setPaymentType,
   setPaymentTypeId,
   setPaymentFee,
+  setMerchantFee,
   selectedPaymentFee,
   shippingCost,
 }) => {
@@ -168,7 +170,8 @@ const PaymentDetails: React.FC<PaymentDetailsProps> = ({
           if (methods.length > 0 && !paymentType) {
             setPaymentType(methods[0].name);
             setPaymentTypeId(methods[0].paymentId);
-            setPaymentFee(methods[0].fee);
+            setPaymentFee(methods[0].customerFee || 0);
+            if (setMerchantFee) setMerchantFee(methods[0].fee || 0);
           }
         }
       } catch (e) {
@@ -182,7 +185,7 @@ const PaymentDetails: React.FC<PaymentDetailsProps> = ({
 
   // Calculations
   const itemDiscount = calculateTotalDiscount(bagItems);
-  const fee = calculateFee(selectedPaymentFee, bagItems);
+  const fee = selectedPaymentFee;
   const rawSubTotal = calculateTotal(bagItems);
 
   // Reconstruct total with dynamic shipping
@@ -275,6 +278,7 @@ const PaymentDetails: React.FC<PaymentDetailsProps> = ({
               setPaymentType={setPaymentType}
               setPaymentTypeId={setPaymentTypeId}
               setPaymentFee={setPaymentFee}
+              setMerchantFee={setMerchantFee}
             />
           )}
         </div>
