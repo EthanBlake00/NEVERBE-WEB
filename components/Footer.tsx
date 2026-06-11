@@ -394,6 +394,25 @@ const Footer = ({ footerNav = [], socialLinks = [] }: FooterProps) => {
             >
               © {new Date().getFullYear()} NEVERBE, INC.
             </Text>
+            <Text
+              style={{
+                fontSize: 10,
+                fontWeight: 800,
+                textTransform: "uppercase",
+                letterSpacing: "0.15em",
+                color: "var(--color-primary-dark)",
+              }}
+            >
+              | Developed by{" "}
+              <a
+                href="https://vx9studio.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-accent transition-colors underline"
+              >
+                VX9Studio
+              </a>
+            </Text>
           </Flex>
 
           <Flex
