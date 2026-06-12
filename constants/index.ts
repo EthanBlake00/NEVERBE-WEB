@@ -155,7 +155,7 @@ export const shippingReturnPolicy = [
   {
     title: "Return Eligibility",
     description:
-      "We accept returns for unworn, unused items with their original packaging intact. Accessories, such as socks and insoles, are final sale and cannot be returned or exchanged. To be eligible for a return, please initiate the process within 7 days of receiving your order.",
+      "We accept returns and exchanges for unworn, unused items with their original packaging and tags intact. Accessories, such as socks and insoles, are final sale and cannot be returned or exchanged. To be eligible for a return or exchange, please initiate the process within 7 days of receiving your order.",
   },
   {
     title: "Initiating a Return",
@@ -165,12 +165,12 @@ export const shippingReturnPolicy = [
   {
     title: "Return Process",
     description:
-      "Once we receive your returned item and inspect it for any damage or signs of wear, we will process your request. Exchanges are subject to the availability of the requested size or color. If you opt for a refund, it will be issued to your original payment method. Please note that it may take up to 10 working days for the refund to reflect on your bank statement.",
+      "Once we receive your returned item and inspect it for any damage or signs of wear, we will process your request. Exchanges are subject to the availability of the requested size or color. Please note that NEVERBE does not offer cash refunds for change of mind or size issues; instead, we offer size/product exchanges or store credit. Cash refunds are only issued in the event of a verified manufacturing defect where a replacement is unavailable.",
   },
   {
     title: "Return Shipping",
     description:
-      "Customers are responsible for return shipping costs unless the return is due to an error on our part (e.g., wrong item sent, defective product). In such cases, we will provide a prepaid shipping label for the return.",
+      "Customers are responsible for return shipping courier fees for size exchanges or change-of-mind returns. NEVERBE will only cover the return shipping costs (or arrange a free courier collection) if the return is due to a manufacturing defect or an error on our part (e.g., wrong item or size sent).",
   },
   {
     title: "Shipping Methods",
@@ -190,7 +190,7 @@ export const shippingReturnPolicy = [
   {
     title: "Order Tracking",
     description:
-      "Once your order has been shipped, you will receive a shipping confirmation text message with a tracking number. You can use this tracking number to monitor the status of your delivery online.",
+      "Once your order has been shipped, you will receive a shipping confirmation text message (SMS) with a tracking number. You can use this tracking number to monitor the status of your delivery online.",
   },
   {
     title: "Shipping Restrictions",
@@ -244,7 +244,6 @@ export const privacyPolicy = {
       - First name and last name
       - Phone number
       - Address, Province, ZIP/Postal code, City/District
-      - National ID Card or Passport Number
       - Cookies and Usage Data
       - IP Address`,
       usageData: `We may also collect information how the Service is accessed and used (“Usage Data”). This Usage Data may include information such as your computer’s Internet Protocol address (e.g. IP address), browser type, browser version, the pages of our Service that you visit, the time and date of your visit, the time spent on those pages, unique device identifiers and other diagnostic data.`,
