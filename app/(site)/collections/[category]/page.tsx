@@ -1,5 +1,5 @@
 import { cache } from "react";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getProductsByCategory } from "@/actions/productAction";
@@ -34,9 +34,24 @@ export async function generateMetadata(context: {
   params: Promise<{ category: string }>;
 }): Promise<Metadata> {
   const params = await context.params;
-  const mapping = getCategoryBySlug(params.category);
+  const decodedCategory = decodeURIComponent(params.category);
+  const mapping = getCategoryBySlug(decodedCategory);
 
   if (!mapping) {
+    const normalized = decodedCategory.toLowerCase().trim();
+    const match = CATEGORY_MAPPINGS.find(
+      (c) =>
+        c.label.toLowerCase() === normalized ||
+        c.slug.replace(/-/g, " ") === normalized ||
+        c.slug === normalized.replace(/\s+/g, "-")
+    );
+    if (match) {
+      return {
+        alternates: {
+          canonical: `https://neverbe.lk/collections/${match.slug}`,
+        },
+      };
+    }
     return {
       title: "Category Not Found | NEVERBE",
       description: "The requested category could not be found.",
@@ -93,9 +108,22 @@ const CategoryPage = async (context: {
   params: Promise<{ category: string }>;
 }) => {
   const params = await context.params;
-  const mapping = getCategoryBySlug(params.category);
+  const decodedCategory = decodeURIComponent(params.category);
+  const mapping = getCategoryBySlug(decodedCategory);
 
-  if (!mapping) return notFound();
+  if (!mapping) {
+    const normalized = decodedCategory.toLowerCase().trim();
+    const match = CATEGORY_MAPPINGS.find(
+      (c) =>
+        c.label.toLowerCase() === normalized ||
+        c.slug.replace(/-/g, " ") === normalized ||
+        c.slug === normalized.replace(/\s+/g, "-")
+    );
+    if (match) {
+      permanentRedirect(`/collections/${match.slug}`);
+    }
+    return notFound();
+  }
 
   const items = await getProductsForCategory(mapping.label);
   const productList = items?.dataList || [];

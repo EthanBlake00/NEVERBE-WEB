@@ -1,4 +1,5 @@
 import axiosInstance from "./axiosInstance";
+import { categoryLabelToSlug } from "@/utils/categorySlug";
 
 export const getProducts = async (params: any = {}) => {
   try {
@@ -108,7 +109,7 @@ export const getCategoriesForSitemap = async () => {
           c.label && c.label !== "undefined" && String(c.label).trim() !== "",
       )
       .map((c: any) => ({
-        url: `${baseUrl}/collections/products?category=${encodeURIComponent(c.label)}`,
+        url: `${baseUrl}/collections/${categoryLabelToSlug(c.label)}`,
         priority: 0.7,
         lastModified: new Date(),
         changeFrequency: "weekly",

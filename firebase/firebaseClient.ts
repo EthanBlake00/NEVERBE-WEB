@@ -19,7 +19,8 @@ const clientApp = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 export const auth = getAuth(clientApp);
 export const db = getFirestore(clientApp, "default");
 
-let analytics;
+let analytics: any;
+
 isSupported()
   .then((supported) => {
     if (supported) {
@@ -30,6 +31,8 @@ isSupported()
     console.error("Analytics not supported:", error);
   });
 
+
+export const getFirebaseAnalytics = () => analytics;
 export const signUser = async () => {
   let user = await signInAnonymously(auth);
   console.log("User Signed In: ", user.user.uid);

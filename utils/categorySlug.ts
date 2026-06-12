@@ -148,6 +148,82 @@ export const CATEGORY_MAPPINGS: CategoryMapping[] = [
     h1: "Accessories",
     subtitle: "Complete your look with premium accessories.",
   },
+  {
+    slug: "casual-shoes",
+    label: "Casual Shoes",
+    title: "Casual Shoes Sri Lanka | Buy Casual Footwear Online - NEVERBE",
+    description:
+      "Shop casual shoes in Sri Lanka at NEVERBE. Premium quality men's and women's casual footwear, loafers, and daily wear with Cash on Delivery island-wide.",
+    keywords: [
+      "casual shoes sri lanka",
+      "buy casual shoes online",
+      "mens casual shoes sri lanka",
+      "casual footwear colombo",
+    ],
+    h1: "Casual Shoes",
+    subtitle: "Everyday comfort and relaxed style footwear.",
+  },
+  {
+    slug: "chunky-shoes",
+    label: "Chunky Shoes",
+    title: "Chunky Shoes Sri Lanka | Chunky Sneakers Online - NEVERBE",
+    description:
+      "Shop the best chunky shoes and chunky sneakers in Sri Lanka at NEVERBE. Premium quality ladies chunky sneakers and dad shoes with Cash on Delivery island-wide.",
+    keywords: [
+      "chunky shoes sri lanka",
+      "ladies chunky shoes",
+      "chunky shoes women",
+      "chunky shoes price in sri lanka",
+      "chunky sneakers colombo",
+    ],
+    h1: "Chunky Shoes",
+    subtitle: "Make a statement with bold, retro-inspired chunky footwear.",
+  },
+  {
+    slug: "formal-shoes",
+    label: "Formal Shoes",
+    title: "Formal Shoes Sri Lanka | Buy Men's Dress Shoes - NEVERBE",
+    description:
+      "Shop premium formal shoes in Sri Lanka at NEVERBE. High-quality dress shoes, oxford shoes, and formal loafers with Cash on Delivery island-wide.",
+    keywords: [
+      "formal shoes sri lanka",
+      "buy formal shoes online",
+      "mens formal shoes colombo",
+      "dress shoes sri lanka",
+    ],
+    h1: "Formal Shoes",
+    subtitle: "Sophisticated formal footwear for special occasions and office wear.",
+  },
+  {
+    slug: "sports-shoes",
+    label: "Sports Shoes",
+    title: "Sports Shoes Sri Lanka | Athletic & Gym Footwear - NEVERBE",
+    description:
+      "Shop sports shoes in Sri Lanka at NEVERBE. High-quality athletic footwear, training shoes, and gym sneakers with Cash on Delivery island-wide.",
+    keywords: [
+      "sports shoes sri lanka",
+      "athletic shoes colombo",
+      "gym shoes sri lanka",
+      "training sneakers online",
+    ],
+    h1: "Sports Shoes",
+    subtitle: "Designed for peak performance, training, and athletic activities.",
+  },
+  {
+    slug: "outdoor-hiking-shoes",
+    label: "Outdoor & Hiking Shoes",
+    title: "Hiking & Outdoor Shoes Sri Lanka | Trail Footwear - NEVERBE",
+    description:
+      "Shop outdoor & hiking shoes in Sri Lanka at NEVERBE. Durable, high-traction trekking and trail footwear with Cash on Delivery island-wide.",
+    keywords: [
+      "hiking shoes sri lanka",
+      "outdoor shoes colombo",
+      "trekking shoes sri lanka",
+      "trail running shoes",
+    ],
+    h1: "Outdoor & Hiking Shoes",
+    subtitle: "Rugged and durable footwear built for adventure and hiking trails.",
+  },
 ];
 
 /**

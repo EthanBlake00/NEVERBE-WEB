@@ -2,6 +2,8 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Roboto_Mono, Inter, Plus_Jakarta_Sans } from "next/font/google";
 import { WebVitals } from "@/components/WebVitals";
+import { Suspense } from "react";
+import AnalyticsTracker from "@/app/(site)/components/AnalyticsTracker";
 
 export const metadata: Metadata = {
   title: {
@@ -288,6 +290,9 @@ export default function RootLayout({
               >
                 <main className="flex-1">{children}</main>
                 <WebVitals />
+                <Suspense fallback={null}>
+                  <AnalyticsTracker />
+                </Suspense>
               </ConfigProvider>
             </AntdRegistry>
           </AuthProvider>

@@ -9,13 +9,5 @@
       "firebase-debug.*.log",
       "functions"
     ]
-  },
-  "redirects": [
-    {
-      "source": "*",
-      "glob": "**",
-      "destination": "https://neverbe.lk",
-      "type": 301
-    }
-  ]
+  }
 }
