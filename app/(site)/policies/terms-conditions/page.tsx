@@ -8,13 +8,13 @@ export const metadata: Metadata = {
   keywords:
     "NEVERBE, terms and conditions, website rules, online shopping Sri Lanka, nike premium, adidas premium, sneakers Sri Lanka",
   alternates: {
-    canonical: "https://neverbe.lk/policies/terms-and-conditions",
+    canonical: "https://neverbe.lk/policies/terms-conditions",
   },
   openGraph: {
     title: "Terms & Conditions - NEVERBE Sri Lanka",
     description:
       "Read NEVERBE's Terms & Conditions outlining the rules and guidelines for using our website and purchasing our products.",
-    url: "https://neverbe.lk/policies/terms-and-conditions",
+    url: "https://neverbe.lk/policies/terms-conditions",
     siteName: "NEVERBE",
     type: "website",
     locale: "en_LK",
@@ -55,7 +55,7 @@ const Page = () => {
       name: "Terms & Conditions",
       description:
         "NEVERBE Terms & Conditions outlining the rules and guidelines for using our website and purchasing our products.",
-      url: "https://neverbe.lk/policies/terms-and-conditions",
+      url: "https://neverbe.lk/policies/terms-conditions",
     },
     {
       "@context": "https://schema.org",
