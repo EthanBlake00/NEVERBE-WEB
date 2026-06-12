@@ -189,6 +189,20 @@ export default function RootLayout({
 
   return (
     <html lang="en" className="bg-white text-primary-dark">
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              if (typeof window !== 'undefined' && window.location.hostname.includes('dev.neverbe')) {
+                var meta = document.createElement('meta');
+                meta.name = 'robots';
+                meta.content = 'noindex, nofollow';
+                document.head.appendChild(meta);
+              }
+            `,
+          }}
+        />
+      </head>
       <body
         className={`${mono.variable} ${inter.variable} ${plusJakartaSans.variable} antialiased min-h-screen flex flex-col font-sans`}
       >
