@@ -148,6 +148,7 @@ const CategoryPage = async (context: {
                 name: product?.name,
                 image: product?.thumbnail?.url,
                 url: `https://neverbe.lk/collections/products/${product?.id}`,
+                description: product?.description || `Shop ${product?.name} online in Sri Lanka at NEVERBE.`,
                 brand: {
                   "@type": "Brand",
                   name: product?.brand || "NEVERBE",
@@ -156,6 +157,7 @@ const CategoryPage = async (context: {
                   "@type": "Offer",
                   priceCurrency: "LKR",
                   price: product?.sellingPrice || "0.00",
+                  priceValidUntil: `${new Date().getFullYear() + 1}-12-31`,
                   availability: product?.inStock
                     ? "https://schema.org/InStock"
                     : "https://schema.org/OutOfStock",
@@ -163,6 +165,41 @@ const CategoryPage = async (context: {
                   seller: {
                     "@type": "Organization",
                     name: "NEVERBE",
+                  },
+                  shippingDetails: {
+                    "@type": "OfferShippingDetails",
+                    shippingDestination: {
+                      "@type": "DefinedRegion",
+                      addressCountry: "LK",
+                    },
+                    shippingRate: {
+                      "@type": "MonetaryAmount",
+                      value: "425.00",
+                      currency: "LKR",
+                    },
+                    deliveryTime: {
+                      "@type": "ShippingDeliveryTime",
+                      handlingTime: {
+                        "@type": "QuantitativeValue",
+                        minValue: 1,
+                        maxValue: 2,
+                        unitCode: "DAY",
+                      },
+                      transitTime: {
+                        "@type": "QuantitativeValue",
+                        minValue: 1,
+                        maxValue: 3,
+                        unitCode: "DAY",
+                      },
+                    },
+                  },
+                  hasMerchantReturnPolicy: {
+                    "@type": "MerchantReturnPolicy",
+                    applicableCountry: "LK",
+                    returnPolicyCategory: "https://schema.org/MerchantReturnFiniteReturnWindow",
+                    merchantReturnDays: 7,
+                    returnMethod: "https://schema.org/ReturnByMail",
+                    returnFees: "https://schema.org/ReturnFeesCustomerPaying",
                   },
                 },
               },

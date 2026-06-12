@@ -155,7 +155,7 @@ export const shippingReturnPolicy = [
   {
     title: "Return Eligibility",
     description:
-      "We accept returns for unworn, unused items with their original packaging intact. Accessories, such as socks and insoles, are final sale and cannot be returned or exchanged. To be eligible for a return, please initiate the process within 3 days of receiving your order.",
+      "We accept returns for unworn, unused items with their original packaging intact. Accessories, such as socks and insoles, are final sale and cannot be returned or exchanged. To be eligible for a return, please initiate the process within 7 days of receiving your order.",
   },
   {
     title: "Initiating a Return",
@@ -190,7 +190,7 @@ export const shippingReturnPolicy = [
   {
     title: "Order Tracking",
     description:
-      "Once your order has been shipped, you will receive a shipping confirmation email with a tracking number. You can use this tracking number to monitor the status of your delivery online.",
+      "Once your order has been shipped, you will receive a shipping confirmation text message with a tracking number. You can use this tracking number to monitor the status of your delivery online.",
   },
   {
     title: "Shipping Restrictions",
