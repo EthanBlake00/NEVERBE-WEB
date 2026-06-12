@@ -153,6 +153,14 @@ export default function RootLayout({
     },
   };
 
+  const websiteLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "NEVERBE",
+    "alternateName": ["Neverbe", "NEVERBE Shoes & Clothing"],
+    "url": "https://neverbe.lk",
+  };
+
   const localBusinessLd = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
@@ -211,6 +219,10 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteLd) }}
         />
         <script
           type="application/ld+json"
