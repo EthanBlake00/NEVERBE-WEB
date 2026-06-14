@@ -167,7 +167,9 @@ const Page = async (context: { params: Promise<{ itemId: string }> }) => {
       "@type": "Offer",
       url: `https://neverbe.lk/collections/products/${item.id}`,
       priceCurrency: "LKR",
-      price: item.sellingPrice || "0.00",
+      price: item.discount > 0
+        ? Math.round((item.sellingPrice - (item.sellingPrice * item.discount) / 100) / 10) * 10
+        : item.sellingPrice || "0.00",
       priceValidUntil: `${new Date().getFullYear() + 1}-12-31`,
       availability: "https://schema.org/InStock",
       itemCondition: "https://schema.org/NewCondition",

@@ -130,7 +130,9 @@ const OffersPage = async () => {
                 offers: {
                   "@type": "Offer",
                   priceCurrency: "LKR",
-                  price: product?.sellingPrice || "0.00",
+                  price: product?.discount > 0
+                    ? Math.round((product.sellingPrice - (product.sellingPrice * product.discount) / 100) / 10) * 10
+                    : product?.sellingPrice || "0.00",
                   priceValidUntil: `${new Date().getFullYear() + 1}-12-31`,
                   availability: "https://schema.org/InStock",
                   shippingDetails: {
