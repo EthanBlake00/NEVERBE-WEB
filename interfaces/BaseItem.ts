@@ -8,6 +8,7 @@ export interface BaseItem {
   name: string;
   thumbnail: string;
   discount?: number;
+  weight?: number;
 }
 
 export interface OrderItem extends BaseItem {

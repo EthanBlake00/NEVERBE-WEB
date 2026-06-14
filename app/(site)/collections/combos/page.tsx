@@ -136,7 +136,7 @@ const CombosPage = async ({
                   },
                   shippingRate: {
                     "@type": "MonetaryAmount",
-                    value: "425.00",
+                    value: `${(((combo.items?.reduce((sum: number, item: any) => sum + (item.product?.weight || 1000) * (item.quantity || 1), 0) || 1000) / 1000) <= 1.0 ? 425 : 600).toFixed(2)}`,
                     currency: "LKR",
                   },
                   deliveryTime: {

@@ -198,6 +198,7 @@ const QuickViewModal: React.FC<QuickViewModalProps> = ({
         variantName: selectedVariant.variantName,
         category: product.category || "",
         brand: product.brand || "",
+        weight: product.weight || 1000,
       }),
     );
     toast.success(`Added ${qty} item${qty > 1 ? "s" : ""} to bag`);

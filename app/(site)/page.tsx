@@ -187,7 +187,7 @@ const Page = async () => {
           target: {
             "@type": "EntryPoint",
             urlTemplate:
-              "https://neverbe.lk/collections/products?search={search_term_string}",
+              "https://neverbe.lk/search?q={search_term_string}",
           },
           "query-input": "required name=search_term_string",
         },

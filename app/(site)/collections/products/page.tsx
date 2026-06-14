@@ -146,7 +146,7 @@ const Page = async () => {
                     },
                     shippingRate: {
                       "@type": "MonetaryAmount",
-                      value: "425.00",
+                      value: `${((product.weight || 1000) / 1000 <= 1.0 ? 425 : 600).toFixed(2)}`,
                       currency: "LKR",
                     },
                     deliveryTime: {

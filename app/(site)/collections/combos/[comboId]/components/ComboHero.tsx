@@ -146,8 +146,8 @@ const ComboHero: React.FC<ComboHeroProps> = ({ combo }) => {
         const allowedVariants =
           slot.variantMode === "SPECIFIC_VARIANTS" && slot.variantIds?.length
             ? slot.product.variants.filter((v) =>
-                slot.variantIds!.includes(v.variantId),
-              )
+              slot.variantIds!.includes(v.variantId),
+            )
             : slot.product.variants;
 
         const variant = slot.variant || allowedVariants?.[0];
@@ -344,9 +344,8 @@ const ComboHero: React.FC<ComboHeroProps> = ({ combo }) => {
   const pricing = useMemo(() => {
     if (combo.type === "BOGO" && combo.buyQuantity && combo.getQuantity) {
       return {
-        label: `Buy ${combo.buyQuantity}, Get ${combo.getQuantity} ${
-          combo.getDiscount === 100 ? "FREE" : `at ${combo.getDiscount}% off`
-        }`,
+        label: `Buy ${combo.buyQuantity}, Get ${combo.getQuantity} ${combo.getDiscount === 100 ? "FREE" : `at ${combo.getDiscount}% off`
+          }`,
         savings: combo.savings,
       };
     }
@@ -398,7 +397,7 @@ const ComboHero: React.FC<ComboHeroProps> = ({ combo }) => {
               className="w-full h-full"
             >
               {activeProduct?.thumbnail?.url ||
-              activeVariant?.images?.[0]?.url ? (
+                activeVariant?.images?.[0]?.url ? (
                 <Image
                   src={
                     activeVariant?.images?.[0]?.url ||
@@ -448,11 +447,10 @@ const ComboHero: React.FC<ComboHeroProps> = ({ combo }) => {
                 type="text"
                 key={slot.slotId}
                 onClick={() => setActiveSlotIndex(idx)}
-                className={`relative aspect-square bg-surface-2 border-2 rounded-sm transition-all p-0 h-auto ${
-                  isActive
+                className={`relative aspect-square bg-surface-2 border-2 rounded-sm transition-all p-0 h-auto ${isActive
                     ? "border-dark hover:border-dark focus:border-dark"
                     : "border-transparent hover:border-border-primary hover:opacity-100"
-                } ${slot.isFreeUnit ? "ring-2 ring-accent ring-offset-2" : ""}`}
+                  } ${slot.isFreeUnit ? "ring-2 ring-accent ring-offset-2" : ""}`}
               >
                 {slot.product?.thumbnail?.url && (
                   <Image
@@ -499,11 +497,10 @@ const ComboHero: React.FC<ComboHeroProps> = ({ combo }) => {
               <div
                 key={slot.slotId}
                 onClick={() => setActiveSlotIndex(idx)}
-                className={`flex items-center gap-4 p-3 border cursor-pointer transition-colors rounded-sm ${
-                  idx === activeSlotIndex
+                className={`flex items-center gap-4 p-3 border cursor-pointer transition-colors rounded-sm ${idx === activeSlotIndex
                     ? "bg-dark text-inverse border-dark"
                     : "bg-surface text-primary-dark border-default hover:border-border-dark"
-                }`}
+                  }`}
               >
                 <div className="w-10 h-10 relative bg-surface border border-default rounded-sm overflow-hidden">
                   {slot.product?.thumbnail?.url && (
@@ -527,9 +524,8 @@ const ComboHero: React.FC<ComboHeroProps> = ({ combo }) => {
                     )}
                   </div>
                   <p
-                    className={`text-[10px] uppercase font-medium ${
-                      idx === activeSlotIndex ? "text-muted" : "text-muted"
-                    }`}
+                    className={`text-[10px] uppercase font-medium ${idx === activeSlotIndex ? "text-muted" : "text-muted"
+                      }`}
                   >
                     {selections[slot.slotId]?.isValid
                       ? `Selected: ${selections[slot.slotId].size}`
@@ -598,11 +594,10 @@ const ComboHero: React.FC<ComboHeroProps> = ({ combo }) => {
           {/* Active Slot Controller */}
           {activeSlot && activeProduct && (
             <div
-              className={`border p-5 rounded-sm ${
-                activeSlot.isFreeUnit
+              className={`border p-5 rounded-sm ${activeSlot.isFreeUnit
                   ? "border-accent bg-accent/5"
                   : "border-default bg-surface"
-              }`}
+                }`}
             >
               <div className="flex justify-between items-start mb-4">
                 <div>
@@ -617,10 +612,10 @@ const ComboHero: React.FC<ComboHeroProps> = ({ combo }) => {
                 {(() => {
                   const allowedVariants =
                     activeSlot.variantMode === "SPECIFIC_VARIANTS" &&
-                    activeSlot.variantIds?.length
+                      activeSlot.variantIds?.length
                       ? activeProduct.variants.filter((v) =>
-                          activeSlot.variantIds!.includes(v.variantId),
-                        )
+                        activeSlot.variantIds!.includes(v.variantId),
+                      )
                       : activeProduct.variants;
 
                   if (allowedVariants.length <= 1) return null;
@@ -634,11 +629,10 @@ const ComboHero: React.FC<ComboHeroProps> = ({ combo }) => {
                           onClick={() =>
                             handleVariantSelect(activeSlot.slotId, v.variantId)
                           }
-                          className={`w-10 h-10 border-2 rounded-sm overflow-hidden p-0 hover:bg-surface-2 focus:bg-surface-2 ${
-                            activeSelection?.variantId === v.variantId
+                          className={`w-10 h-10 border-2 rounded-sm overflow-hidden p-0 hover:bg-surface-2 focus:bg-surface-2 ${activeSelection?.variantId === v.variantId
                               ? "border-dark hover:border-dark focus:border-dark"
                               : "border-default"
-                          }`}
+                            }`}
                         >
                           <Image
                             src={v.images?.[0]?.url || ""}
@@ -726,11 +720,10 @@ const ComboHero: React.FC<ComboHeroProps> = ({ combo }) => {
             <div
               className="bg-accent h-1 transition-all duration-300"
               style={{
-                width: `${
-                  (slots.filter((s) => selections[s.slotId]?.isValid).length /
+                width: `${(slots.filter((s) => selections[s.slotId]?.isValid).length /
                     slots.length) *
                   100
-                }%`,
+                  }%`,
               }}
             />
           </div>

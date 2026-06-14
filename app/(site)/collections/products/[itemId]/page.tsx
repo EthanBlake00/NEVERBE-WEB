@@ -185,7 +185,7 @@ const Page = async (context: { params: Promise<{ itemId: string }> }) => {
         },
         shippingRate: {
           "@type": "MonetaryAmount",
-          value: "425.00",
+          value: `${((item.weight || 1000) / 1000 <= 1.0 ? 425 : 600).toFixed(2)}`,
           currency: "LKR",
         },
         deliveryTime: {

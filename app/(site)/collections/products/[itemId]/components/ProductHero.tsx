@@ -212,6 +212,7 @@ const ProductHero = ({ item }: { item: Product }) => {
         maxQuantity: 10,
         category: item.category || "",
         brand: item.brand || "",
+        weight: item.weight || 1000,
       } as any),
     );
     toast.success(`Added ${qty} item${qty > 1 ? "s" : ""} to bag`);
