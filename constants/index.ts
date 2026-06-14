@@ -128,7 +128,7 @@ export const termsAndConditions = [
   {
     title: "Intellectual Property",
     description:
-      "All content on this website, including but not limited to text, images, logos, and graphics, is the property of NEVERBE and is protected by copyright and other intellectual property laws. Any use, reproduction, or distribution of this content without our express written consent is strictly prohibited. Please note that some of the images used on our website are sourced from free image platforms and remain the intellectual property of their respective owners. These images are used in compliance with the licenses provided by their creators. If you believe your content has been used improperly, please contact us to resolve the issue.",
+      "All content on this website, including but not limited to text, images, logos, and graphics, is the property of Neverbe and is protected by copyright and other intellectual property laws. Any use, reproduction, or distribution of this content without our express written consent is strictly prohibited. Please note that some of the images used on our website are sourced from free image platforms and remain the intellectual property of their respective owners. These images are used in compliance with the licenses provided by their creators. If you believe your content has been used improperly, please contact us to resolve the issue.",
   },
   {
     title: "Product Information",
@@ -138,12 +138,12 @@ export const termsAndConditions = [
   {
     title: "Limitation of Liability",
     description:
-      "NEVERBE shall not be held liable for any direct, indirect, incidental, special, or consequential damages that arise out of or are in any way connected to the use of our website or the purchase of products through our website. This includes, but is not limited to, any errors, omissions, or inaccuracies in the content or products available on our website.",
+      "Neverbe shall not be held liable for any direct, indirect, incidental, special, or consequential damages that arise out of or are in any way connected to the use of our website or the purchase of products through our website. This includes, but is not limited to, any errors, omissions, or inaccuracies in the content or products available on our website.",
   },
   {
     title: "Use of Free Images",
     description:
-      "Some of the images displayed on our website are sourced from free image websites and are used in accordance with the relevant licenses. NEVERBE respects the rights of content creators and ensures that such materials are used appropriately. If you believe that an image has been misused, please contact us immediately.",
+      "Some of the images displayed on our website are sourced from free image websites and are used in accordance with the relevant licenses. Neverbe respects the rights of content creators and ensures that such materials are used appropriately. If you believe that an image has been misused, please contact us immediately.",
   },
   {
     title: "Governing Law",
@@ -165,12 +165,12 @@ export const shippingReturnPolicy = [
   {
     title: "Return Process",
     description:
-      "Once we receive your returned item and inspect it for any damage or signs of wear, we will process your request. Exchanges are subject to the availability of the requested size or color. Please note that NEVERBE does not offer cash refunds for change of mind or size issues; instead, we offer size/product exchanges or store credit. Cash refunds are only issued in the event of a verified manufacturing defect where a replacement is unavailable.",
+      "Once we receive your returned item and inspect it for any damage or signs of wear, we will process your request. Exchanges are subject to the availability of the requested size or color. Please note that Neverbe does not offer cash refunds for change of mind or size issues; instead, we offer size/product exchanges or store credit. Cash refunds are only issued in the event of a verified manufacturing defect where a replacement is unavailable.",
   },
   {
     title: "Return Shipping",
     description:
-      "Customers are responsible for return shipping courier fees for size exchanges or change-of-mind returns. NEVERBE will only cover the return shipping costs (or arrange a free courier collection) if the return is due to a manufacturing defect or an error on our part (e.g., wrong item or size sent).",
+      "Customers are responsible for return shipping courier fees for size exchanges or change-of-mind returns. Neverbe will only cover the return shipping costs (or arrange a free courier collection) if the return is due to a manufacturing defect or an error on our part (e.g., wrong item or size sent).",
   },
   {
     title: "Shipping Methods",
@@ -229,7 +229,7 @@ export const informationLinks: FooterLink[] = [
 export const privacyPolicy = {
   company: "Watch Line",
   website: "https://neverbe.lk",
-  serviceName: "NEVERBE",
+  serviceName: "Neverbe",
   lastUpdated: "2024-10-04",
   sections: {
     intro: `Watch Line (“us”, “we”, or “our”) operates the https://neverbe.lk website (the “Service”).
@@ -268,7 +268,7 @@ export const privacyPolicy = {
     disclosureOfData: {
       legalRequirements: [
         "To comply with a legal obligation",
-        "To protect and defend the rights or property of NEVERBE",
+        "To protect and defend the rights or property of Neverbe",
         "To prevent or investigate possible wrongdoing in connection with the Service",
         "To protect the personal safety of users of the Service or the public",
         "To protect against legal liability",

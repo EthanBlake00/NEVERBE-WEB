@@ -2,20 +2,20 @@ import { Metadata } from "next";
 import ShippingReturnPolicyClient from "./components/ShippingReturnPolicyClient";
 
 export const metadata: Metadata = {
-  title: "Shipping & Return Policy - NEVERBE Sri Lanka",
+  title: "Shipping & Return Policy - Neverbe Sri Lanka",
   description:
-    "Read NEVERBE's shipping & return policy outlining how we manage shipping and returns. Fast delivery and easy returns across Sri Lanka.",
+    "Read Neverbe's shipping & return policy outlining how we manage shipping and returns. Fast delivery and easy returns across Sri Lanka.",
   keywords:
-    "NEVERBE, shipping policy, return policy, delivery Sri Lanka, online shoe store Sri Lanka, nike premium, adidas premium, sneakers Sri Lanka",
+    "Neverbe, shipping policy, return policy, delivery Sri Lanka, online shoe store Sri Lanka, nike premium, adidas premium, sneakers Sri Lanka",
   alternates: {
     canonical: "https://neverbe.lk/policies/shipping-return-policy",
   },
   openGraph: {
-    title: "Shipping & Return Policy - NEVERBE Sri Lanka",
+    title: "Shipping & Return Policy - Neverbe Sri Lanka",
     description:
-      "Read NEVERBE's shipping & return policy outlining how we manage shipping and returns.",
+      "Read Neverbe's shipping & return policy outlining how we manage shipping and returns.",
     url: "https://neverbe.lk/policies/shipping-return-policy",
-    siteName: "NEVERBE",
+    siteName: "Neverbe",
     type: "website",
     locale: "en_LK",
     images: [
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
         url: "https://neverbe.lk/logo-og.png",
         width: 1200,
         height: 630,
-        alt: "NEVERBE Logo",
+        alt: "Neverbe Logo",
       },
     ],
   },
@@ -31,9 +31,9 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     site: "@neverbe",
     creator: "@neverbe",
-    title: "Shipping & Return Policy - NEVERBE Sri Lanka",
+    title: "Shipping & Return Policy - Neverbe Sri Lanka",
     description:
-      "Read NEVERBE's shipping & return policy outlining how we manage shipping and returns.",
+      "Read Neverbe's shipping & return policy outlining how we manage shipping and returns.",
     images: ["https://neverbe.lk/logo-og.png"],
   },
   robots: {
@@ -54,13 +54,13 @@ const Page = () => {
       "@type": "WebPage",
       name: "Shipping & Return Policy",
       description:
-        "NEVERBE Shipping & Return Policy outlining how we manage shipping and returns.",
+        "Neverbe Shipping & Return Policy outlining how we manage shipping and returns.",
       url: "https://neverbe.lk/policies/shipping-return-policy",
     },
     {
       "@context": "https://schema.org",
       "@type": "Organization",
-      name: "NEVERBE",
+      name: "Neverbe",
       url: "https://neverbe.lk",
       logo: "https://neverbe.lk/logo-og.png",
       contactPoint: {

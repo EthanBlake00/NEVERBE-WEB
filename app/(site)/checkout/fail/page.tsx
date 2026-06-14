@@ -4,7 +4,7 @@ import FailAnimationComponent from "@/app/(site)/checkout/fail/components/FailAn
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Transaction Failed | NEVERBE",
+  title: "Transaction Failed | Neverbe",
 };
 
 const Page = ({

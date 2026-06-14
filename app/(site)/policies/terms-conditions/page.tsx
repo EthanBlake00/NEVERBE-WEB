@@ -2,20 +2,20 @@ import { Metadata } from "next";
 import TermsClient from "./components/TermsClient";
 
 export const metadata: Metadata = {
-  title: "Terms & Conditions - NEVERBE Sri Lanka",
+  title: "Terms & Conditions - Neverbe Sri Lanka",
   description:
-    "Read NEVERBE's Terms & Conditions outlining the rules and guidelines for using our website and purchasing our products in Sri Lanka.",
+    "Read Neverbe's Terms & Conditions outlining the rules and guidelines for using our website and purchasing our products in Sri Lanka.",
   keywords:
-    "NEVERBE, terms and conditions, website rules, online shopping Sri Lanka, nike premium, adidas premium, sneakers Sri Lanka",
+    "Neverbe, terms and conditions, website rules, online shopping Sri Lanka, nike premium, adidas premium, sneakers Sri Lanka",
   alternates: {
     canonical: "https://neverbe.lk/policies/terms-conditions",
   },
   openGraph: {
-    title: "Terms & Conditions - NEVERBE Sri Lanka",
+    title: "Terms & Conditions - Neverbe Sri Lanka",
     description:
-      "Read NEVERBE's Terms & Conditions outlining the rules and guidelines for using our website and purchasing our products.",
+      "Read Neverbe's Terms & Conditions outlining the rules and guidelines for using our website and purchasing our products.",
     url: "https://neverbe.lk/policies/terms-conditions",
-    siteName: "NEVERBE",
+    siteName: "Neverbe",
     type: "website",
     locale: "en_LK",
     images: [
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
         url: "https://neverbe.lk/logo-og.png",
         width: 1200,
         height: 630,
-        alt: "NEVERBE Logo",
+        alt: "Neverbe Logo",
       },
     ],
   },
@@ -31,9 +31,9 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     site: "@neverbe",
     creator: "@neverbe",
-    title: "Terms & Conditions - NEVERBE Sri Lanka",
+    title: "Terms & Conditions - Neverbe Sri Lanka",
     description:
-      "Read NEVERBE's Terms & Conditions outlining the rules and guidelines for using our website and purchasing our products.",
+      "Read Neverbe's Terms & Conditions outlining the rules and guidelines for using our website and purchasing our products.",
     images: ["https://neverbe.lk/logo-og.png"],
   },
   robots: {
@@ -54,13 +54,13 @@ const Page = () => {
       "@type": "WebPage",
       name: "Terms & Conditions",
       description:
-        "NEVERBE Terms & Conditions outlining the rules and guidelines for using our website and purchasing our products.",
+        "Neverbe Terms & Conditions outlining the rules and guidelines for using our website and purchasing our products.",
       url: "https://neverbe.lk/policies/terms-conditions",
     },
     {
       "@context": "https://schema.org",
       "@type": "Organization",
-      name: "NEVERBE",
+      name: "Neverbe",
       url: "https://neverbe.lk",
       logo: "https://neverbe.lk/logo-og.png",
       contactPoint: {

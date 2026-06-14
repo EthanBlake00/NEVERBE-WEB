@@ -162,7 +162,7 @@ const Footer = ({ footerNav = [], socialLinks = [] }: FooterProps) => {
               >
                 <Image
                   src="/logo.png"
-                  alt="NEVERBE"
+                  alt="Neverbe"
                   width={150}
                   height={50}
                   className="object-contain"
@@ -392,7 +392,7 @@ const Footer = ({ footerNav = [], socialLinks = [] }: FooterProps) => {
                 color: "var(--color-primary-dark)",
               }}
             >
-              © {new Date().getFullYear()} NEVERBE, INC.
+              © {new Date().getFullYear()} Neverbe, Inc.
             </Text>
             <Text
               style={{

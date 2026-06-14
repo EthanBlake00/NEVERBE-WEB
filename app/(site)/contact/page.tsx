@@ -5,28 +5,28 @@ import SocialMediaSection from "@/app/(site)/contact/components/SocialMediaSecti
 import MapSection from "@/app/(site)/contact/components/MapSection";
 
 export const metadata: Metadata = {
-  title: "Contact Us - NEVERBE | Shoes & Clothing Sri Lanka",
+  title: "Contact Us - Neverbe | Shoes & Clothing Sri Lanka",
   description:
-    "Get in touch with NEVERBE for inquiries about shoes, clothing & apparel. Contact us via email, WhatsApp, social media, or visit our store in Sri Lanka.",
+    "Get in touch with Neverbe for inquiries about shoes, clothing & apparel. Contact us via email, WhatsApp, social media, or visit our store in Sri Lanka.",
   keywords:
-    "NEVERBE contact, customer service, shoe store sri lanka, clothing store sri lanka, whatsapp, support, inquiries",
+    "Neverbe contact, customer service, shoe store sri lanka, clothing store sri lanka, whatsapp, support, inquiries",
   alternates: {
     canonical: "https://neverbe.lk/contact",
   },
   openGraph: {
-    title: "Contact Us - NEVERBE",
+    title: "Contact Us - Neverbe",
     description:
-      "Reach out to NEVERBE via email, social media, WhatsApp, or visit our store in Sri Lanka.",
+      "Reach out to Neverbe via email, social media, WhatsApp, or visit our store in Sri Lanka.",
     url: "https://neverbe.lk/contact",
     type: "website",
-    siteName: "NEVERBE",
+    siteName: "Neverbe",
     locale: "en_LK",
     images: [
       {
         url: "/main-og.png",
         width: 1200,
         height: 630,
-        alt: "NEVERBE Logo",
+        alt: "Neverbe Logo",
       },
     ],
   },
@@ -34,9 +34,9 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     site: "@neverbe",
     creator: "@neverbe",
-    title: "Contact Us - NEVERBE",
+    title: "Contact Us - Neverbe",
     description:
-      "Reach out to NEVERBE via email, social media, WhatsApp, or visit our store in Sri Lanka.",
+      "Reach out to Neverbe via email, social media, WhatsApp, or visit our store in Sri Lanka.",
     images: ["/main-og.png"],
   },
   robots: {
@@ -73,7 +73,7 @@ const ContactPage = () => {
     {
       "@context": "https://schema.org",
       "@type": "Organization",
-      name: "NEVERBE",
+      name: "Neverbe",
       url: "https://neverbe.lk",
       logo: "/main-og.png",
       contactPoint: {

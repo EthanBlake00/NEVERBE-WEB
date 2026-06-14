@@ -17,16 +17,16 @@ export async function generateMetadata(props: SearchPageProps): Promise<Metadata
   const canonicalUrl = `${WEB_BASE_URL}/search?q=${encodeURIComponent(query)}`;
 
   return {
-    title: query ? `Search results for "${query}" | NEVERBE` : "Search | NEVERBE",
+    title: query ? `Search results for "${query}" | Neverbe` : "Search | Neverbe",
     description: query
-      ? `Browse search results for "${query}" at NEVERBE. Discover our curated collection of premium apparel including linen shirts, trousers, and more.`
-      : "Search for premium apparel and accessories at NEVERBE. Find high-quality linen shirts, casual wear, and luxury gear.",
+      ? `Browse search results for "${query}" at Neverbe. Discover our curated collection of premium apparel including linen shirts, trousers, and more.`
+      : "Search for premium apparel and accessories at Neverbe. Find high-quality linen shirts, casual wear, and luxury gear.",
     alternates: {
       canonical: canonicalUrl,
     },
     openGraph: {
-      title: query ? `Shop "${query}" at NEVERBE` : "Search Products | NEVERBE",
-      description: `Find the best ${query || "premium apparel"} at NEVERBE. Order online for islandwide delivery in Sri Lanka.`,
+      title: query ? `Shop "${query}" at Neverbe` : "Search Products | Neverbe",
+      description: `Find the best ${query || "premium apparel"} at Neverbe. Order online for islandwide delivery in Sri Lanka.`,
       url: canonicalUrl,
       type: "website",
       images: [
@@ -34,7 +34,7 @@ export async function generateMetadata(props: SearchPageProps): Promise<Metadata
           url: "/collections-og.png",
           width: 1200,
           height: 630,
-          alt: "NEVERBE Search",
+          alt: "Neverbe Search",
         },
       ],
     },

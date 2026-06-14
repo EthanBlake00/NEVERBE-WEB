@@ -5,10 +5,10 @@
   Note: This replaces the legacy tailwind.config.js theme section.
   Design tokens are centralized here for consistency.
   
-  NEVERBE Brand Theme - Vibrant Green
+  Neverbe Brand Theme - Vibrant Green
 */
 @theme {
-  /* === BRAND COLORS (NEVERBE Green) === */
+  /* === BRAND COLORS (Neverbe Green) === */
   --color-primary: #2e9e5b;
   --color-primary-50: #eaf5ef;
   --color-primary-100: #cbdfd3;
@@ -196,7 +196,7 @@
     border-color: var(--color-accent);
   }
 
-  /* Accent colors (NEVERBE Green) */
+  /* Accent colors (Neverbe Green) === */
   .bg-accent {
     background-color: var(--color-accent);
   }

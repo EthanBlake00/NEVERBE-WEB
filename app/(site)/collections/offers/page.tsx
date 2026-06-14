@@ -22,9 +22,9 @@ const sectionLabel: React.CSSProperties = {
 };
 
 export const metadata: Metadata = {
-  title: "Exclusive Deals, Coupons & Promotions | NEVERBE Sri Lanka",
+  title: "Exclusive Deals, Coupons & Promotions | Neverbe Sri Lanka",
   description:
-    "Unlock exclusive promotions, seasonal coupons and markdown deals at NEVERBE. Best discounts on sneakers, clothing & apparel in Sri Lanka. Cash on Delivery available.",
+    "Unlock exclusive promotions, seasonal coupons and markdown deals at Neverbe. Best discounts on sneakers, clothing & apparel in Sri Lanka. Cash on Delivery available.",
   alternates: { canonical: "https://neverbe.lk/collections/offers" },
   keywords: [
     "shoe deals sri lanka",
@@ -38,25 +38,25 @@ export const metadata: Metadata = {
     "markdown deals shoes",
   ],
   openGraph: {
-    title: "Deals & Promotions | NEVERBE Sri Lanka",
+    title: "Deals & Promotions | Neverbe Sri Lanka",
     description:
       "Exclusive promotions, coupons and markdown deals on sneakers, clothing & apparel in Sri Lanka.",
     url: "https://neverbe.lk/collections/offers",
     type: "website",
-    siteName: "NEVERBE",
+    siteName: "Neverbe",
     locale: "en_LK",
     images: [
       {
         url: "/offers-og.png",
         width: 1200,
         height: 630,
-        alt: "NEVERBE Offers & Deals - Shoes & Clothing",
+        alt: "Neverbe Offers & Deals - Shoes & Clothing",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Deals & Promotions | NEVERBE",
+    title: "Deals & Promotions | Neverbe",
     description: "Exclusive coupons & markdown deals on sneakers & clothing in Sri Lanka.",
     images: ["/offers-og.png"],
   },
@@ -104,9 +104,9 @@ const OffersPage = async () => {
       },
       {
         "@type": "CollectionPage",
-        name: "Offers & Deals - NEVERBE Sri Lanka",
+        name: "Offers & Deals - Neverbe Sri Lanka",
         description:
-          "Exclusive deals and discounts on premium footwear at NEVERBE.",
+          "Exclusive deals and discounts on premium footwear at Neverbe.",
         url: "https://neverbe.lk/collections/offers",
         inLanguage: "en-LK",
         mainEntity: {
@@ -120,12 +120,16 @@ const OffersPage = async () => {
               item: {
                 "@type": "Product",
                 name: product?.name,
-                image: product?.thumbnail?.url,
+                image: product?.thumbnail?.url
+                  ? (product.thumbnail.url.startsWith("http")
+                      ? product.thumbnail.url
+                      : `https://neverbe.lk${product.thumbnail.url.startsWith("/") ? "" : "/"}${product.thumbnail.url}`)
+                  : "https://neverbe.lk/collections-og.png",
                 url: `https://neverbe.lk/collections/products/${product?.id}`,
-                description: product?.description || `Shop ${product?.name} online in Sri Lanka at NEVERBE.`,
+                description: product?.description || `Shop ${product?.name} online in Sri Lanka at Neverbe.`,
                 brand: {
                   "@type": "Brand",
-                  name: product?.brand || "NEVERBE",
+                  name: product?.brand || "Neverbe",
                 },
                 offers: {
                   "@type": "Offer",
@@ -134,7 +138,9 @@ const OffersPage = async () => {
                     ? Math.round((product.sellingPrice - (product.sellingPrice * product.discount) / 100) / 10) * 10
                     : product?.sellingPrice || "0.00",
                   priceValidUntil: `${new Date().getFullYear() + 1}-12-31`,
-                  availability: "https://schema.org/InStock",
+                  availability: product?.inStock
+                    ? "https://schema.org/InStock"
+                    : "https://schema.org/OutOfStock",
                   shippingDetails: {
                     "@type": "OfferShippingDetails",
                     shippingDestination: {

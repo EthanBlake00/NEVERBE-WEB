@@ -53,38 +53,38 @@ export async function generateMetadata(context: {
       };
     }
     return {
-      title: "Category Not Found | NEVERBE",
+      title: "Category Not Found | Neverbe",
       description: "The requested category could not be found.",
       robots: { index: false, follow: true },
     };
   }
 
   return {
-    title: `${mapping.title} | NEVERBE`,
+    title: `${mapping.title} | Neverbe`,
     description: mapping.description,
     keywords: mapping.keywords,
     alternates: {
       canonical: `https://neverbe.lk/collections/${mapping.slug}`,
     },
     openGraph: {
-      title: `${mapping.title} | NEVERBE`,
+      title: `${mapping.title} | Neverbe`,
       description: mapping.description,
       url: `https://neverbe.lk/collections/${mapping.slug}`,
       type: "website",
-      siteName: "NEVERBE",
+      siteName: "Neverbe",
       locale: "en_LK",
       images: [
         {
           url: "/collections-og.png",
           width: 1200,
           height: 630,
-          alt: `${mapping.h1} - NEVERBE Sri Lanka`,
+          alt: `${mapping.h1} - Neverbe Sri Lanka`,
         },
       ],
     },
     twitter: {
       card: "summary_large_image",
-      title: `${mapping.h1} | NEVERBE Sri Lanka`,
+      title: `${mapping.h1} | Neverbe Sri Lanka`,
       description: mapping.description,
       images: ["/collections-og.png"],
     },
@@ -156,7 +156,7 @@ const CategoryPage = async (context: {
       },
       {
         "@type": "CollectionPage",
-        name: `${mapping.h1} - NEVERBE Sri Lanka`,
+        name: `${mapping.h1} - Neverbe Sri Lanka`,
         description: mapping.description,
         url: `https://neverbe.lk/collections/${mapping.slug}`,
         inLanguage: "en-LK",
@@ -174,12 +174,16 @@ const CategoryPage = async (context: {
               item: {
                 "@type": "Product",
                 name: product?.name,
-                image: product?.thumbnail?.url,
+                image: product?.thumbnail?.url
+                  ? (product.thumbnail.url.startsWith("http")
+                      ? product.thumbnail.url
+                      : `https://neverbe.lk${product.thumbnail.url.startsWith("/") ? "" : "/"}${product.thumbnail.url}`)
+                  : "https://neverbe.lk/collections-og.png",
                 url: `https://neverbe.lk/collections/products/${product?.id}`,
-                description: product?.description || `Shop ${product?.name} online in Sri Lanka at NEVERBE.`,
+                description: product?.description || `Shop ${product?.name} online in Sri Lanka at Neverbe.`,
                 brand: {
                   "@type": "Brand",
-                  name: product?.brand || "NEVERBE",
+                  name: product?.brand || "Neverbe",
                 },
                 offers: {
                   "@type": "Offer",
@@ -194,7 +198,7 @@ const CategoryPage = async (context: {
                   itemCondition: "https://schema.org/NewCondition",
                   seller: {
                     "@type": "Organization",
-                    name: "NEVERBE",
+                    name: "Neverbe",
                   },
                   shippingDetails: {
                     "@type": "OfferShippingDetails",

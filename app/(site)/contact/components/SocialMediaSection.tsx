@@ -10,7 +10,7 @@ const { Title, Text } = Typography;
 const SocialMediaSection = () => {
   const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER;
   const message = encodeURIComponent(
-    "Hello NEVERBE, I’d like to get in touch.",
+    "Hello Neverbe, I’d like to get in touch.",
   );
 
   // Helper to map icons based on URL or logic

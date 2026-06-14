@@ -1,7 +1,7 @@
 {
-  "name": "NEVERBE",
-  "short_name": "NEVERBE",
-  "description": "NEVERBE - Premium Footwear, Clothing & Wearables",
+  "name": "Neverbe",
+  "short_name": "Neverbe",
+  "description": "Neverbe - Premium Footwear, Clothing & Wearables",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",

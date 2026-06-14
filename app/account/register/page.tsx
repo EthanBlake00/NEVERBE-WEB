@@ -78,7 +78,7 @@ const RegisterPage = () => {
         await updateProfile(userCredential.user, {
           displayName: `${values.firstName} ${values.lastName}`.trim(),
         });
-        toast.success("Welcome to NEVERBE");
+        toast.success("Welcome to Neverbe");
       }
       router.push(redirectUrl);
     } catch (err: any) {
@@ -103,7 +103,7 @@ const RegisterPage = () => {
               src="/logo.png"
               width={130}
               height={45}
-              alt="NEVERBE"
+              alt="Neverbe"
               priority
             />
           </Link>

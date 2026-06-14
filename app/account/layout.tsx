@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "My Account | NEVERBE - Manage Your Profile & Orders",
+  title: "My Account | Neverbe - Manage Your Profile & Orders",
   description:
-    "View your order history, manage your addresses, and update your profile details safely and securely on NEVERBE.",
+    "View your order history, manage your addresses, and update your profile details safely and securely on Neverbe.",
   robots: {
     index: false,
     follow: false,

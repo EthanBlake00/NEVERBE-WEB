@@ -98,7 +98,7 @@ const Header = ({ season, mainNav = [] }: HeaderProps) => {
           <Link href="/" className="shrink-0 pl-0 lg:pl-8">
             <Image
               src="/logo.png"
-              alt="NEVERBE"
+              alt="Neverbe"
               width={70}
               height={35}
               className="object-contain transition-transform hover:scale-110 active:scale-95 duration-300"
@@ -222,7 +222,7 @@ const Header = ({ season, mainNav = [] }: HeaderProps) => {
                   >
                     <Image
                       src="/logo.png"
-                      alt="NEVERBE"
+                      alt="Neverbe"
                       width={60}
                       height={24}
                       className="lg:w-[70px]"

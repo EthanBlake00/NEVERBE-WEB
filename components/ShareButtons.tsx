@@ -27,7 +27,7 @@ const ShareButtons: React.FC<ShareButtonsProps> = ({
 
   const shareToWhatsApp = () => {
     const text = encodeURIComponent(
-      `Check out ${title} on NEVERBE!\n${fullUrl}`,
+      `Check out ${title} on Neverbe!\n${fullUrl}`,
     );
     window.open(`https://wa.me/?text=${text}`, "_blank");
   };

@@ -249,7 +249,7 @@ const Menu = ({ mainNav = [] }: { mainNav?: NavigationItem[] }) => {
             margin: 0,
           }}
         >
-          &copy; {new Date().getFullYear()} NEVERBE, INC.
+          &copy; {new Date().getFullYear()} Neverbe, Inc.
         </p>
       </div>
     </Drawer>

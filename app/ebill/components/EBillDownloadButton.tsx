@@ -41,7 +41,7 @@ const EBillDownloadButton: React.FC<EBillDownloadButtonProps> = ({ order }) => {
 
     doc.setFont("helvetica", "bold");
     doc.setFontSize(28);
-    doc.setTextColor(46, 158, 91); // NEVERBE green
+    doc.setTextColor(46, 158, 91); // Neverbe green
     doc.text("INVOICE", 196, 22, { align: "right" });
 
     doc.setFontSize(10);
@@ -138,7 +138,7 @@ const EBillDownloadButton: React.FC<EBillDownloadButtonProps> = ({ order }) => {
 
     doc.setFontSize(8);
     doc.setTextColor(150);
-    doc.text("THANK YOU FOR SHOPPING WITH NEVERBE!", 105, 285, { align: "center" });
+    doc.text("THANK YOU FOR SHOPPING WITH Neverbe!", 105, 285, { align: "center" });
 
     doc.save(`Neverbe-eBill-${orderId}.pdf`);
   };

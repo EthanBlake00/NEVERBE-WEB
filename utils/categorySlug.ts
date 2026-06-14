@@ -24,7 +24,7 @@ export const CATEGORY_MAPPINGS: CategoryMapping[] = [
     label: "Sneakers",
     title: "Sneakers in Sri Lanka | Buy Sneakers Online",
     description:
-      "Shop the best sneakers in Sri Lanka at NEVERBE. Premium quality sneakers for men & women with Cash on Delivery island-wide.",
+      "Shop the best sneakers in Sri Lanka at Neverbe. Premium quality sneakers for men & women with Cash on Delivery island-wide.",
     keywords: [
       "sneakers sri lanka",
       "buy sneakers online",
@@ -41,7 +41,7 @@ export const CATEGORY_MAPPINGS: CategoryMapping[] = [
     label: "Running Shoes",
     title: "Running Shoes in Sri Lanka | Buy Running Shoes Online",
     description:
-      "Shop running shoes in Sri Lanka at NEVERBE. High-performance running footwear for men & women. Cash on Delivery island-wide.",
+      "Shop running shoes in Sri Lanka at Neverbe. High-performance running footwear for men & women. Cash on Delivery island-wide.",
     keywords: [
       "running shoes sri lanka",
       "buy running shoes online",
@@ -57,7 +57,7 @@ export const CATEGORY_MAPPINGS: CategoryMapping[] = [
     label: "Sandals & Slippers & Slides",
     title: "Slides & Sandals in Sri Lanka | Casual Footwear Online",
     description:
-      "Shop slides, sandals & slippers in Sri Lanka at NEVERBE. Comfortable casual footwear for men & women. Cash on Delivery island-wide.",
+      "Shop slides, sandals & slippers in Sri Lanka at Neverbe. Comfortable casual footwear for men & women. Cash on Delivery island-wide.",
     keywords: [
       "slides sri lanka",
       "sandals sri lanka",
@@ -73,10 +73,10 @@ export const CATEGORY_MAPPINGS: CategoryMapping[] = [
     label: "Boots",
     title: "Boots in Sri Lanka | Premium Boots Online",
     description:
-      "Shop premium boots in Sri Lanka at NEVERBE. High-ankle boots, combat boots & casual boots. Cash on Delivery island-wide.",
+      "Shop premium boots in Sri Lanka at Neverbe. High-ankle boots, combat boots & casual boots. Cash on Delivery island-wide.",
     keywords: [
       "boots sri lanka",
-      "high ankle boots sri lanka",
+      "high-ankle boots sri lanka",
       "mens boots sri lanka",
       "combat boots colombo",
     ],
@@ -88,7 +88,7 @@ export const CATEGORY_MAPPINGS: CategoryMapping[] = [
     label: "Clothing",
     title: "Men's Clothing in Sri Lanka | T-Shirts, Hoodies & More",
     description:
-      "Shop men's clothing in Sri Lanka at NEVERBE. T-shirts, hoodies, joggers & casual wear. Premium quality with Cash on Delivery island-wide.",
+      "Shop men's clothing in Sri Lanka at Neverbe. T-shirts, hoodies, joggers & casual wear. Premium quality with Cash on Delivery island-wide.",
     keywords: [
       "mens clothing sri lanka",
       "mens t-shirts sri lanka",
@@ -105,7 +105,7 @@ export const CATEGORY_MAPPINGS: CategoryMapping[] = [
     label: "Activewear",
     title: "Activewear & Sportswear in Sri Lanka | Gym Wear Online",
     description:
-      "Shop activewear & sportswear in Sri Lanka at NEVERBE. Gym wear, workout clothing & performance apparel. Cash on Delivery island-wide.",
+      "Shop activewear & sportswear in Sri Lanka at Neverbe. Gym wear, workout clothing & performance apparel. Cash on Delivery island-wide.",
     keywords: [
       "activewear sri lanka",
       "gym wear sri lanka",
@@ -122,7 +122,7 @@ export const CATEGORY_MAPPINGS: CategoryMapping[] = [
     label: "Sports Apparel",
     title: "Sports Apparel in Sri Lanka | Athletic Clothing Online",
     description:
-      "Shop sports apparel in Sri Lanka at NEVERBE. Athletic clothing for men & women. Premium quality with Cash on Delivery island-wide.",
+      "Shop sports apparel in Sri Lanka at Neverbe. Athletic clothing for men & women. Premium quality with Cash on Delivery island-wide.",
     keywords: [
       "sports apparel sri lanka",
       "athletic clothing sri lanka",
@@ -137,7 +137,7 @@ export const CATEGORY_MAPPINGS: CategoryMapping[] = [
     label: "Accessories",
     title: "Fashion Accessories in Sri Lanka | Bags, Socks & More",
     description:
-      "Shop fashion accessories in Sri Lanka at NEVERBE. Bags, socks, caps & more. Premium quality with Cash on Delivery island-wide.",
+      "Shop fashion accessories in Sri Lanka at Neverbe. Bags, socks, caps & more. Premium quality with Cash on Delivery island-wide.",
     keywords: [
       "fashion accessories sri lanka",
       "bags sri lanka",
@@ -151,9 +151,9 @@ export const CATEGORY_MAPPINGS: CategoryMapping[] = [
   {
     slug: "casual-shoes",
     label: "Casual Shoes",
-    title: "Casual Shoes Sri Lanka | Buy Casual Footwear Online - NEVERBE",
+    title: "Casual Shoes Sri Lanka | Buy Casual Footwear Online - Neverbe",
     description:
-      "Shop casual shoes in Sri Lanka at NEVERBE. Premium quality men's and women's casual footwear, loafers, and daily wear with Cash on Delivery island-wide.",
+      "Shop casual shoes in Sri Lanka at Neverbe. Premium quality men's and women's casual footwear, loafers, and daily wear with Cash on Delivery island-wide.",
     keywords: [
       "casual shoes sri lanka",
       "buy casual shoes online",
@@ -166,9 +166,9 @@ export const CATEGORY_MAPPINGS: CategoryMapping[] = [
   {
     slug: "chunky-shoes",
     label: "Chunky Shoes",
-    title: "Chunky Shoes Sri Lanka | Chunky Sneakers Online - NEVERBE",
+    title: "Chunky Shoes Sri Lanka | Chunky Sneakers Online - Neverbe",
     description:
-      "Shop the best chunky shoes and chunky sneakers in Sri Lanka at NEVERBE. Premium quality ladies chunky sneakers and dad shoes with Cash on Delivery island-wide.",
+      "Shop the best chunky shoes and chunky sneakers in Sri Lanka at Neverbe. Premium quality ladies chunky sneakers and dad shoes with Cash on Delivery island-wide.",
     keywords: [
       "chunky shoes sri lanka",
       "ladies chunky shoes",
@@ -182,9 +182,9 @@ export const CATEGORY_MAPPINGS: CategoryMapping[] = [
   {
     slug: "formal-shoes",
     label: "Formal Shoes",
-    title: "Formal Shoes Sri Lanka | Buy Men's Dress Shoes - NEVERBE",
+    title: "Formal Shoes Sri Lanka | Buy Men's Dress Shoes - Neverbe",
     description:
-      "Shop premium formal shoes in Sri Lanka at NEVERBE. High-quality dress shoes, oxford shoes, and formal loafers with Cash on Delivery island-wide.",
+      "Shop premium formal shoes in Sri Lanka at Neverbe. High-quality dress shoes, oxford shoes, and formal loafers with Cash on Delivery island-wide.",
     keywords: [
       "formal shoes sri lanka",
       "buy formal shoes online",
@@ -197,9 +197,9 @@ export const CATEGORY_MAPPINGS: CategoryMapping[] = [
   {
     slug: "sports-shoes",
     label: "Sports Shoes",
-    title: "Sports Shoes Sri Lanka | Athletic & Gym Footwear - NEVERBE",
+    title: "Sports Shoes Sri Lanka | Athletic & Gym Footwear - Neverbe",
     description:
-      "Shop sports shoes in Sri Lanka at NEVERBE. High-quality athletic footwear, training shoes, and gym sneakers with Cash on Delivery island-wide.",
+      "Shop sports shoes in Sri Lanka at Neverbe. High-quality athletic footwear, training shoes, and gym sneakers with Cash on Delivery island-wide.",
     keywords: [
       "sports shoes sri lanka",
       "athletic shoes colombo",
@@ -212,9 +212,9 @@ export const CATEGORY_MAPPINGS: CategoryMapping[] = [
   {
     slug: "outdoor-hiking-shoes",
     label: "Outdoor & Hiking Shoes",
-    title: "Hiking & Outdoor Shoes Sri Lanka | Trail Footwear - NEVERBE",
+    title: "Hiking & Outdoor Shoes Sri Lanka | Trail Footwear - Neverbe",
     description:
-      "Shop outdoor & hiking shoes in Sri Lanka at NEVERBE. Durable, high-traction trekking and trail footwear with Cash on Delivery island-wide.",
+      "Shop outdoor & hiking shoes in Sri Lanka at Neverbe. Durable, high-traction trekking and trail footwear with Cash on Delivery island-wide.",
     keywords: [
       "hiking shoes sri lanka",
       "outdoor shoes colombo",

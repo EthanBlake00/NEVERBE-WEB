@@ -15,6 +15,12 @@ const getCombo = cache(async (id: string) => {
   }
 });
 
+const getAbsoluteUrl = (url?: string) => {
+  if (!url) return "https://neverbe.lk/logo-og.png";
+  if (url.startsWith("http://") || url.startsWith("https://")) return url;
+  return `https://neverbe.lk${url.startsWith("/") ? "" : "/"}${url}`;
+};
+
 // Dynamic Metadata
 export async function generateMetadata(context: {
   params: Promise<{ comboId: string }>;
@@ -24,7 +30,7 @@ export async function generateMetadata(context: {
 
   if (!combo) {
     return {
-      title: "Deal Not Found | NEVERBE",
+      title: "Deal Not Found | Neverbe",
       description: "The requested combo deal could not be found.",
       robots: { index: false, follow: true },
     };
@@ -33,17 +39,17 @@ export async function generateMetadata(context: {
   const savings = combo.originalPrice - combo.comboPrice;
 
   return {
-    title: `${combo.name} - Save Rs. ${savings} | NEVERBE`,
+    title: `${combo.name} - Save Rs. ${savings} | Neverbe`,
     description:
       combo.description ||
       `Get ${combo.name} bundle and save Rs. ${savings}. Limited time combo deal!`,
     openGraph: {
-      title: `${combo.name} | NEVERBE Combo Deals`,
+      title: `${combo.name} | Neverbe Combo Deals`,
       description: `Save Rs. ${savings} with this exclusive combo deal.`,
       url: `https://neverbe.lk/collections/combos/${combo.id}`,
       images: [
         {
-          url: combo.thumbnail?.url || "https://neverbe.lk/logo-og.png",
+          url: getAbsoluteUrl(combo.thumbnail?.url),
           width: 1200,
           height: 630,
           alt: combo.name,
@@ -67,7 +73,7 @@ const ComboDetailPage = async (context: {
     "@type": "Product",
     name: combo.name,
     description: combo.description,
-    image: combo.thumbnail?.url,
+    image: getAbsoluteUrl(combo.thumbnail?.url),
     offers: {
       "@type": "Offer",
       price: combo.comboPrice,

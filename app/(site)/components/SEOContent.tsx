@@ -83,7 +83,7 @@ const SEOContent = () => {
                 lineHeight: 1.8,
               }}
             >
-              NEVERBE is Sri Lanka&apos;s premier online destination to{" "}
+              Neverbe is Sri Lanka&apos;s premier online destination to{" "}
               <strong>
                 buy shoes, clothing, and fashion accessories
               </strong>
@@ -168,7 +168,7 @@ const SEOContent = () => {
                   color: "var(--color-primary-dark)",
                 }}
               >
-                Why Buy Online with NEVERBE?
+                Why Buy Online with Neverbe?
               </h2>
               <p
                 style={{
@@ -184,7 +184,7 @@ const SEOContent = () => {
                 and dedicated customer support. Join thousands of satisfied
                 customers across Sri Lanka who have upgraded their wardrobe —
                 from <strong>shoes and clothing to accessories</strong> — with
-                NEVERBE. Shop <strong>men&apos;s t-shirts, women&apos;s
+                Neverbe. Shop <strong>men&apos;s t-shirts, women&apos;s
                 activewear, gym clothing, sportswear</strong>, and{" "}
                 <strong>premium sneakers</strong> all in one place.
               </p>

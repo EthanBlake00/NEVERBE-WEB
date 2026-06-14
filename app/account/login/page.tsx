@@ -35,7 +35,7 @@ const AuthPage = () => {
     const provider = new GoogleAuthProvider();
     try {
       await signInWithPopup(auth, provider);
-      toast.success("Welcome back to NEVERBE");
+      toast.success("Welcome back to Neverbe");
       router.push(redirectUrl);
     } catch (err: any) {
       toast.error("Google sign-in failed.");
@@ -90,7 +90,7 @@ const AuthPage = () => {
               src="/logo.png"
               width={130}
               height={50}
-              alt="NEVERBE"
+              alt="Neverbe"
               priority
             />
           </Link>

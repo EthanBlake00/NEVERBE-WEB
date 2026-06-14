@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Metadata } from "next";
 
 export const metadata = {
-  title: "404 - Page Not Found | NEVERBE",
+  title: "404 - Page Not Found | Neverbe",
 };
 
 const NotFound = () => {

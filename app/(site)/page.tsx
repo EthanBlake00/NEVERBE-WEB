@@ -20,16 +20,16 @@ import { Flex } from "antd";
 export const metadata: Metadata = {
   title: {
     default:
-      "NEVERBE — Shoes & Clothing in Sri Lanka | Sneakers, Apparel & Fashion Online",
-    template: "%s | NEVERBE",
+      "Neverbe — Shoes & Clothing in Sri Lanka | Sneakers, Apparel & Fashion Online",
+    template: "%s | Neverbe",
   },
   metadataBase: new URL("https://neverbe.lk"),
   alternates: {
     canonical: "https://neverbe.lk",
   },
   description:
-    "NEVERBE — Sri Lanka's #1 Online Store for Shoes, Clothing & Apparel. Shop Sneakers, T-Shirts, Activewear, Sportswear & Fashion Accessories. Island-wide Cash on Delivery.",
-  applicationName: "NEVERBE",
+    "Neverbe — Sri Lanka's #1 Online Store for Shoes, Clothing & Apparel. Shop Sneakers, T-Shirts, Activewear, Sportswear & Fashion Accessories. Island-wide Cash on Delivery.",
+  applicationName: "Neverbe",
   keywords: [
     "shoes sri lanka",
     "clothing sri lanka",
@@ -45,20 +45,20 @@ export const metadata: Metadata = {
     "gym wear sri lanka",
     "sportswear sri lanka",
     "premium sneakers",
-    "NEVERBE",
+    "Neverbe",
   ],
   openGraph: {
-    title: "NEVERBE — Shoes & Clothing in Sri Lanka | Sneakers, Apparel & Fashion",
+    title: "Neverbe — Shoes & Clothing in Sri Lanka | Sneakers, Apparel & Fashion",
     description:
       "Sri Lanka's top shop for shoes, clothing & fashion. Sneakers, activewear, t-shirts, sportswear & more. Best prices with island-wide Cash on Delivery.",
     url: "https://neverbe.lk",
-    siteName: "NEVERBE",
+    siteName: "Neverbe",
     type: "website",
     locale: "en_LK",
     images: [
       {
         url: "/main-og.png",
-        alt: "NEVERBE - Shoes & Clothing in Sri Lanka",
+        alt: "Neverbe - Shoes & Clothing in Sri Lanka",
         width: 1200,
         height: 630,
       },
@@ -91,9 +91,9 @@ const Page = async () => {
       {
         "@type": "Organization",
         "@id": "https://neverbe.lk/#organization",
-        name: "NEVERBE",
-        legalName: "NEVERBE",
-        alternateName: "NEVERBE Sri Lanka",
+        name: "Neverbe",
+        legalName: "Neverbe",
+        alternateName: "Neverbe Sri Lanka",
         url: "https://neverbe.lk",
         logo: {
           "@type": "ImageObject",
@@ -120,10 +120,10 @@ const Page = async () => {
       {
         "@type": ["ShoeStore", "ClothingStore"],
         "@id": "https://neverbe.lk/#shoestore",
-        name: "NEVERBE - Online Shoe & Clothing Store Sri Lanka",
-        brand: "NEVERBE",
-        legalName: "NEVERBE",
-        alternateName: "NEVERBE Shoe & Clothing Store",
+        name: "Neverbe - Online Shoe & Clothing Store Sri Lanka",
+        brand: "Neverbe",
+        legalName: "Neverbe",
+        alternateName: "Neverbe Shoe & Clothing Store",
         url: "https://neverbe.lk",
         image: "/main-og.png",
         description:
@@ -161,7 +161,7 @@ const Page = async () => {
         },
         hasOfferCatalog: {
           "@type": "OfferCatalog",
-          name: "NEVERBE Collection",
+          name: "Neverbe Collection",
           itemListElement: [
             { "@type": "OfferCatalog", name: "Sneakers" },
             { "@type": "OfferCatalog", name: "Running Shoes" },
@@ -178,7 +178,7 @@ const Page = async () => {
         "@type": "WebSite",
         "@id": "https://neverbe.lk/#website",
         url: "https://neverbe.lk",
-        name: "NEVERBE",
+        name: "Neverbe",
         description: "Buy Shoes Online in Sri Lanka",
         publisher: { "@id": "https://neverbe.lk/#organization" },
         inLanguage: "en-LK",

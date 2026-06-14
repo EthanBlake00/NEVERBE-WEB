@@ -16,9 +16,9 @@ const sectionLabel: React.CSSProperties = {
 };
 
 export const metadata: Metadata = {
-  title: "New Arrivals | Latest Shoes, Clothing & Apparel | NEVERBE Sri Lanka",
+  title: "New Arrivals | Latest Shoes, Clothing & Apparel | Neverbe Sri Lanka",
   description:
-    "Shop the latest shoe drops, clothing & fresh apparel at NEVERBE. New sneakers, t-shirts, activewear & sportswear added weekly. Premium quality. Cash on Delivery island-wide.",
+    "Shop the latest shoe drops, clothing & fresh apparel at Neverbe. New sneakers, t-shirts, activewear & sportswear added weekly. Premium quality. Cash on Delivery island-wide.",
   alternates: { canonical: "https://neverbe.lk/collections/new-arrivals" },
   keywords: [
     "new sneakers sri lanka",
@@ -32,25 +32,25 @@ export const metadata: Metadata = {
     "new slides sri lanka",
   ],
   openGraph: {
-    title: "New Arrivals | Latest Shoes, Clothing & Apparel | NEVERBE",
+    title: "New Arrivals | Latest Shoes, Clothing & Apparel | Neverbe",
     description:
-      "Latest shoe drops, clothing & fresh apparel added weekly at NEVERBE Sri Lanka.",
+      "Latest shoe drops, clothing & fresh apparel added weekly at Neverbe Sri Lanka.",
     url: "https://neverbe.lk/collections/new-arrivals",
     type: "website",
-    siteName: "NEVERBE",
+    siteName: "Neverbe",
     locale: "en_LK",
     images: [
       {
         url: "/collections-og.png",
         width: 1200,
         height: 630,
-        alt: "NEVERBE New Arrivals - Shoes & Clothing",
+        alt: "Neverbe New Arrivals - Shoes & Clothing",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "New Arrivals | NEVERBE Sri Lanka",
+    title: "New Arrivals | Neverbe Sri Lanka",
     description: "Fresh shoe drops, clothing & apparel added weekly in Sri Lanka.",
     images: ["/collections-og.png"],
   },
@@ -97,11 +97,14 @@ const NewArrivalsPage = async () => {
               item: {
                 "@type": "Product",
                 name: product.name,
-                image:
-                  product.thumbnail?.url || "/collections-og.png",
+                image: product.thumbnail?.url
+                  ? (product.thumbnail.url.startsWith("http")
+                      ? product.thumbnail.url
+                      : `https://neverbe.lk${product.thumbnail.url.startsWith("/") ? "" : "/"}${product.thumbnail.url}`)
+                  : "https://neverbe.lk/collections-og.png",
                 url: `https://neverbe.lk/collections/products/${product.id}`,
-                description: product.description || `Shop ${product.name} online in Sri Lanka at NEVERBE.`,
-                brand: { "@type": "Brand", name: product.brand || "NEVERBE" },
+                description: product.description || `Shop ${product.name} online in Sri Lanka at Neverbe.`,
+                brand: { "@type": "Brand", name: product.brand || "Neverbe" },
                 offers: {
                   "@type": "Offer",
                   priceCurrency: "LKR",
@@ -115,7 +118,7 @@ const NewArrivalsPage = async () => {
                   itemCondition: "https://schema.org/NewCondition",
                   seller: {
                     "@type": "Organization",
-                    name: "NEVERBE",
+                    name: "Neverbe",
                   },
                   shippingDetails: {
                     "@type": "OfferShippingDetails",

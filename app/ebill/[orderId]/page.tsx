@@ -9,8 +9,8 @@ import { Metadata } from "next";
 
 export async function generateMetadata(props: { params: Promise<{ orderId: string }> }): Promise<Metadata> {
   const { orderId } = await props.params;
-  const title = `Electronic Receipt #${orderId.toUpperCase()} - NEVERBE`;
-  const description = `View and download your official NEVERBE electronic receipt for order #${orderId.toUpperCase()}. Digital billing made simple.`;
+  const title = `Electronic Receipt #${orderId.toUpperCase()} - Neverbe`;
+  const description = `View and download your official Neverbe electronic receipt for order #${orderId.toUpperCase()}. Digital billing made simple.`;
   const ogImage = "/ebill-og.png";
 
   return {
@@ -19,7 +19,7 @@ export async function generateMetadata(props: { params: Promise<{ orderId: strin
     openGraph: {
       title,
       description,
-      images: [{ url: ogImage, width: 1200, height: 630, alt: "NEVERBE Electronic Receipt" }],
+      images: [{ url: ogImage, width: 1200, height: 630, alt: "Neverbe Electronic Receipt" }],
       type: "website",
     },
     twitter: {
@@ -101,7 +101,7 @@ export default async function EBillPage(props: { params: Promise<{ orderId: stri
               href="https://neverbe.lk"
               className="inline-block px-8 py-4 bg-primary-dark text-white text-xs font-black uppercase tracking-widest rounded-full hover:bg-accent transition-colors"
             >
-              Visit NEVERBE
+              Visit Neverbe
             </a>
           </div>
         </div>
@@ -300,7 +300,7 @@ export default async function EBillPage(props: { params: Promise<{ orderId: stri
                 </div>
               </div>
               <div className="pt-8 text-[10px] font-bold uppercase tracking-[0.3em] text-muted leading-relaxed max-w-xs">
-                <p>Thank you for shopping with NEVERBE. This is a system generated receipt.</p>
+                <p>Thank you for shopping with Neverbe. This is a system generated receipt.</p>
               </div>
             </div>
 

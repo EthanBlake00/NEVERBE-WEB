@@ -20,7 +20,7 @@ const AboutUsClient = () => {
               color: "var(--color-primary-dark)",
             }}
           >
-            We Are <br /> NEVERBE.
+            We Are <br /> Neverbe.
           </Title>
           <Paragraph
             style={{
@@ -93,7 +93,7 @@ const AboutUsClient = () => {
                       drops.
                     </p>
                     <p className="text-base md:text-lg text-primary-dark leading-relaxed">
-                      At NEVERBE, we don't just sell shoes; we curate a
+                      At Neverbe, we don't just sell shoes; we curate a
                       lifestyle. We recognized a gap in the Sri Lankan market
                       for high-quality, trend-setting footwear that doesn't cost
                       a fortune. We bridge the gap between high-end streetwear

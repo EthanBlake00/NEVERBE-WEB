@@ -11,6 +11,12 @@ import Breadcrumbs from "@/components/Breadcrumbs";
 import ProductReviews from "./components/ProductReviews";
 import { Flex } from "antd";
 
+const getAbsoluteUrl = (url?: string) => {
+  if (!url) return "https://neverbe.lk/collections-og.png";
+  if (url.startsWith("http://") || url.startsWith("https://")) return url;
+  return `https://neverbe.lk${url.startsWith("/") ? "" : "/"}${url}`;
+};
+
 const getProduct = cache(async (id: string): Promise<Product | null> => {
   try {
     return await getProductById(id);
@@ -28,7 +34,7 @@ export async function generateMetadata(context: {
 
   if (!item) {
     return {
-      title: "Item Not Found | NEVERBE",
+      title: "Item Not Found | Neverbe",
       description: "The requested sneaker could not be found.",
       robots: { index: false, follow: true },
     };
@@ -39,7 +45,7 @@ export async function generateMetadata(context: {
 
   return {
     title: safeTitle,
-    description: `Shop ${item.name} online in Sri Lanka. Premium quality ${categoryLabel} with island-wide delivery & Cash on Delivery available at NEVERBE.`,
+    description: `Shop ${item.name} online in Sri Lanka. Premium quality ${categoryLabel} with island-wide delivery & Cash on Delivery available at Neverbe.`,
     keywords: [
       item.name,
       `${categoryLabel} sri lanka`,
@@ -54,25 +60,21 @@ export async function generateMetadata(context: {
     },
     openGraph: {
       title: safeTitle,
-      description: `Shop ${item.name} - premium ${categoryLabel} in Sri Lanka at NEVERBE.`,
+      description: `Shop ${item.name} - premium ${categoryLabel} in Sri Lanka at Neverbe.`,
       url: `https://neverbe.lk/collections/products/${item.id}`,
       type: "website",
-      siteName: "NEVERBE",
+      siteName: "Neverbe",
       locale: "en_LK",
       images: [
         {
-          url: (
-            item.thumbnail?.url || "/collections-og.png"
-          ).replace(/^http:\/\//, "https://"),
+          url: getAbsoluteUrl(item.thumbnail?.url),
           width: 1200,
           height: 630,
           type: "image/jpeg",
           alt: `${item.name} - Premium Edition`,
         },
         {
-          url: (
-            item.thumbnail?.url || "/collections-og.png"
-          ).replace(/^http:\/\//, "https://"),
+          url: getAbsoluteUrl(item.thumbnail?.url),
           width: 600,
           height: 600,
           type: "image/jpeg",
@@ -83,8 +85,8 @@ export async function generateMetadata(context: {
     twitter: {
       card: "summary_large_image",
       title: safeTitle,
-      description: `Explore ${item.name} at NEVERBE. Premium quality footwear and apparel in Sri Lanka.`,
-      images: [(item.thumbnail?.url || "/collections-og.png").replace(/^http:\/\//, "https://")],
+      description: `Explore ${item.name} at Neverbe. Premium quality footwear and apparel in Sri Lanka.`,
+      images: [getAbsoluteUrl(item.thumbnail?.url)],
     },
   };
 }
@@ -136,13 +138,13 @@ const Page = async (context: { params: Promise<{ itemId: string }> }) => {
     "@context": "https://schema.org",
     "@type": "Product",
     name: item.name,
-    image: [item.thumbnail?.url || "/collections-og.png"],
-    description: `Shop ${item.name} — premium quality ${categoryLabel.toLowerCase()} available in Sri Lanka at NEVERBE. Island-wide delivery with Cash on Delivery.`,
+    image: [getAbsoluteUrl(item.thumbnail?.url)],
+    description: `Shop ${item.name} — premium quality ${categoryLabel.toLowerCase()} available in Sri Lanka at Neverbe. Island-wide delivery with Cash on Delivery.`,
     sku: item.id,
     category: categoryLabel,
     brand: {
       "@type": "Brand",
-      name: item.brand || "NEVERBE",
+      name: item.brand || "Neverbe",
     },
     aggregateRating: {
       "@type": "AggregateRating",
@@ -171,11 +173,13 @@ const Page = async (context: { params: Promise<{ itemId: string }> }) => {
         ? Math.round((item.sellingPrice - (item.sellingPrice * item.discount) / 100) / 10) * 10
         : item.sellingPrice || "0.00",
       priceValidUntil: `${new Date().getFullYear() + 1}-12-31`,
-      availability: "https://schema.org/InStock",
+      availability: item.inStock
+        ? "https://schema.org/InStock"
+        : "https://schema.org/OutOfStock",
       itemCondition: "https://schema.org/NewCondition",
       seller: {
         "@type": "Organization",
-        name: "NEVERBE",
+        name: "Neverbe",
       },
       shippingDetails: {
         "@type": "OfferShippingDetails",

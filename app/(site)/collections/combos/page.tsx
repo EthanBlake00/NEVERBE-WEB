@@ -18,9 +18,9 @@ const sectionLabel: React.CSSProperties = {
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: "Bundle Deals & Combos | Shoes & Clothing Offers | NEVERBE",
+  title: "Bundle Deals & Combos | Shoes & Clothing Offers | Neverbe",
   description:
-    "Exclusive BOGO deals, multi-buy discounts and combo packs on sneakers, clothing & apparel. Save more when you bundle at NEVERBE Sri Lanka.",
+    "Exclusive BOGO deals, multi-buy discounts and combo packs on sneakers, clothing & apparel. Save more when you bundle at Neverbe Sri Lanka.",
   keywords: [
     "combo deals sri lanka",
     "bundle shoe offers",
@@ -33,25 +33,25 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "https://neverbe.lk/collections/combos" },
   openGraph: {
-    title: "Bundle Deals & Combos | NEVERBE Sri Lanka",
+    title: "Bundle Deals & Combos | Neverbe Sri Lanka",
     description:
       "BOGO deals and multi-buy discounts on premium sneakers & clothing. Save more when you bundle.",
     url: "https://neverbe.lk/collections/combos",
     type: "website",
-    siteName: "NEVERBE",
+    siteName: "Neverbe",
     locale: "en_LK",
     images: [
       {
         url: "/offers-og.png",
         width: 1200,
         height: 630,
-        alt: "NEVERBE Bundle Deals - Shoes & Clothing",
+        alt: "Neverbe Bundle Deals - Shoes & Clothing",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Bundle Deals | NEVERBE Sri Lanka",
+    title: "Bundle Deals | Neverbe Sri Lanka",
     description: "BOGO & multi-buy discounts on sneakers & clothing in Sri Lanka.",
     images: ["/offers-og.png"],
   },
@@ -116,12 +116,15 @@ const CombosPage = async ({
             item: {
               "@type": "Product",
               name: combo?.name,
-              image:
-                combo?.previewThumbnail || "/offers-og.png",
+              image: combo?.previewThumbnail
+                ? (combo.previewThumbnail.startsWith("http")
+                    ? combo.previewThumbnail
+                    : `https://neverbe.lk${combo.previewThumbnail.startsWith("/") ? "" : "/"}${combo.previewThumbnail}`)
+                : "https://neverbe.lk/offers-og.png",
               description:
-                combo?.description || "Bundle deal at NEVERBE Sri Lanka.",
+                combo?.description || "Bundle deal at Neverbe Sri Lanka.",
               url: `https://neverbe.lk/collections/combos/${combo?.id}`,
-              brand: { "@type": "Brand", name: "NEVERBE" },
+              brand: { "@type": "Brand", name: "Neverbe" },
               offers: {
                 "@type": "Offer",
                 priceCurrency: "LKR",

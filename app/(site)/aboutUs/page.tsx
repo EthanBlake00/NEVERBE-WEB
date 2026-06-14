@@ -3,20 +3,20 @@ import type { Metadata } from "next";
 import AboutUsClient from "./components/AboutUsClient";
 
 export const metadata: Metadata = {
-  title: "About Us - NEVERBE | Sri Lanka's #1 Shoe & Clothing Store",
+  title: "About Us - Neverbe | Sri Lanka's #1 Shoe & Clothing Store",
   description:
-    "Learn about NEVERBE, Sri Lanka's trusted destination for premium shoes, clothing & apparel. Discover our mission, vision, and commitment to style, quality, and affordability.",
+    "Learn about Neverbe, Sri Lanka's trusted destination for premium shoes, clothing & apparel. Discover our mission, vision, and commitment to style, quality, and affordability.",
   keywords:
-    "NEVERBE, about us, shoes sri lanka, clothing sri lanka, premium footwear, apparel online, sneakers, online shoe and clothing store sri lanka",
+    "Neverbe, about us, shoes sri lanka, clothing sri lanka, premium footwear, apparel online, sneakers, online shoe and clothing store sri lanka",
   alternates: {
     canonical: "https://neverbe.lk/aboutUs",
   },
   openGraph: {
-    title: "About NEVERBE - Sri Lanka's Trusted Shoe & Clothing Store",
+    title: "About Neverbe - Sri Lanka's Trusted Shoe & Clothing Store",
     description:
-      "Learn about NEVERBE, Sri Lanka's trusted destination for premium shoes, clothing & apparel. Style, quality, and affordability.",
+      "Learn about Neverbe, Sri Lanka's trusted destination for premium shoes, clothing & apparel. Style, quality, and affordability.",
     url: "https://neverbe.lk/aboutUs",
-    siteName: "NEVERBE",
+    siteName: "Neverbe",
     type: "website",
     locale: "en_LK",
     images: [
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
         url: "/main-og.png",
         width: 1200,
         height: 630,
-        alt: "NEVERBE - Shoes & Clothing Sri Lanka",
+        alt: "Neverbe - Shoes & Clothing Sri Lanka",
       },
     ],
   },
@@ -32,9 +32,9 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     site: "@neverbe",
     creator: "@neverbe",
-    title: "About NEVERBE - Sri Lanka's Trusted Shoe & Clothing Store",
+    title: "About Neverbe - Sri Lanka's Trusted Shoe & Clothing Store",
     description:
-      "Learn about NEVERBE, Sri Lanka's trusted destination for premium shoes & clothing.",
+      "Learn about Neverbe, Sri Lanka's trusted destination for premium shoes & clothing.",
     images: ["/main-og.png"],
   },
   robots: {
@@ -57,7 +57,7 @@ const AboutUs = () => {
     "@graph": [
       {
         "@type": "Organization",
-        name: "NEVERBE",
+        name: "Neverbe",
         url: "https://neverbe.lk",
         logo: "/main-og.png",
         sameAs: [
@@ -75,9 +75,9 @@ const AboutUs = () => {
       },
       {
         "@type": "AboutPage",
-        name: "About NEVERBE",
+        name: "About Neverbe",
         description:
-          "Learn about NEVERBE, Sri Lanka's trusted destination for premium shoes, clothing & apparel. Discover our mission, vision, and commitment to style, quality, and affordability.",
+          "Learn about Neverbe, Sri Lanka's trusted destination for premium shoes, clothing & apparel. Discover our mission, vision, and commitment to style, quality, and affordability.",
         url: "https://neverbe.lk/aboutUs",
         inLanguage: "en-LK",
       },

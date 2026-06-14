@@ -110,7 +110,7 @@ const Account = () => {
                 src="/logo.png"
                 width={120}
                 height={40}
-                alt="NEVERBE"
+                alt="Neverbe"
                 priority
               />
             </Link>

@@ -1,5 +1,5 @@
 /**
- * Currency and formatting utilities for NEVERBE
+ * Currency and formatting utilities for Neverbe
  * Consolidates duplicate formatting patterns across the codebase
  */
 

@@ -95,7 +95,7 @@ export default function MaintenancePage() {
         <div className="flex flex-col items-center gap-4">
           <div className="w-12 h-px bg-accent/20" />
           <p className="text-[10px] font-black uppercase text-muted tracking-[0.4em]">
-            &copy; {new Date().getFullYear()} NEVERBE PERFORMANCE CLOTHING LABS
+            &copy; {new Date().getFullYear()} Neverbe Performance Clothing Labs
           </p>
         </div>
       </footer>

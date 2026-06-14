@@ -30,7 +30,7 @@ const ImagesSlider = forwardRef<CarouselRef, ImagesSliderProps>(
             <div className="relative w-full h-[40vh] md:h-[75vh] bg-white rounded-[24px] overflow-hidden">
               <Image
                 src={image.url}
-                alt="NEVERBE Hero"
+                alt="Neverbe Hero"
                 fill
                 className="object-cover object-center"
                 priority={index === 0}

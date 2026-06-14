@@ -4,7 +4,7 @@ import CheckoutForm from "@/app/(site)/checkout/components/CheckoutForm";
 import AnonymousConversionBanner from "@/components/AnonymousConversionBanner";
 
 export const metadata: Metadata = {
-  title: "Secure Checkout | NEVERBE",
+  title: "Secure Checkout | Neverbe",
 };
 
 const Page = () => {

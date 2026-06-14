@@ -16,9 +16,9 @@ const sectionLabel: React.CSSProperties = {
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: "Shop Shoes, Clothing & Apparel | NEVERBE Sri Lanka",
+  title: "Shop Shoes, Clothing & Apparel | Neverbe Sri Lanka",
   description:
-    "Browse the full NEVERBE collection — sneakers, t-shirts, activewear, sportswear, slides, accessories and more. Premium quality. Cash on Delivery island-wide.",
+    "Browse the full Neverbe collection — sneakers, t-shirts, activewear, sportswear, slides, accessories and more. Premium quality. Cash on Delivery island-wide.",
   keywords: [
     "buy shoes online sri lanka",
     "buy clothing online sri lanka",
@@ -40,25 +40,25 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "https://neverbe.lk/collections/products" },
   openGraph: {
-    title: "Shop Shoes, Clothing & Apparel | NEVERBE Sri Lanka",
+    title: "Shop Shoes, Clothing & Apparel | Neverbe Sri Lanka",
     description:
-      "Browse the full NEVERBE collection. Sneakers, clothing, activewear, sportswear and more at best prices. Cash on Delivery island-wide.",
+      "Browse the full Neverbe collection. Sneakers, clothing, activewear, sportswear and more at best prices. Cash on Delivery island-wide.",
     url: "https://neverbe.lk/collections/products",
     type: "website",
-    siteName: "NEVERBE",
+    siteName: "Neverbe",
     locale: "en_LK",
     images: [
       {
         url: "/collections-og.png",
         width: 1200,
         height: 630,
-        alt: "NEVERBE Collection - Shoes & Clothing",
+        alt: "Neverbe Collection - Shoes & Clothing",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Shop NEVERBE | Shoes, Clothing & Apparel",
+    title: "Shop Neverbe | Shoes, Clothing & Apparel",
     description: "Premium quality shoes & clothing. Cash on Delivery island-wide.",
     images: ["/collections-og.png"],
   },
@@ -100,7 +100,7 @@ const Page = async () => {
       },
       {
         "@type": "CollectionPage",
-        name: "Buy Shoes & Clothing Online Sri Lanka | NEVERBE Collection",
+        name: "Buy Shoes & Clothing Online Sri Lanka | Neverbe Collection",
         description:
           "Shop sneakers, clothing, activewear, sportswear & accessories in Sri Lanka. Cash on Delivery available.",
         url: "https://neverbe.lk/collections/products",
@@ -119,10 +119,14 @@ const Page = async () => {
               item: {
                 "@type": "Product",
                 name: product?.name,
-                image: product?.thumbnail?.url,
+                image: product?.thumbnail?.url
+                  ? (product.thumbnail.url.startsWith("http")
+                      ? product.thumbnail.url
+                      : `https://neverbe.lk${product.thumbnail.url.startsWith("/") ? "" : "/"}${product.thumbnail.url}`)
+                  : "https://neverbe.lk/collections-og.png",
                 url: `https://neverbe.lk/collections/products/${product?.id}`,
-                description: product?.description || `Shop ${product?.name} online in Sri Lanka at NEVERBE.`,
-                brand: { "@type": "Brand", name: product?.brand || "NEVERBE" },
+                description: product?.description || `Shop ${product?.name} online in Sri Lanka at Neverbe.`,
+                brand: { "@type": "Brand", name: product?.brand || "Neverbe" },
                 offers: {
                   "@type": "Offer",
                   priceCurrency: "LKR",
@@ -136,7 +140,7 @@ const Page = async () => {
                   itemCondition: "https://schema.org/NewCondition",
                   seller: {
                     "@type": "Organization",
-                    name: "NEVERBE",
+                    name: "Neverbe",
                   },
                   shippingDetails: {
                     "@type": "OfferShippingDetails",
@@ -249,7 +253,7 @@ const Page = async () => {
                   margin: 0,
                 }}
               >
-                NEVERBE offers shoes, clothing, activewear, and accessories —
+                Neverbe offers shoes, clothing, activewear, and accessories —
                 all with island-wide Cash on Delivery.
               </p>
             </div>

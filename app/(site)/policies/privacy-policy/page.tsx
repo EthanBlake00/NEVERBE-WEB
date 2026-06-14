@@ -2,20 +2,20 @@ import { Metadata } from "next";
 import PrivacyPolicyClient from "./components/PrivacyPolicyClient";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy - NEVERBE Sri Lanka",
+  title: "Privacy Policy - Neverbe Sri Lanka",
   description:
-    "Read NEVERBE's Privacy Policy outlining how we collect, use, and protect your data. Trusted online shoe store in Sri Lanka.",
+    "Read Neverbe's Privacy Policy outlining how we collect, use, and protect your data. Trusted online shoe store in Sri Lanka.",
   keywords:
-    "NEVERBE, privacy policy, data protection, online shoe store Sri Lanka, nike premium, adidas premium, sneakers Sri Lanka",
+    "Neverbe, privacy policy, data protection, online shoe store Sri Lanka, nike premium, adidas premium, sneakers Sri Lanka",
   alternates: {
     canonical: "https://neverbe.lk/policies/privacy-policy",
   },
   openGraph: {
-    title: "Privacy Policy - NEVERBE Sri Lanka",
+    title: "Privacy Policy - Neverbe Sri Lanka",
     description:
-      "Read NEVERBE's Privacy Policy outlining how we collect, use, and protect your data.",
+      "Read Neverbe's Privacy Policy outlining how we collect, use, and protect your data.",
     url: "https://neverbe.lk/policies/privacy-policy",
-    siteName: "NEVERBE",
+    siteName: "Neverbe",
     type: "website",
     locale: "en_LK",
     images: [
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
         url: "https://neverbe.lk/logo-og.png",
         width: 1200,
         height: 630,
-        alt: "NEVERBE Logo",
+        alt: "Neverbe Logo",
       },
     ],
   },
@@ -31,9 +31,9 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     site: "@neverbe",
     creator: "@neverbe",
-    title: "Privacy Policy - NEVERBE Sri Lanka",
+    title: "Privacy Policy - Neverbe Sri Lanka",
     description:
-      "Read NEVERBE's Privacy Policy outlining how we collect, use, and protect your data.",
+      "Read Neverbe's Privacy Policy outlining how we collect, use, and protect your data.",
     images: ["https://neverbe.lk/logo-og.png"],
   },
   robots: {
@@ -54,13 +54,13 @@ const Page = () => {
       "@type": "WebPage",
       name: "Privacy Policy",
       description:
-        "NEVERBE Privacy Policy outlining how we collect, use, and protect your data.",
+        "Neverbe Privacy Policy outlining how we collect, use, and protect your data.",
       url: "https://neverbe.lk/policies/privacy-policy",
     },
     {
       "@context": "https://schema.org",
       "@type": "Organization",
-      name: "NEVERBE",
+      name: "Neverbe",
       url: "https://neverbe.lk",
       logo: "https://neverbe.lk/logo-og.png",
       contactPoint: {

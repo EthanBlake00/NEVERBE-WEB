@@ -8,14 +8,14 @@ import AnalyticsTracker from "@/app/(site)/components/AnalyticsTracker";
 export const metadata: Metadata = {
   title: {
     default:
-      "NEVERBE — Shoes & Clothing Sri Lanka | Sneakers, Apparel & Fashion Online",
-    template: "%s | NEVERBE",
+      "Neverbe — Shoes & Clothing Sri Lanka | Sneakers, Apparel & Fashion Online",
+    template: "%s | Neverbe",
   },
   description:
-    "NEVERBE is Sri Lanka's #1 online store for shoes, clothing & apparel. Shop sneakers, t-shirts, activewear, sportswear & fashion accessories. Island-wide delivery & Cash on Delivery.",
-  applicationName: "NEVERBE",
+    "Neverbe is Sri Lanka's #1 online store for shoes, clothing & apparel. Shop sneakers, t-shirts, activewear, sportswear & fashion accessories. Island-wide delivery & Cash on Delivery.",
+  applicationName: "Neverbe",
   keywords: [
-    "NEVERBE",
+    "Neverbe",
     "shoes sri lanka",
     "buy shoes online sri lanka",
     "sneakers sri lanka",
@@ -34,9 +34,9 @@ export const metadata: Metadata = {
     "premium footwear sri lanka",
     "buy sneakers online colombo",
   ],
-  authors: [{ name: "NEVERBE" }],
-  creator: "NEVERBE",
-  publisher: "NEVERBE",
+  authors: [{ name: "Neverbe" }],
+  creator: "Neverbe",
+  publisher: "Neverbe",
   robots: {
     index: true,
     follow: true,
@@ -59,10 +59,10 @@ export const metadata: Metadata = {
     canonical: "https://neverbe.lk",
   },
   openGraph: {
-    title: "NEVERBE — Shoes & Clothing in Sri Lanka | Online Fashion Store",
+    title: "Neverbe — Shoes & Clothing in Sri Lanka | Online Fashion Store",
     description:
       "Sri Lanka's top online store for shoes, clothing & fashion. Sneakers, t-shirts, activewear, gym wear & more with island-wide delivery.",
-    siteName: "NEVERBE",
+    siteName: "Neverbe",
     url: "https://neverbe.lk",
     locale: "en_LK",
     type: "website",
@@ -71,13 +71,13 @@ export const metadata: Metadata = {
         url: "/logo-og.png",
         width: 1200,
         height: 630,
-        alt: "NEVERBE - Premium Footwear & Apparel Sri Lanka",
+        alt: "Neverbe - Premium Footwear & Apparel Sri Lanka",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "NEVERBE — Shoes & Clothing Sri Lanka | Fashion Online",
+    title: "Neverbe — Shoes & Clothing Sri Lanka | Fashion Online",
     description:
       "Shop shoes, clothing & apparel in Sri Lanka. Sneakers, activewear, t-shirts & more with Cash on Delivery island-wide.",
     images: ["/logo-og.png"],
@@ -120,7 +120,7 @@ export default function RootLayout({
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "NEVERBE",
+    name: "Neverbe",
     url: "https://neverbe.lk",
     logo: "https://neverbe.lk/logo.png",
     contactPoint: [
@@ -156,15 +156,15 @@ export default function RootLayout({
   const websiteLd = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    "name": "NEVERBE",
-    "alternateName": ["Neverbe", "NEVERBE Shoes & Clothing"],
+    "name": "Neverbe",
+    "alternateName": ["Neverbe", "Neverbe Shoes & Clothing"],
     "url": "https://neverbe.lk",
   };
 
   const localBusinessLd = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
-    name: "NEVERBE",
+    name: "Neverbe",
     image: "https://neverbe.lk/logo-og.png",
     "@id": "https://neverbe.lk",
     url: "https://neverbe.lk",

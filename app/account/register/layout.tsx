@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Register | NEVERBE - Create Account",
+  title: "Register | Neverbe - Create Account",
   description:
     "Create your account to get access to the best products and inspiration.",
 };
