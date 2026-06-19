@@ -2,6 +2,8 @@
 import React from "react";
 import { PaymentMethod } from "@/interfaces";
 import { IoCheckmark } from "react-icons/io5";
+import { BagItem } from "@/interfaces/BagItem";
+import { calculateFee } from "@/utils/bagCalculations";
 
 interface PaymentOptionsProps {
   paymentOptions: PaymentMethod[];
@@ -10,6 +12,7 @@ interface PaymentOptionsProps {
   setPaymentTypeId: React.Dispatch<React.SetStateAction<string>>;
   setPaymentFee: React.Dispatch<React.SetStateAction<number>>;
   setMerchantFee?: React.Dispatch<React.SetStateAction<number>>;
+  bagItems: BagItem[];
 }
 
 const PaymentOptions: React.FC<PaymentOptionsProps> = ({
@@ -19,6 +22,7 @@ const PaymentOptions: React.FC<PaymentOptionsProps> = ({
   setPaymentTypeId,
   setPaymentFee,
   setMerchantFee,
+  bagItems,
 }) => {
   const handleSelect = (option: PaymentMethod) => {
     setPaymentType(option.name);
@@ -96,7 +100,7 @@ const PaymentOptions: React.FC<PaymentOptionsProps> = ({
                         }
                       `}
                     >
-                      +Rs.{option.customerFee}
+                      +Rs.{calculateFee(option.customerFee || 0, bagItems).toFixed(2)}
                     </span>
                   ) : (
                     <span

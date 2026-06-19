@@ -185,7 +185,7 @@ const PaymentDetails: React.FC<PaymentDetailsProps> = ({
 
   // Calculations
   const itemDiscount = calculateTotalDiscount(bagItems);
-  const fee = selectedPaymentFee;
+  const fee = calculateFee(selectedPaymentFee, bagItems);
   const rawSubTotal = calculateTotal(bagItems);
 
   // Reconstruct total with dynamic shipping
@@ -279,6 +279,7 @@ const PaymentDetails: React.FC<PaymentDetailsProps> = ({
               setPaymentTypeId={setPaymentTypeId}
               setPaymentFee={setPaymentFee}
               setMerchantFee={setMerchantFee}
+              bagItems={bagItems}
             />
           )}
         </div>

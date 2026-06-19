@@ -19,6 +19,7 @@ import {
   sendCODOrderNotifications,
 } from "@/actions/orderAction";
 import {
+  calculateFee,
   calculateShippingCost,
   calculateTotal,
   calculateTotalDiscount,
@@ -163,7 +164,7 @@ export const usePayment = (options: UsePaymentOptions): UsePaymentReturn => {
         shippingFeeOverride !== undefined
           ? shippingFeeOverride
           : calculateShippingCost(bagItems);
-      const paymentFee = options.paymentFee || 0;
+      const paymentFee = calculateFee(options.paymentFee || 0, bagItems);
       const rawSubtotal = calculateTotal(bagItems);
       const subtotal = rawSubtotal - itemDiscount + shippingFee + paymentFee;
       const total = subtotal - couponDisc - promotionDisc;
