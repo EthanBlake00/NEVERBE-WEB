@@ -6,6 +6,7 @@ import { format } from "date-fns";
 import EBillDownloadButton from "../components/EBillDownloadButton";
 import { BusinessInfo } from "@/config/BusinessInfo";
 import { Metadata } from "next";
+import { formatSLDate } from "@/actions/utilAction";
 
 export async function generateMetadata(props: { params: Promise<{ orderId: string }> }): Promise<Metadata> {
   const { orderId } = await props.params;
@@ -123,10 +124,6 @@ export default async function EBillPage(props: { params: Promise<{ orderId: stri
     return notFound();
   }
 
-  const orderDate = order.createdAt?._seconds
-    ? new Date(order.createdAt._seconds * 1000)
-    : new Date(order.createdAt);
-
   // Raw subtotal BEFORE any discounts
   const rawSubtotal = order.items?.reduce(
     (sum: number, item: any) => sum + item.price * item.quantity,
@@ -154,7 +151,7 @@ export default async function EBillPage(props: { params: Promise<{ orderId: stri
             <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-[10px] md:text-xs font-bold uppercase tracking-widest text-muted">
               <span>Ref: #{order.orderId?.toUpperCase()}</span>
               <span className="hidden sm:inline">|</span>
-              <span>Issued: {format(orderDate, "MMM dd, yyyy h:mm a")}</span>
+              <span>Issued: {formatSLDate(order.createdAt)}</span>
               <span className="hidden sm:inline">|</span>
               <span>
                 Validity: {daysRemaining !== undefined ? (
@@ -212,11 +209,21 @@ export default async function EBillPage(props: { params: Promise<{ orderId: stri
                 const hasDiscount = (item.discount || 0) > 0;
                 return (
                   <div key={idx} className="flex justify-between items-start border-b border-default pb-4">
-                    <div className="space-y-1">
-                      <p className="font-display font-black uppercase tracking-tight text-lg leading-none">{item.name}</p>
-                      <p className="text-[10px] font-bold uppercase text-muted tracking-widest">
-                        {item.size || "Free Size"} &times; {item.quantity}
-                      </p>
+                    <div className="flex gap-4">
+                      {item.thumbnail && (
+                        <div className="w-12 h-12 bg-white shrink-0 rounded-lg overflow-hidden border border-default p-1 flex items-center justify-center">
+                          <img
+                            src={item.thumbnail}
+                            alt={item.name}
+                            className="w-full h-full object-cover mix-blend-multiply"
+                          />
+                        </div>
+                      )}
+                      <div className="space-y-1">
+                        <p className="font-display font-black uppercase tracking-tight text-lg leading-none">{item.name}</p>
+                        <p className="text-[10px] font-bold uppercase text-muted tracking-widest">
+                          {item.size || "Free Size"} &times; {item.quantity}
+                        </p>
                       {hasDiscount && (
                         <p className="text-[9px] font-bold text-accent">
                           {formatCurrency(item.price)} → {formatCurrency(netPrice)} (-{formatCurrency(item.discount)})
@@ -253,13 +260,19 @@ export default async function EBillPage(props: { params: Promise<{ orderId: stri
                     const hasDiscount = (item.discount || 0) > 0;
                     return (
                       <tr key={idx} className="group transition-colors">
-                        <td className="py-6 pr-4">
-                          <p className="font-display font-black uppercase tracking-tight text-lg leading-tight">{item.name}</p>
-                          {item.variantName && (
-                            <p className="text-[10px] font-bold uppercase text-muted tracking-widest mt-1">
-                              {item.variantName}
-                            </p>
+                        <td className="py-6 pr-4 flex items-center gap-4">
+                          {item.thumbnail && (
+                            <div className="w-12 h-12 bg-white shrink-0 rounded-lg overflow-hidden border border-default p-1 flex items-center justify-center">
+                              <img
+                                src={item.thumbnail}
+                                alt={item.name}
+                                className="w-full h-full object-cover mix-blend-multiply"
+                              />
+                            </div>
                           )}
+                          <div>
+                            <p className="font-display font-black uppercase tracking-tight text-lg leading-tight">{item.name}</p>
+                          </div>
                         </td>
                         <td className="py-6 px-4 text-center font-bold text-sm">{item.size || "-"}</td>
                         <td className="py-6 px-4 text-center font-bold text-sm">{item.quantity}</td>

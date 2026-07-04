@@ -27,11 +27,23 @@ interface OrderDetailsModalProps {
   onClose: () => void;
 }
 
+const loadImage = (url: string): Promise<HTMLImageElement> => {
+  return new Promise((resolve, reject) => {
+    const img = new (window as any).Image();
+    img.crossOrigin = "anonymous";
+    img.onload = () => resolve(img);
+    img.onerror = (e: any) => reject(e);
+    img.src = url;
+  });
+};
+
 const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
   order,
   isOpen,
   onClose,
 }) => {
+  const [downloading, setDownloading] = React.useState(false);
+
   if (!isOpen || !order) return null;
 
   const {
@@ -84,183 +96,226 @@ const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
   const promotionDiscountSum = (order as any).promotionDiscount || 0;
   const total = subtotal - (couponDiscountSum + promotionDiscountSum) + (shippingFee || 0) + (fee || 0);
 
-  const handleDownloadInvoice = () => {
-    const doc = new jsPDF();
-
-    // 1. Header & Branding
-    // Add Logo
-    const img = new (window as any).Image();
-    img.src = "/logo.png";
-    
-    // Header Section
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(24);
-    doc.text(BusinessInfo.name, 50, 22);
-
-    doc.setFontSize(9);
-    doc.setFont("helvetica", "normal");
-    doc.setTextColor(120);
-    doc.text(BusinessInfo.legalName, 50, 27);
-    doc.text(`${BusinessInfo.addressLine1}, ${BusinessInfo.city}`, 50, 31);
-    doc.text(`${BusinessInfo.email} | ${BusinessInfo.website}`, 50, 35);
-    doc.text(`Tel: ${BusinessInfo.phone}`, 50, 39);
-
-    // Add Logo to PDF
+  const handleDownloadInvoice = async () => {
+    setDownloading(true);
     try {
-      doc.addImage(img, "PNG", 14, 12, 30, 30);
-    } catch (e) {
-      console.error("Logo not found or failed to load", e);
-    }
+      const doc = new jsPDF();
 
-    // Invoice Title & Info
-    doc.setFont("helvetica", "black");
-    doc.setFontSize(28);
-    doc.setTextColor(46, 158, 91); // Neverbe green
-    doc.text("INVOICE", 196, 22, { align: "right" });
+      // Preload images
+      const loadedImages: Record<string, HTMLImageElement> = {};
+      if (items) {
+        await Promise.all(
+          items.map(async (item: any) => {
+            if (item.thumbnail) {
+              try {
+                const img = await loadImage(item.thumbnail);
+                loadedImages[item.itemId] = img;
+              } catch (e) {
+                console.error("Failed to load thumbnail for", item.name, e);
+              }
+            }
+          })
+        );
+      }
 
-    doc.setFontSize(10);
-    doc.setFont("helvetica", "bold");
-    doc.setTextColor(0);
-    doc.text(`Order ID: #${orderId}`, 196, 30, { align: "right" });
-    doc.setFont("helvetica", "normal");
-    doc.setTextColor(100);
-    doc.text(`Date: ${toSafeLocaleString(createdAt)}`, 196, 35, {
-      align: "right",
-    });
-    doc.text(`Status: ${status.toUpperCase()}`, 196, 40, { align: "right" });
+      // 1. Header & Branding
+      // Add Logo
+      const img = new (window as any).Image();
+      img.src = "/logo.png";
+      
+      // Header Section
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(24);
+      doc.text(BusinessInfo.name, 50, 22);
 
-    // 2. Customer & Shipping details
-    doc.setDrawColor(230);
-    doc.line(14, 48, 196, 48); // Divider
+      doc.setFontSize(9);
+      doc.setFont("helvetica", "normal");
+      doc.setTextColor(120);
+      doc.text(BusinessInfo.legalName, 50, 27);
+      doc.text(`${BusinessInfo.addressLine1}, ${BusinessInfo.city}`, 50, 31);
+      doc.text(`${BusinessInfo.email} | ${BusinessInfo.website}`, 50, 35);
+      doc.text(`Tel: ${BusinessInfo.phone}`, 50, 39);
 
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(10);
-    doc.setTextColor(0);
-    doc.text("BILLED TO", 14, 58);
-    doc.text("SHIPPED TO", 140, 58); // Pushed further right to justify between
+      // Add Logo to PDF
+      try {
+        doc.addImage(img, "PNG", 14, 12, 30, 30);
+      } catch (e) {
+        console.error("Logo not found or failed to load", e);
+      }
 
-    doc.setFont("helvetica", "normal");
-    doc.setTextColor(80);
-    doc.setFontSize(9);
-    
-    // Billed To details
-    doc.text(customer.name, 14, 64);
-    const splitBilling = doc.splitTextToSize(customer.address || "", 80);
-    doc.text(splitBilling, 14, 69);
-    const billingCityY = 69 + (splitBilling.length * 4.5);
-    doc.text(customer.city || "", 14, billingCityY);
-    doc.text(`Phone: ${customer.phone.startsWith("+") ? "" : "+"}${customer.phone}`, 14, billingCityY + 5);
+      // Invoice Title & Info
+      doc.setFont("helvetica", "black");
+      doc.setFontSize(28);
+      doc.setTextColor(46, 158, 91); // Neverbe green
+      doc.text("INVOICE", 196, 22, { align: "right" });
 
-    // Shipped To details
-    doc.text(customer.shippingName || customer.name, 140, 64);
-    const splitShipping = doc.splitTextToSize(customer.shippingAddress || customer.address, 55); // Adjusted width for right side
-    doc.text(splitShipping, 140, 69);
-    const shippingCityY = 69 + (splitShipping.length * 4.5);
-    doc.text(customer.shippingCity || customer.city, 140, shippingCityY);
-    doc.text(`Phone: ${((customer.shippingPhone || customer.phone).startsWith("+") ? "" : "+")}${(customer.shippingPhone || customer.phone)}`, 140, shippingCityY + 5);
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "bold");
+      doc.setTextColor(0);
+      doc.text(`Order ID: #${orderId}`, 196, 30, { align: "right" });
+      doc.setFont("helvetica", "normal");
+      doc.setTextColor(100);
+      doc.text(`Date: ${toSafeLocaleString(createdAt)}`, 196, 35, {
+        align: "right",
+      });
+      doc.text(`Status: ${status.toUpperCase()}`, 196, 40, { align: "right" });
 
-    // 3. Items Table
-    const tableColumn = [
-      "Item Description",
-      "Size",
-      "Qty",
-      "Unit Price",
-      "Total",
-    ];
-    const tableRows = items.map((item) => {
-      const netItemPrice = item.price - (item.discount || 0);
-      return [
-        item.name,
-        item.size || "-",
-        item.quantity.toString(),
-        `Rs. ${netItemPrice.toLocaleString()}`,
-        `Rs. ${(netItemPrice * item.quantity).toLocaleString()}`,
+      // 2. Customer & Shipping details
+      doc.setDrawColor(230);
+      doc.line(14, 48, 196, 48); // Divider
+
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(10);
+      doc.setTextColor(0);
+      doc.text("BILLED TO", 14, 58);
+      doc.text("SHIPPED TO", 140, 58); // Pushed further right to justify between
+
+      doc.setFont("helvetica", "normal");
+      doc.setTextColor(80);
+      doc.setFontSize(9);
+      
+      // Billed To details
+      doc.text(customer.name, 14, 64);
+      const splitBilling = doc.splitTextToSize(customer.address || "", 80);
+      doc.text(splitBilling, 14, 69);
+      const billingCityY = 69 + (splitBilling.length * 4.5);
+      doc.text(customer.city || "", 14, billingCityY);
+      doc.text(`Phone: ${customer.phone.startsWith("+") ? "" : "+"}${customer.phone}`, 14, billingCityY + 5);
+
+      // Shipped To details
+      doc.text(customer.shippingName || customer.name, 140, 64);
+      const splitShipping = doc.splitTextToSize(customer.shippingAddress || customer.address, 55); // Adjusted width for right side
+      doc.text(splitShipping, 140, 69);
+      const shippingCityY = 69 + (splitShipping.length * 4.5);
+      doc.text(customer.shippingCity || customer.city, 140, shippingCityY);
+      doc.text(`Phone: ${((customer.shippingPhone || customer.phone).startsWith("+") ? "" : "+")}${(customer.shippingPhone || customer.phone)}`, 140, shippingCityY + 5);
+
+      // 3. Items Table
+      const tableColumn = [
+        "",
+        "Item Description",
+        "Size",
+        "Qty",
+        "Unit Price",
+        "Total",
       ];
-    });
+      const tableRows = items.map((item) => {
+        const netItemPrice = item.price - (item.discount || 0);
+        return [
+          "", // Thumbnail
+          item.name,
+          item.size || "-",
+          item.quantity.toString(),
+          `Rs. ${netItemPrice.toLocaleString()}`,
+          `Rs. ${(netItemPrice * item.quantity).toLocaleString()}`,
+        ];
+      });
 
-    // Calculate max Y for address block to determine table start
-    const tableStartY = Math.max(billingCityY, shippingCityY) + 15;
+      // Calculate max Y for address block to determine table start
+      const tableStartY = Math.max(billingCityY, shippingCityY) + 15;
 
-    autoTable(doc, {
-      head: [tableColumn],
-      body: tableRows,
-      startY: tableStartY,
-      theme: "grid",
-      headStyles: { 
-        fillColor: [46, 158, 91], 
-        textColor: [255, 255, 255],
-        fontStyle: "bold",
-        halign: "center"
-      },
-      columnStyles: {
-        2: { halign: "center" },
-        3: { halign: "right" },
-        4: { halign: "right" },
-      },
-      styles: { fontSize: 9, cellPadding: 4 },
-    });
+      autoTable(doc, {
+        head: [tableColumn],
+        body: tableRows,
+        startY: tableStartY,
+        theme: "grid",
+        headStyles: { 
+          fillColor: [46, 158, 91], 
+          textColor: [255, 255, 255],
+          fontStyle: "bold",
+          halign: "center"
+        },
+        columnStyles: {
+          0: { cellWidth: 15, halign: "center" },
+          3: { halign: "center" },
+          4: { halign: "right" },
+          5: { halign: "right" },
+        },
+        styles: { fontSize: 9, cellPadding: 4, minCellHeight: 12 },
+        didDrawCell: (data: any) => {
+          if (data.column.index === 0 && data.cell.section === "body") {
+            const item = items[data.row.index];
+            const img = loadedImages[item.itemId];
+            if (img) {
+              const size = 8; // mm
+              const x = data.cell.x + (data.cell.width - size) / 2;
+              const y = data.cell.y + (data.cell.height - size) / 2;
+              try {
+                doc.addImage(img, "JPEG", x, y, size, size);
+              } catch (e) {
+                console.error("Failed to add image to PDF cell:", e);
+              }
+            }
+          }
+        }
+      });
 
-    const finalY = (doc as any).lastAutoTable.finalY + 15;
+      const finalY = (doc as any).lastAutoTable.finalY + 15;
 
-    // 4. Summary Totals
-    const summaryX = 140;
-    const valueX = 196;
+      // 4. Summary Totals
+      const summaryX = 140;
+      const valueX = 196;
 
-    doc.setFontSize(10);
-    doc.setFont("helvetica", "normal");
-    doc.setTextColor(100);
-    
-    doc.text("Subtotal:", summaryX, finalY);
-    doc.text(`Rs. ${subtotal.toLocaleString()}`, valueX, finalY, { align: "right" });
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "normal");
+      doc.setTextColor(100);
+      
+      doc.text("Subtotal:", summaryX, finalY);
+      doc.text(`Rs. ${subtotal.toLocaleString()}`, valueX, finalY, { align: "right" });
 
-    let currentY = finalY + 7;
+      let currentY = finalY + 7;
 
-    if (promotionDiscountSum > 0) {
-      doc.setTextColor(46, 158, 91);
+      if (promotionDiscountSum > 0) {
+        doc.setTextColor(46, 158, 91);
+        doc.setFont("helvetica", "bold");
+        doc.text("Auto Promotion:", summaryX, currentY);
+        doc.text(`- Rs. ${promotionDiscountSum.toLocaleString()}`, valueX, currentY, { align: "right" });
+        currentY += 7;
+      }
+
+      if (couponDiscountSum > 0) {
+        doc.setTextColor(46, 158, 91);
+        doc.setFont("helvetica", "bold");
+        doc.text("Coupon Savings:", summaryX, currentY);
+        doc.text(`- Rs. ${couponDiscountSum.toLocaleString()}`, valueX, currentY, { align: "right" });
+        currentY += 7;
+      }
+
+      doc.setTextColor(100);
+      doc.setFont("helvetica", "normal");
+      doc.text("Shipping Fee:", summaryX, currentY);
+      doc.text(`Rs. ${(shippingFee || 0).toLocaleString()}`, valueX, currentY, { align: "right" });
+      
+      currentY += 10;
+      doc.setDrawColor(230);
+      doc.line(summaryX, currentY - 5, valueX, currentY - 5);
+
       doc.setFont("helvetica", "bold");
-      doc.text("Auto Promotion:", summaryX, currentY);
-      doc.text(`- Rs. ${promotionDiscountSum.toLocaleString()}`, valueX, currentY, { align: "right" });
-      currentY += 7;
-    }
+      doc.setFontSize(14);
+      doc.setTextColor(0);
+      doc.text("Grand Total:", summaryX, currentY);
+      doc.text(`Rs. ${total.toLocaleString()}`, valueX, currentY, { align: "right" });
 
-    if (couponDiscountSum > 0) {
-      doc.setTextColor(46, 158, 91);
+      // 5. Footer & Terms
+      const footerY = 270;
+      doc.setFontSize(8);
+      doc.setTextColor(150);
+      doc.setFont("helvetica", "italic");
+      doc.text("Terms & Conditions:", 14, footerY);
+      doc.text("1. Items can be exchanged within 7 days of purchase.", 14, footerY + 5);
+      doc.text("2. Please present this invoice for any exchanges.", 14, footerY + 9);
+
       doc.setFont("helvetica", "bold");
-      doc.text("Coupon Savings:", summaryX, currentY);
-      doc.text(`- Rs. ${couponDiscountSum.toLocaleString()}`, valueX, currentY, { align: "right" });
-      currentY += 7;
+      doc.setFontSize(10);
+      doc.setTextColor(46, 158, 91);
+      doc.text("THANK YOU FOR SHOPPING WITH Neverbe!", 105, 285, { align: "center" });
+
+      doc.save(`Neverbe-Invoice-${orderId}.pdf`);
+    } catch (err) {
+      console.error("Failed to generate PDF invoice:", err);
+    } finally {
+      setDownloading(false);
     }
-
-    doc.setTextColor(100);
-    doc.setFont("helvetica", "normal");
-    doc.text("Shipping Fee:", summaryX, currentY);
-    doc.text(`Rs. ${(shippingFee || 0).toLocaleString()}`, valueX, currentY, { align: "right" });
-    
-    currentY += 10;
-    doc.setDrawColor(230);
-    doc.line(summaryX, currentY - 5, valueX, currentY - 5);
-
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(14);
-    doc.setTextColor(0);
-    doc.text("Grand Total:", summaryX, currentY);
-    doc.text(`Rs. ${total.toLocaleString()}`, valueX, currentY, { align: "right" });
-
-    // 5. Footer & Terms
-    const footerY = 270;
-    doc.setFontSize(8);
-    doc.setTextColor(150);
-    doc.setFont("helvetica", "italic");
-    doc.text("Terms & Conditions:", 14, footerY);
-    doc.text("1. Items can be exchanged within 7 days of purchase.", 14, footerY + 5);
-    doc.text("2. Please present this invoice for any exchanges.", 14, footerY + 9);
-
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(10);
-    doc.setTextColor(46, 158, 91);
-    doc.text("THANK YOU FOR SHOPPING WITH Neverbe!", 105, 285, { align: "center" });
-
-    doc.save(`Neverbe-Invoice-${orderId}.pdf`);
   };
 
   return (
@@ -322,10 +377,12 @@ const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
               <div className="flex items-center gap-3">
                 <Button
                   onClick={handleDownloadInvoice}
+                  loading={downloading}
+                  disabled={downloading}
                   className="flex items-center gap-2 px-6 py-4 bg-white text-primary-dark border border-strong hover:border-primary transition-all text-xs! font-black! uppercase! tracking-widest! rounded-full shadow-sm h-auto"
                 >
                   <IoCloudDownloadOutline size={18} />
-                  Download Invoice
+                  {downloading ? "Generating..." : "Download Invoice"}
                 </Button>
               </div>
             </div>
