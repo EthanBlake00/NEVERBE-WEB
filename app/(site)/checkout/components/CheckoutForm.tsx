@@ -86,9 +86,9 @@ const CheckoutForm = () => {
   const [riskResult, setRiskResult] = useState<CompositeRiskResult | null>(null);
   const [isEvaluatingRisk, setIsEvaluatingRisk] = useState(false);
 
-  const evaluateFullFraudRisk = async () => {
-    const formValues = form.getFieldsValue();
-    if (!formValues.phone || formValues.phone.trim().length < 8) return;
+  const evaluateFullFraudRisk = async (overrideValues?: any): Promise<CompositeRiskResult | null> => {
+    const formValues = overrideValues || form.getFieldsValue();
+    if (!formValues.phone && !formValues.email && !formValues.address) return null;
     setIsEvaluatingRisk(true);
     try {
       const res = await evaluateCustomerFraudRisk({
@@ -104,8 +104,10 @@ const CheckoutForm = () => {
       if (res.isHighRisk) {
         toast.error("High delivery risk flagged. Delivery fee prepayment (Rs. 450) is required for COD.", { duration: 6000 });
       }
+      return res;
     } catch (e) {
       console.warn("Fraud evaluation error", e);
+      return null;
     } finally {
       setIsEvaluatingRisk(false);
     }
@@ -278,6 +280,12 @@ const CheckoutForm = () => {
             }),
       };
 
+      // 0. Ensure Customer Risk Evaluation is executed
+      let currentRisk = riskResult;
+      if (!currentRisk) {
+        currentRisk = await evaluateFullFraudRisk(values);
+      }
+
       // 1. Calculate Totals
       const totals = calculateTotals(
         bagItems,
@@ -297,13 +305,13 @@ const CheckoutForm = () => {
           appliedPromotionIds: promotionIds,
         },
         undefined,
-        riskResult?.isHighRisk
+        currentRisk?.isHighRisk
           ? {
               riskStatus: "HIGH_RISK",
-              ipqsFraudScore: riskResult.fraudScore,
-              ipqsRiskLevel: riskResult.riskLevel,
-              ipqsLineType: riskResult.lineType,
-              ipqsReasons: riskResult.reasons,
+              ipqsFraudScore: currentRisk.fraudScore,
+              ipqsRiskLevel: currentRisk.riskLevel,
+              ipqsLineType: currentRisk.lineType,
+              ipqsReasons: currentRisk.reasons,
             }
           : undefined
       );

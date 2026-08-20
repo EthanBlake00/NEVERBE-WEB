@@ -326,8 +326,8 @@ export async function calculateCentralizedFraudRisk(
     if (data.city) params.append("city", data.city);
     if ((data as any).recaptchaToken) params.append("token", (data as any).recaptchaToken);
 
-    const res = await axiosInstance.get(`/api/v1/erp/orders/customer-risk-history?${params.toString()}`, {
-      timeout: 3000,
+    const res = await axiosInstance.get(`/erp/orders/customer-risk-history?${params.toString()}`, {
+      timeout: 5000,
     });
 
     const history = res.data;
