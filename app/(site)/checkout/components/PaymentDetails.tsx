@@ -39,6 +39,7 @@ interface PaymentDetailsProps {
   setMerchantFee?: React.Dispatch<React.SetStateAction<number>>;
   selectedPaymentFee: number;
   shippingCost: number;
+  isHighRisk?: boolean;
 }
 
 interface BundleGroup {
@@ -115,6 +116,7 @@ const PaymentDetails: React.FC<PaymentDetailsProps> = ({
   setMerchantFee,
   selectedPaymentFee,
   shippingCost,
+  isHighRisk,
 }) => {
   const bagItems = useSelector((state: RootState) => state.bag.bag);
   const couponDiscount =
@@ -280,6 +282,7 @@ const PaymentDetails: React.FC<PaymentDetailsProps> = ({
               setPaymentFee={setPaymentFee}
               setMerchantFee={setMerchantFee}
               bagItems={bagItems}
+              isHighRisk={isHighRisk}
             />
           )}
         </div>

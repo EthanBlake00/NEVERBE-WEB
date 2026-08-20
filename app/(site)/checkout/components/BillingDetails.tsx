@@ -7,12 +7,14 @@ interface BillingDetailsProps {
   saveAddress: boolean;
   setSaveAddress: React.Dispatch<React.SetStateAction<boolean>>;
   customer: Customer | null;
+  onPhoneBlur?: (phone: string) => void;
 }
 
 const BillingDetails: React.FC<BillingDetailsProps> = ({
   saveAddress,
   setSaveAddress,
   customer,
+  onPhoneBlur,
 }) => {
   return (
     <section className="flex flex-col items-start w-full mx-auto md:px-0 px-2">
@@ -160,6 +162,7 @@ const BillingDetails: React.FC<BillingDetailsProps> = ({
               size="large"
               placeholder="07XXXXXXXX"
               className="px-4 rounded-xl text-sm font-bold"
+              onBlur={(e) => onPhoneBlur?.(e.target.value)}
             />
           </Form.Item>
         </Col>

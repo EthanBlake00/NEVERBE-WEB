@@ -28,6 +28,15 @@ export interface Order {
   trackingNumber?: string;
   courier?: string; // e.g. "Domex"
 
+  // Anti-Spam & Risk Protection
+  riskStatus?: "NORMAL" | "HIGH_RISK";
+  ipqsFraudScore?: number;
+  ipqsRiskLevel?: string;
+  ipqsLineType?: string;
+  ipqsReasons?: string[];
+  deliveryFeePrepaid?: boolean;
+  deliveryFeeTxnId?: string;
+
   createdAt: string | Date;
   updatedAt: string | Date;
 }

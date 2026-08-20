@@ -25,6 +25,8 @@ export * from "./Customer";
 export * from "./BagItem";
 export * from "./BaseItem";
 export * from "./PaymentMethod";
+export * from "./FraudRisk";
+export * from "./SpammerRecord";
 
 // User & Auth
 export * from "./SerializableUser";

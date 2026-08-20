@@ -13,6 +13,7 @@ interface PaymentOptionsProps {
   setPaymentFee: React.Dispatch<React.SetStateAction<number>>;
   setMerchantFee?: React.Dispatch<React.SetStateAction<number>>;
   bagItems: BagItem[];
+  isHighRisk?: boolean;
 }
 
 const PaymentOptions: React.FC<PaymentOptionsProps> = ({
@@ -23,6 +24,7 @@ const PaymentOptions: React.FC<PaymentOptionsProps> = ({
   setPaymentFee,
   setMerchantFee,
   bagItems,
+  isHighRisk,
 }) => {
   const handleSelect = (option: PaymentMethod) => {
     setPaymentType(option.name);
@@ -36,6 +38,7 @@ const PaymentOptions: React.FC<PaymentOptionsProps> = ({
       {paymentOptions.map((option) => {
         const isSelected = option.name === paymentType;
         const hasFee = (option.customerFee || 0) > 0;
+        const isCod = option.name?.toLowerCase().includes("cod") || option.name?.toLowerCase().includes("cash on delivery");
 
         return (
           <div
@@ -79,13 +82,20 @@ const PaymentOptions: React.FC<PaymentOptionsProps> = ({
                         />
                       </div>
                     )}
-                    <p
-                      className={`text-sm font-display font-black uppercase tracking-wider ${
-                        isSelected ? "text-primary-dark" : "text-primary-dark"
-                      }`}
-                    >
-                      {option.name}
-                    </p>
+                    <div>
+                      <p
+                        className={`text-sm font-display font-black uppercase tracking-wider ${
+                          isSelected ? "text-primary-dark" : "text-primary-dark"
+                        }`}
+                      >
+                        {isCod && isHighRisk ? "COD (Prepaid Delivery Fee Required)" : option.name}
+                      </p>
+                      {isCod && isHighRisk && (
+                        <span className="inline-block text-[9px] font-bold uppercase tracking-wider text-rose-600 bg-rose-50 border border-rose-200 px-1.5 py-0.5 rounded mt-0.5">
+                          Rs. 450 Delivery Fee Online Prepayment Required
+                        </span>
+                      )}
+                    </div>
                   </div>
 
                   {/* Fee Indicator Tag */}

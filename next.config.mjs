@@ -7,8 +7,7 @@ const nextConfig = {
         ignoreBuildErrors: true,
     },
 
-    // Great for Docker / Firebase / Node deployments
-    output: "standalone",
+    // output: "standalone",
 
     // Enable gzip + brotli compression
     compress: true,
@@ -37,6 +36,7 @@ const nextConfig = {
 
     // Experimental features supported in Next.js 16
     experimental: {
+        webpackBuildWorker: false,
         optimizePackageImports: ["lodash", "date-fns"],
         serverActions: {
             bodySizeLimit: "2mb",

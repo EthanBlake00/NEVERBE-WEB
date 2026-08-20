@@ -5,7 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import { AppDispatch, RootState } from "@/redux/store";
 import { Form, Input, Button, Row, Col, Modal, Flex, Typography } from "antd";
-import { FiX } from "react-icons/fi";
+import { FiX, FiAlertTriangle } from "react-icons/fi";
+import { evaluateCustomerFraudRisk, CompositeRiskResult } from "@/actions/thirdPartyRiskAction";
 import BillingDetails from "./BillingDetails";
 import ShippingDetails from "./ShippingDetails";
 import PaymentDetails from "@/app/(site)/checkout/components/PaymentDetails";
@@ -80,6 +81,35 @@ const CheckoutForm = () => {
   const [shippingSameAsBilling, setShippingSameAsBilling] = useState(true);
   const [saveAddress, setSaveAddress] = useState(true);
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
+
+  // Dual-Engine Fraud Risk Check State
+  const [riskResult, setRiskResult] = useState<CompositeRiskResult | null>(null);
+  const [isEvaluatingRisk, setIsEvaluatingRisk] = useState(false);
+
+  const evaluateFullFraudRisk = async () => {
+    const formValues = form.getFieldsValue();
+    if (!formValues.phone || formValues.phone.trim().length < 8) return;
+    setIsEvaluatingRisk(true);
+    try {
+      const res = await evaluateCustomerFraudRisk({
+        phone: formValues.phone || "",
+        email: formValues.email || "",
+        first_name: formValues.first_name || "",
+        last_name: formValues.last_name || "",
+        address: formValues.address || "",
+        city: formValues.city || "",
+        zip: formValues.zip || "",
+      });
+      setRiskResult(res);
+      if (res.isHighRisk) {
+        toast.error("High delivery risk flagged. Delivery fee prepayment (Rs. 450) is required for COD.", { duration: 6000 });
+      }
+    } catch (e) {
+      console.warn("Fraud evaluation error", e);
+    } finally {
+      setIsEvaluatingRisk(false);
+    }
+  };
 
   // 1. Auth Guard: Ensure Anonymous Sign-in
   useEffect(() => {
@@ -266,6 +296,16 @@ const CheckoutForm = () => {
           appliedPromotionId: promotionIds[0] || null, // Assuming first is primary if needed
           appliedPromotionIds: promotionIds,
         },
+        undefined,
+        riskResult?.isHighRisk
+          ? {
+              riskStatus: "HIGH_RISK",
+              ipqsFraudScore: riskResult.fraudScore,
+              ipqsRiskLevel: riskResult.riskLevel,
+              ipqsLineType: riskResult.lineType,
+              ipqsReasons: riskResult.reasons,
+            }
+          : undefined
       );
 
       console.log("New Order Payload:", newOrder);
@@ -318,6 +358,7 @@ const CheckoutForm = () => {
                 saveAddress={saveAddress}
                 setSaveAddress={setSaveAddress}
                 customer={billingCustomer}
+                onPhoneBlur={evaluateFullFraudRisk}
               />
 
               <ShippingDetails
@@ -331,6 +372,17 @@ const CheckoutForm = () => {
 
           {/* --- RIGHT COLUMN: SUMMARY & PAYMENT --- */}
           <Col xs={24} lg={10}>
+            {riskResult?.isHighRisk && (
+              <div className="bg-rose-50 border border-rose-200 rounded-xl p-4 mb-4 flex items-start gap-3 text-rose-800">
+                <FiAlertTriangle className="text-rose-500 shrink-0 mt-0.5" size={20} />
+                <div>
+                  <p className="text-xs font-black uppercase tracking-wider">High Delivery Risk Flagged</p>
+                  <p className="text-xs mt-1 font-medium leading-relaxed">
+                    {riskResult.noticeMessage || "Due to high return/spam risk on past network activity, delivery fee prepayment (Rs. 450) is required for COD orders."}
+                  </p>
+                </div>
+              </div>
+            )}
             <PaymentDetails
               setPaymentType={setPaymentType}
               paymentType={paymentType || ""}
@@ -339,6 +391,7 @@ const CheckoutForm = () => {
               setMerchantFee={setMerchantFee}
               selectedPaymentFee={paymentFee}
               shippingCost={shippingCost}
+              isHighRisk={riskResult?.isHighRisk}
             />
           </Col>
         </Row>

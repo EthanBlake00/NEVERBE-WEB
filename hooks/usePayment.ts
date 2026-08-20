@@ -85,6 +85,13 @@ interface UsePaymentReturn {
       appliedPromotionIds: string[];
     },
     customOrderId?: string,
+    riskData?: {
+      riskStatus?: "NORMAL" | "HIGH_RISK";
+      ipqsFraudScore?: number;
+      ipqsRiskLevel?: string;
+      ipqsLineType?: string;
+      ipqsReasons?: string[];
+    },
   ) => Order;
 
   // Payment processing
@@ -187,6 +194,13 @@ export const usePayment = (options: UsePaymentOptions): UsePaymentReturn => {
         appliedPromotionIds: string[];
       },
       customOrderId?: string,
+      riskData?: {
+        riskStatus?: "NORMAL" | "HIGH_RISK";
+        ipqsFraudScore?: number;
+        ipqsRiskLevel?: string;
+        ipqsLineType?: string;
+        ipqsReasons?: string[];
+      },
     ): Order => {
       const finalOrderId = customOrderId || activeOrderId || "PENDING";
       return {
@@ -216,6 +230,11 @@ export const usePayment = (options: UsePaymentOptions): UsePaymentReturn => {
         promotionDiscount: totals.promotionDiscount,
         appliedPromotionId: promotionData?.appliedPromotionId || undefined,
         appliedPromotionIds: promotionData?.appliedPromotionIds,
+        riskStatus: riskData?.riskStatus || "NORMAL",
+        ipqsFraudScore: riskData?.ipqsFraudScore,
+        ipqsRiskLevel: riskData?.ipqsRiskLevel,
+        ipqsLineType: riskData?.ipqsLineType,
+        ipqsReasons: riskData?.ipqsReasons,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };
