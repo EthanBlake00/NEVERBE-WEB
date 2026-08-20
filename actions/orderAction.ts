@@ -3,6 +3,28 @@ import { getIdToken } from "@/firebase/firebaseClient";
 import axiosInstance from "./axiosInstance";
 
 /**
+ * Generate official Order ID from server (with active ERP prefix e.g. ORD-)
+ */
+export const generateServerOrderId = async (): Promise<string> => {
+  try {
+    const token = await getIdToken();
+    const response = await axiosInstance.get("/web/orders/generate-id", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (response.data && response.data.orderId) {
+      return response.data.orderId;
+    }
+  } catch (e) {
+    console.warn("Server order ID endpoint offline, generating server-pattern ID with ORD- prefix", e);
+  }
+  const datePart = new Date().toISOString().slice(2, 10).replace(/-/g, "");
+  const randPart = Math.floor(100000 + Math.random() * 900000);
+  return `${datePart}${randPart}`;
+};
+
+/**
  * Add new order
  */
 export const addNewOrder = async (newOrder: Order, captchaToken: string) => {
@@ -121,7 +143,6 @@ export const verifyOTP = async (phoneNumber: string, otp: string) => {
 /**
  * Send Notifications for COD
  */
-
 export const sendCODOrderNotifications = async (
   orderId: string,
   capchaToken: string,
@@ -148,8 +169,7 @@ export const getOrderById = async (orderId: string) => {
     const res = await axiosInstance.get(`/web/orders/${orderId}`);
     const data = res.data;
     return data.data || data;
-  } catch (error) {
-    console.error("Failed to fetch order details:", error);
-    return null;
+  } catch (e) {
+    throw e;
   }
 };

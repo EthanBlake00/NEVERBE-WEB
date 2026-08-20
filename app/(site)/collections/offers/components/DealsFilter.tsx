@@ -28,6 +28,10 @@ const DealsFilter = ({ filters, actions }: DealsFilterProps) => {
       onCategoryToggle={actions.toggleCategory}
       onSizeToggle={actions.toggleSize}
       onInStockChange={actions.setInStock}
+      selectedOccasions={[]}
+      selectedStyles={[]}
+      onOccasionToggle={() => {}}
+      onStyleToggle={() => {}}
       onReset={actions.resetFilters}
     />
   );

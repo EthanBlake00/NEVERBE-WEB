@@ -232,7 +232,7 @@ const Account = () => {
               </div>
             ) : (
               <div className="w-full">
-                {activeTab === "dashboard" && (
+                {activeTab === "dashboard" && user && (
                   <ProfileOverview
                     user={user}
                     setActiveTab={setActiveTab}

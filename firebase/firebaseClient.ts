@@ -51,7 +51,7 @@ export const getIdToken = async () => {
   // 2. If a sign-in is already in progress, wait for it
   if (signInPromise) {
     await signInPromise;
-    return auth.currentUser?.getIdToken();
+    return (auth.currentUser as any)?.getIdToken();
   }
 
   // 3. Initiate a new anonymous sign-in

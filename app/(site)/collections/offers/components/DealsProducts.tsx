@@ -62,6 +62,10 @@ const DealsProducts = ({ items }: { items: Product[] }) => {
             onCategoryToggle={toggleCategory}
             onSizeToggle={toggleSize}
             onInStockChange={setInStock}
+            selectedOccasions={[]}
+            selectedStyles={[]}
+            onOccasionToggle={() => {}}
+            onStyleToggle={() => {}}
             onReset={resetFilters}
             onClose={() => setShowFilter(false)}
           />

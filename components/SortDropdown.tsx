@@ -23,7 +23,7 @@ const SortDropdown: React.FC<SortDropdownProps> = ({
   className = "",
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  const dropdownRef = useRef<any>(null);
 
   const closeDropdown = useCallback(() => setIsOpen(false), []);
   useClickOutside(dropdownRef, closeDropdown, isOpen);

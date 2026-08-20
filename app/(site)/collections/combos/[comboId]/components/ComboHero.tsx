@@ -13,7 +13,7 @@ import { Button } from "antd";
 import { AppDispatch, RootState } from "@/redux/store";
 import { addMultipleToBag } from "@/redux/bagSlice/bagSlice";
 import { ComboProduct, ComboItem } from "@/interfaces/ComboProduct";
-import { BagItem, VariantMode } from "@/interfaces/BagItem";
+import { BagItem, VariantMode } from "@/interfaces";
 import SizeGrid from "@/components/SizeGrid";
 import axiosInstance from "@/actions/axiosInstance";
 

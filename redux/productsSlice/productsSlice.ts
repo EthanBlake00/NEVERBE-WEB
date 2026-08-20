@@ -1,4 +1,4 @@
-import { Item } from "@/interfaces/BagItem";
+import { Item } from "@/interfaces";
 import { createSlice } from "@reduxjs/toolkit";
 
 interface ProductsSlice {

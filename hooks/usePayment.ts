@@ -17,6 +17,7 @@ import {
   requestOTP,
   verifyOTP,
   sendCODOrderNotifications,
+  generateServerOrderId,
 } from "@/actions/orderAction";
 import {
   calculateFee,
@@ -24,7 +25,6 @@ import {
   calculateTotal,
   calculateTotalDiscount,
   calculateTransactionFeeCharge,
-  generateOrderId,
 } from "@/utils/bagCalculations";
 
 // Payment method IDs
@@ -84,6 +84,7 @@ interface UsePaymentReturn {
       appliedPromotionId: string | null;
       appliedPromotionIds: string[];
     },
+    customOrderId?: string,
   ) => Order;
 
   // Payment processing
@@ -105,28 +106,18 @@ const getDeviceSystem = (): string => {
 
   const userAgent = window.navigator.userAgent.toLowerCase();
 
-  if (/android/i.test(userAgent)) {
-    return "Android Web";
-  }
-  if (/ipad|iphone|ipod/.test(userAgent)) {
-    return "iOS Web";
-  }
-  if (/macintosh|mac os x/i.test(userAgent)) {
-    return "Mac Web";
-  }
-  if (/windows/i.test(userAgent)) {
-    return "Windows Web";
-  }
-  if (/linux/i.test(userAgent)) {
-    return "Linux Web";
-  }
+  if (/android/i.test(userAgent)) return "Android Web";
+  if (/ipad|iphone|ipod/.test(userAgent)) return "iOS Web";
+  if (/macintosh|mac os x/i.test(userAgent)) return "Mac Web";
+  if (/windows/i.test(userAgent)) return "Windows Web";
+  if (/linux/i.test(userAgent)) return "Linux Web";
 
   return "Website";
 };
 
 /**
  * usePayment - Centralized hook for all checkout payment logic
- * Handles PayHere, KOKO, and COD payment flows
+ * Handles PayHere, KOKO, and COD payment flows using Server-Generated Order IDs
  */
 export const usePayment = (options: UsePaymentOptions): UsePaymentReturn => {
   const dispatch: AppDispatch = useDispatch();
@@ -141,7 +132,7 @@ export const usePayment = (options: UsePaymentOptions): UsePaymentReturn => {
   // State
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [orderId] = useState(generateOrderId());
+  const [activeOrderId, setActiveOrderId] = useState<string>("");
 
   // OTP state for COD
   const [otpState, setOtpState] = useState<OTPState>({
@@ -183,7 +174,7 @@ export const usePayment = (options: UsePaymentOptions): UsePaymentReturn => {
   );
 
   /**
-   * Build order payload for submission
+   * Build order payload for submission using Server-Generated Order ID
    */
   const buildOrderPayload = useCallback(
     (
@@ -195,37 +186,41 @@ export const usePayment = (options: UsePaymentOptions): UsePaymentReturn => {
         appliedPromotionId: string | null;
         appliedPromotionIds: string[];
       },
-    ): Order => ({
-      orderId,
-      paymentId: "",
-      userId: userId || "anonymous-user",
-      customer,
-      items: bagItems as any, // BagItem is compatible with OrderItem at runtime
-      total: totals.total,
-      paymentMethod: options.paymentMethodName,
-      paymentMethodId: options.paymentMethodId,
-      fee: totals.paymentFee,
-      shippingFee: totals.shippingFee,
-      transactionFeeCharge: calculateTransactionFeeCharge(
-        bagItems,
-        options.merchantFee || 0,
-        totals.paymentFee,
-        totals.shippingFee,
-      ),
-      paymentStatus: "Pending",
-      status: "Processing",
-      from: getDeviceSystem(),
-      discount:
-        totals.itemDiscount + totals.couponDiscount + totals.promotionDiscount,
-      couponCode: couponCode || undefined,
-      couponDiscount: totals.couponDiscount,
-      promotionDiscount: totals.promotionDiscount,
-      appliedPromotionId: promotionData?.appliedPromotionId || undefined,
-      appliedPromotionIds: promotionData?.appliedPromotionIds,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    }),
-    [orderId, options, couponCode],
+      customOrderId?: string,
+    ): Order => {
+      const finalOrderId = customOrderId || activeOrderId || "PENDING";
+      return {
+        orderId: finalOrderId,
+        paymentId: "",
+        userId: userId || "anonymous-user",
+        customer,
+        items: bagItems as any,
+        total: totals.total,
+        paymentMethod: options.paymentMethodName,
+        paymentMethodId: options.paymentMethodId,
+        fee: totals.paymentFee,
+        shippingFee: totals.shippingFee,
+        transactionFeeCharge: calculateTransactionFeeCharge(
+          bagItems,
+          options.merchantFee || 0,
+          totals.paymentFee,
+          totals.shippingFee,
+        ),
+        paymentStatus: "Pending",
+        status: "Processing",
+        from: getDeviceSystem(),
+        discount:
+          totals.itemDiscount + totals.couponDiscount + totals.promotionDiscount,
+        couponCode: couponCode || undefined,
+        couponDiscount: totals.couponDiscount,
+        promotionDiscount: totals.promotionDiscount,
+        appliedPromotionId: promotionData?.appliedPromotionId || undefined,
+        appliedPromotionIds: promotionData?.appliedPromotionIds,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+    },
+    [activeOrderId, options, couponCode],
   );
 
   /**
@@ -300,7 +295,7 @@ export const usePayment = (options: UsePaymentOptions): UsePaymentReturn => {
   };
 
   /**
-   * Process COD Payment - initiates OTP flow
+   * Process COD Payment - initiates OTP flow with Server Order ID
    */
   const processCOD = async (order: Order, customer: Customer) => {
     if (!executeRecaptcha) {
@@ -333,10 +328,10 @@ export const usePayment = (options: UsePaymentOptions): UsePaymentReturn => {
   };
 
   /**
-   * Main payment processor - routes to appropriate handler
+   * Main payment processor - fetches Server-Generated Order ID before processing
    */
   const processPayment = useCallback(
-    async (order: Order, customer: Customer) => {
+    async (orderData: Order, customer: Customer) => {
       if (!executeRecaptcha) {
         setError("Recaptcha not ready");
         return;
@@ -346,33 +341,46 @@ export const usePayment = (options: UsePaymentOptions): UsePaymentReturn => {
       setError(null);
 
       try {
+        // 1. Fetch Official Server Order ID with ERP Prefix (ORD-)
+        const serverOrderId = await generateServerOrderId();
+        setActiveOrderId(serverOrderId);
+
+        const orderWithServerId: Order = {
+          ...orderData,
+          orderId: serverOrderId,
+        };
+
+        // 2. Handle COD Flow
         if (options.paymentMethodId?.toUpperCase() === PAYMENT_METHOD_IDS.COD) {
-          await processCOD(order, customer);
+          await processCOD(orderWithServerId, customer);
           return;
         }
 
+        // 3. Handle PayHere / KOKO Gateways
         const token = await executeRecaptcha("new_order");
 
         switch (options.paymentMethodId?.toUpperCase()) {
-          case PAYMENT_METHOD_IDS.KOKO:
-            const kokoPayload = await processKOKO(order, customer);
-            await addNewOrder(order, token);
+          case PAYMENT_METHOD_IDS.KOKO: {
+            const kokoPayload = await processKOKO(orderWithServerId, customer);
+            await addNewOrder(orderWithServerId, token);
             dispatch(clearBag());
             submitExternalForm(
               process.env.NEXT_PUBLIC_KOKO_REDIRECT_URL || "",
               kokoPayload,
             );
             break;
+          }
 
-          case PAYMENT_METHOD_IDS.PAYHERE:
-            const payherePayload = await processPayHere(order, customer);
-            await addNewOrder(order, token);
+          case PAYMENT_METHOD_IDS.PAYHERE: {
+            const payherePayload = await processPayHere(orderWithServerId, customer);
+            await addNewOrder(orderWithServerId, token);
             dispatch(clearBag());
             submitExternalForm(
               process.env.NEXT_PUBLIC_PAYHERE_URL || "",
               payherePayload,
             );
             break;
+          }
 
           default:
             throw new Error("Invalid payment method selected");
@@ -450,7 +458,7 @@ export const usePayment = (options: UsePaymentOptions): UsePaymentReturn => {
       } catch (err: any) {
         console.error("OTP Resend Error:", err);
         const serverMessage = err.response?.data?.message;
-        toast.error(serverMessage || err.message || "Failed to send OTP");
+        toast.error(serverMessage || err.message || "Failed to resend OTP");
       } finally {
         setOtpState((prev) => ({ ...prev, isResending: false }));
       }
@@ -458,23 +466,14 @@ export const usePayment = (options: UsePaymentOptions): UsePaymentReturn => {
     [executeRecaptcha],
   );
 
-  /**
-   * Close OTP modal without clearing pending order
-   */
   const closeOTPModal = useCallback(() => {
     setOtpState((prev) => ({ ...prev, showModal: false }));
   }, []);
 
-  /**
-   * Open OTP modal (re-show verification)
-   */
   const openOTPModal = useCallback(() => {
     setOtpState((prev) => ({ ...prev, showModal: true }));
   }, []);
 
-  /**
-   * Reset OTP state completely (for starting over)
-   */
   const resetOTPState = useCallback(() => {
     setOtpState({
       showModal: false,
@@ -488,7 +487,7 @@ export const usePayment = (options: UsePaymentOptions): UsePaymentReturn => {
   return {
     isProcessing,
     error,
-    orderId,
+    orderId: activeOrderId,
     otpState,
     calculateTotals,
     buildOrderPayload,
@@ -500,5 +499,3 @@ export const usePayment = (options: UsePaymentOptions): UsePaymentReturn => {
     resetOTPState,
   };
 };
-
-export default usePayment;

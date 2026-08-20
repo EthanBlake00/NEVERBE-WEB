@@ -22,7 +22,7 @@ export default async function Page(context: {
     const order = await getOrderById(orderId);
     if (!order) return redirect("/checkout/fail");
 
-    return <SuccessPageClient order={order} expired={order.expired} />;
+    return <SuccessPageClient order={order} />;
   } catch (error) {
     console.error("Error fetching order:", error);
     return redirect("/checkout/fail");

@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { SerializableUser } from "@/interfaces/BagItem";
+import { SerializableUser } from "@/interfaces";
 
 interface AuthSlice {
   user: SerializableUser | null;

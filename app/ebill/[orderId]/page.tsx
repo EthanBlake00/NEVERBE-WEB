@@ -224,11 +224,12 @@ export default async function EBillPage(props: { params: Promise<{ orderId: stri
                         <p className="text-[10px] font-bold uppercase text-muted tracking-widest">
                           {item.size || "Free Size"} &times; {item.quantity}
                         </p>
-                      {hasDiscount && (
-                        <p className="text-[9px] font-bold text-accent">
-                          {formatCurrency(item.price)} → {formatCurrency(netPrice)} (-{formatCurrency(item.discount)})
-                        </p>
-                      )}
+                        {hasDiscount && (
+                          <p className="text-[9px] font-bold text-accent">
+                            {formatCurrency(item.price)} → {formatCurrency(netPrice)} (-{formatCurrency(item.discount)})
+                          </p>
+                        )}
+                      </div>
                     </div>
                     <div className="text-right">
                       <p className="font-display font-black text-lg">{formatCurrency(netPrice * item.quantity)}</p>
