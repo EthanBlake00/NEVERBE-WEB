@@ -1,8 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Form, Input, Button, Row, Col, Typography, Card } from "antd";
-const { Title, Text } = Typography;
+import { Form, Input, Button, Row, Col } from "antd";
 import toast from "react-hot-toast";
 import { auth } from "@/firebase/firebaseClient";
 import { motion, AnimatePresence } from "framer-motion";
@@ -86,7 +85,7 @@ const SavedAddresses: React.FC<SavedAddressesProps> = ({
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              className="bg-white p-6 rounded-2xl border border-default"
+              className="v2-glass p-6 rounded-3xl border border-[var(--v2-glass-border,rgba(255,255,255,0.08))]"
             >
               <Form
                 form={form}
@@ -100,19 +99,16 @@ const SavedAddresses: React.FC<SavedAddressesProps> = ({
                 }}
               >
                 <div className="flex justify-between items-center mb-2">
-                  <Title
-                    level={3}
-                    className="text-lg! font-bold! text-primary-dark! uppercase! tracking-tight! mb-0!"
-                  >
+                  <h3 className="text-base font-black text-[var(--v2-text-primary,#F5F5F5)] uppercase tracking-tight m-0">
                     Edit {type} Address
-                  </Title>
-                  <Button
-                    type="text"
+                  </h3>
+                  <button
+                    type="button"
                     onClick={() => setIsEditing(false)}
-                    className="text-muted hover:text-primary-dark transition-colors p-0 h-auto"
+                    className="text-[var(--v2-text-muted,#666666)] hover:text-[var(--v2-text-primary,#F5F5F5)] transition-colors p-0 border-none bg-transparent cursor-pointer"
                   >
-                    <IoCloseOutline size={24} />
-                  </Button>
+                    <IoCloseOutline size={22} />
+                  </button>
                 </div>
 
                 <Form.Item
@@ -121,9 +117,8 @@ const SavedAddresses: React.FC<SavedAddressesProps> = ({
                   className="mb-0"
                 >
                   <Input
-                    size="large"
                     placeholder="Street Address"
-                    className="w-full bg-white p-3 rounded-xl border border-default focus:border-accent outline-none text-sm transition-all hover:bg-white focus:bg-white"
+                    className="w-full h-12 rounded-2xl bg-[var(--v2-glass-bg,rgba(255,255,255,0.04))] border-[var(--v2-glass-border,rgba(255,255,255,0.1))] text-[var(--v2-text-primary,#F5F5F5)] font-bold text-xs"
                   />
                 </Form.Item>
                 <div className="grid grid-cols-2 gap-4">
@@ -133,9 +128,8 @@ const SavedAddresses: React.FC<SavedAddressesProps> = ({
                     className="mb-0"
                   >
                     <Input
-                      size="large"
                       placeholder="City"
-                      className="w-full bg-white p-3 rounded-xl border border-default focus:border-accent outline-none text-sm transition-all hover:bg-white focus:bg-white"
+                      className="w-full h-12 rounded-2xl bg-[var(--v2-glass-bg,rgba(255,255,255,0.04))] border-[var(--v2-glass-border,rgba(255,255,255,0.1))] text-[var(--v2-text-primary,#F5F5F5)] font-bold text-xs"
                     />
                   </Form.Item>
                   <Form.Item
@@ -144,9 +138,8 @@ const SavedAddresses: React.FC<SavedAddressesProps> = ({
                     className="mb-0"
                   >
                     <Input
-                      size="large"
                       placeholder="Phone Number"
-                      className="w-full bg-white p-3 rounded-xl border border-default focus:border-accent outline-none text-sm transition-all hover:bg-white focus:bg-white"
+                      className="w-full h-12 rounded-2xl bg-[var(--v2-glass-bg,rgba(255,255,255,0.04))] border-[var(--v2-glass-border,rgba(255,255,255,0.1))] text-[var(--v2-text-primary,#F5F5F5)] font-bold text-xs"
                     />
                   </Form.Item>
                 </div>
@@ -155,7 +148,7 @@ const SavedAddresses: React.FC<SavedAddressesProps> = ({
                   type="primary"
                   htmlType="submit"
                   loading={isSaving}
-                  className="w-full bg-dark hover:bg-accent text-inverse hover:text-dark py-5 rounded-full font-black uppercase text-[10px] tracking-widest border-none mt-4"
+                  className="w-full h-12 rounded-full bg-[var(--v2-accent,#2EE66A)]! text-[#0A0A0A]! font-black uppercase text-xs tracking-widest border-none mt-2 cursor-pointer shadow-md"
                 >
                   Save Address
                 </Button>
@@ -163,64 +156,50 @@ const SavedAddresses: React.FC<SavedAddressesProps> = ({
             </motion.div>
           ) : (
             <motion.div key="display" className="h-full">
-              <Card
-                bordered={false}
-                className="bg-white rounded-2xl border border-default flex flex-col justify-between h-full min-h-[200px] relative group hover:border-accent transition-all shadow-none hover:shadow-none"
-                bodyStyle={{
-                  padding: "24px",
-                  height: "100%",
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "space-between",
-                }}
-              >
+              <div className="v2-glass p-6 rounded-3xl border border-[var(--v2-glass-border,rgba(255,255,255,0.08))] hover:border-[var(--v2-accent,#2EE66A)] transition-all duration-300 flex flex-col justify-between h-full min-h-[220px] relative group">
                 <div>
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-accent border border-default">
+                    <div className="w-10 h-10 rounded-2xl bg-[var(--v2-accent,#2EE66A)]/10 border border-[var(--v2-accent,#2EE66A)]/20 text-[var(--v2-accent,#2EE66A)] flex items-center justify-center">
                       {type === "Shipping" ? (
                         <IoMapOutline size={20} />
                       ) : (
                         <IoCardOutline size={20} />
                       )}
                     </div>
-                    <Title
-                      level={3}
-                      className="font-display! font-black! text-lg! uppercase! tracking-tighter! text-primary-dark! mb-0!"
-                    >
+                    <h3 className="font-black text-base uppercase tracking-tight text-[var(--v2-text-primary,#F5F5F5)] m-0">
                       {type} Address
-                    </Title>
+                    </h3>
                   </div>
 
                   {existing ? (
-                    <div className="space-y-1 block">
-                      <Text className="block text-sm font-bold text-primary-dark">
+                    <div className="space-y-1">
+                      <p className="text-sm font-extrabold text-[var(--v2-text-primary,#F5F5F5)] m-0">
                         {existing.address}
-                      </Text>
-                      <Text className="block text-sm text-muted">
+                      </p>
+                      <p className="text-xs text-[var(--v2-text-secondary,#A0A0A0)] m-0">
                         {existing.city}
-                      </Text>
-                      <Text className="block text-xs font-bold text-accent mt-2 tracking-widest">
+                      </p>
+                      <p className="text-xs font-black text-[var(--v2-accent,#2EE66A)] uppercase tracking-wider mt-2 m-0">
                         {existing.phone}
-                      </Text>
+                      </p>
                     </div>
                   ) : (
-                    <Text className="block text-sm text-muted">
-                      {user?.isAnonymous 
+                    <p className="text-xs text-[var(--v2-text-muted,#666666)] m-0">
+                      {user?.isAnonymous
                         ? "Registered customers can save multiple addresses here."
-                        : "No address provided"}
-                    </Text>
+                        : "No address saved yet"}
+                    </p>
                   )}
                 </div>
 
                 <div className="mt-6 flex flex-col gap-2">
-                  <Button
-                    type="text"
+                  <button
                     disabled={user?.isAnonymous}
                     onClick={() => setIsEditing(true)}
-                    className={`flex items-center gap-2 text-[10px] font-black uppercase tracking-widest transition-all ${
+                    className={`flex items-center gap-2 text-[10px] font-black uppercase tracking-widest transition-all bg-transparent border-none p-0 cursor-pointer ${
                       user?.isAnonymous
-                        ? "text-muted cursor-not-allowed opacity-60"
-                        : "text-accent hover:text-primary-dark"
+                        ? "text-[var(--v2-text-muted,#666666)] cursor-not-allowed opacity-60"
+                        : "text-[var(--v2-accent,#2EE66A)] hover:underline"
                     }`}
                   >
                     {user?.isAnonymous ? (
@@ -228,22 +207,16 @@ const SavedAddresses: React.FC<SavedAddressesProps> = ({
                     ) : (
                       <IoPencilOutline size={14} />
                     )}
-                    {existing ? "Change Address" : "Add Address"}
-                  </Button>
-                  
-                  {user?.isAnonymous && (
-                    <Text className="text-[9px] font-bold uppercase tracking-widest text-warning opacity-80 pl-1">
-                      Guest Restriction
-                    </Text>
-                  )}
+                    <span>{existing ? "Change Address" : "Add Address"}</span>
+                  </button>
                 </div>
 
                 {existing && (
-                  <div className="absolute top-6 right-6 text-accent/50">
+                  <div className="absolute top-6 right-6 text-[var(--v2-accent,#2EE66A)]">
                     <IoCheckmarkCircleOutline size={22} />
                   </div>
                 )}
-              </Card>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
@@ -253,22 +226,17 @@ const SavedAddresses: React.FC<SavedAddressesProps> = ({
 
   return (
     <div className="space-y-8">
-      <div className="border-b border-default pb-6">
-        <Text className="block text-[10px] font-black uppercase tracking-[0.3em] text-accent">
-          Delivery
-        </Text>
-        <Title
-          level={2}
-          className="text-3xl! font-display! font-black! uppercase! tracking-tighter! text-primary-dark! mt-2! mb-0!"
-        >
-          Your Addresses
-        </Title>
-        <Text className="block text-xs text-muted font-bold uppercase tracking-widest mt-2">
-          Manage your delivery and billing locations
-        </Text>
+      <div className="border-b border-[var(--v2-glass-border,rgba(255,255,255,0.08))] pb-6">
+        <span className="v2-section-label mb-1">DELIVERY DESTINATIONS</span>
+        <h2 className="text-3xl font-black uppercase tracking-tight text-[var(--v2-text-primary,#F5F5F5)] m-0">
+          Saved Addresses
+        </h2>
+        <p className="text-xs text-[var(--v2-text-secondary,#A0A0A0)] font-medium mt-1 m-0">
+          Manage your delivery &amp; billing locations for fast 1-click checkout.
+        </p>
       </div>
 
-      <Row gutter={[24, 24]}>
+      <Row gutter={[20, 20]}>
         <Col xs={24} md={12}>
           <AddressCard type="Shipping" />
         </Col>

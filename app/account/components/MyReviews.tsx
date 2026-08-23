@@ -1,13 +1,16 @@
+"use client";
+
 import React, { useEffect, useState } from "react";
-import { Table, Button, Rate, Tag, Space, Modal, Typography, Empty } from "antd";
+import { Rate, Modal } from "antd";
 import { EditOutlined, DeleteOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
 import axiosInstance from "@/actions/axiosInstance";
 import { auth } from "@/firebase/firebaseClient";
 import toast from "react-hot-toast";
 import { formatDistanceToNow } from "date-fns";
 import ReviewForm from "@/components/ReviewForm";
+import EmptyState from "@/components/EmptyState";
+import { motion } from "framer-motion";
 
-const { Text, Title } = Typography;
 const { confirm } = Modal;
 
 interface Review {
@@ -69,99 +72,108 @@ const MyReviews = () => {
     });
   };
 
-  const columns = [
-    {
-      title: "Review",
-      key: "review",
-      render: (record: Review) => (
-        <Space direction="vertical" size={4}>
-          <Rate disabled defaultValue={record.rating} style={{ fontSize: 12 }} />
-          <Text className="block text-sm font-medium">{record.review}</Text>
-          <Text className="text-[10px] text-muted uppercase tracking-widest">
-            {record.createdAt ? formatDistanceToNow(new Date(record.createdAt), { addSuffix: true }) : "recently"}
-          </Text>
-        </Space>
-      ),
-    },
-    {
-      title: "Status",
-      dataIndex: "status",
-      key: "status",
-      width: 120,
-      render: (status: string) => (
-        <Tag color={status === "APPROVED" ? "success" : status === "PENDING" ? "processing" : "error"}>
-          {status}
-        </Tag>
-      ),
-    },
-    {
-      title: "Actions",
-      key: "actions",
-      width: 100,
-      render: (record: Review) => (
-        <Space size="middle">
-          <Button
-            type="text"
-            icon={<EditOutlined className="text-accent" />}
-            onClick={() => {
-              setEditingReview(record);
-              setIsModalOpen(true);
-            }}
-          />
-          <Button
-            type="text"
-            icon={<DeleteOutlined className="text-error" />}
-            onClick={() => handleDelete(record.reviewId)}
-          />
-        </Space>
-      ),
-    },
-  ];
-
   return (
-    <div className="animate-fade">
-      <div className="mb-8">
-        <Title level={4} className="uppercase tracking-tighter font-black m-0">
-          My Reviews
-        </Title>
-        <Text className="text-muted text-xs">Manage your feedback for products you've purchased.</Text>
+    <div className="space-y-8">
+      {/* Header */}
+      <div className="border-b border-[var(--v2-glass-border,rgba(255,255,255,0.08))] pb-6">
+        <span className="v2-section-label mb-1">FEEDBACK</span>
+        <h2 className="text-3xl font-black uppercase tracking-tight text-[var(--v2-text-primary,#F5F5F5)] m-0">
+          My Reviews &amp; Ratings
+        </h2>
       </div>
 
-      <Table
-        columns={columns}
-        dataSource={reviews}
-        rowKey="reviewId"
-        loading={loading}
-        pagination={{ hideOnSinglePage: true }}
-        locale={{
-          emptyText: (
-            <Empty
-              description="No reviews yet"
-              image={Empty.PRESENTED_IMAGE_SIMPLE}
-              className="py-12"
+      {reviews.length === 0 ? (
+        <EmptyState
+          heading="No reviews submitted"
+          subHeading="Once you purchase items and share your experience, your reviews will appear here."
+        />
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {reviews.map((r) => (
+            <motion.div
+              key={r.reviewId}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="v2-glass p-6 rounded-3xl border border-[var(--v2-glass-border,rgba(255,255,255,0.08))] hover:border-[var(--v2-accent,#2EE66A)] transition-all flex flex-col justify-between"
             >
-              <Button type="primary" onClick={() => (window.location.href = "/collections/products")} className="bg-accent border-none rounded-full px-8 h-10 font-black uppercase text-[10px] tracking-widest mt-4">
-                Shop to Review
-              </Button>
-            </Empty>
-          ),
-        }}
-        className="review-table rounded-2xl overflow-hidden border border-default shadow-sm"
-      />
+              <div>
+                <div className="flex items-center justify-between gap-2 mb-3">
+                  <Rate disabled defaultValue={r.rating} style={{ fontSize: 14, color: "var(--v2-accent,#2EE66A)" }} />
+                  <span
+                    className={`px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest ${
+                      r.status === "APPROVED"
+                        ? "bg-[var(--v2-accent,#2EE66A)]/10 text-[var(--v2-accent,#2EE66A)] border border-[var(--v2-accent,#2EE66A)]/30"
+                        : r.status === "PENDING"
+                        ? "bg-amber-400/10 text-amber-400 border border-amber-400/30"
+                        : "bg-rose-500/10 text-rose-400 border border-rose-500/30"
+                    }`}
+                  >
+                    {r.status}
+                  </span>
+                </div>
 
-      <ReviewForm
+                <p className="text-xs text-[var(--v2-text-primary,#F5F5F5)] leading-relaxed m-0 mb-4 font-medium">
+                  "{r.review}"
+                </p>
+              </div>
+
+              <div className="flex items-center justify-between pt-3 border-t border-[var(--v2-glass-border,rgba(255,255,255,0.06))] text-[10px] font-extrabold uppercase tracking-widest text-[var(--v2-text-muted,#666666)]">
+                <span>
+                  {r.createdAt ? formatDistanceToNow(new Date(r.createdAt), { addSuffix: true }) : "Recently"}
+                </span>
+
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={() => {
+                      setEditingReview(r);
+                      setIsModalOpen(true);
+                    }}
+                    className="text-[var(--v2-text-secondary,#A0A0A0)] hover:text-[var(--v2-accent,#2EE66A)] transition-colors border-none bg-transparent cursor-pointer p-0"
+                  >
+                    <EditOutlined />
+                  </button>
+                  <button
+                    onClick={() => handleDelete(r.reviewId)}
+                    className="text-rose-400 hover:text-rose-300 transition-colors border-none bg-transparent cursor-pointer p-0"
+                  >
+                    <DeleteOutlined />
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      )}
+
+      {/* Edit Review Modal */}
+      <Modal
+        title={
+          <span className="font-black uppercase tracking-tight text-[var(--v2-text-primary,#F5F5F5)]">
+            Edit Review
+          </span>
+        }
         open={isModalOpen}
-        initialValues={editingReview}
         onCancel={() => {
           setIsModalOpen(false);
           setEditingReview(null);
         }}
-        onSuccess={() => {
-          setIsModalOpen(false);
-          setEditingReview(null);
-          fetchReviews();
-        }}
-      />
+        footer={null}
+        destroyOnClose
+        centered
+        className="v2-landing"
+      >
+        {editingReview && (
+          <ReviewForm
+            itemId={editingReview.itemId}
+            existingReview={editingReview}
+            onSuccess={() => {
+              setIsModalOpen(false);
+              setEditingReview(null);
+              fetchReviews();
+            }}
+          />
+        )}
+      </Modal>
     </div>
   );
 };

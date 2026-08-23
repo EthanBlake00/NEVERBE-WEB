@@ -164,103 +164,59 @@ const NewArrivalsPage = async () => {
   };
 
   return (
-    <main className="w-full min-h-screen" style={{ background: "#f8faf5" }}>
+    <main className="w-full min-h-screen bg-[var(--v2-bg-surface,#141414)]">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
 
-      {/* Page Header */}
-      <div className="w-full max-w-content mx-auto px-4 md:px-12 pt-8 pb-6">
-        <nav
-          style={{
-            fontSize: 12,
-            color: "var(--color-primary-dark)",
-            marginBottom: 16,
-          }}
-        >
-          <Link href="/" style={{ color: "var(--color-primary-dark)" }}>
-            Home
-          </Link>
-          <span style={{ margin: "0 8px" }}>/</span>
-          <span>New Arrivals</span>
-        </nav>
-        <h1
-          style={{
-            fontSize: "clamp(2rem, 5vw, 3.5rem)",
-            fontWeight: 900,
-            textTransform: "uppercase",
-            letterSpacing: "-0.03em",
-            lineHeight: 1,
-            margin: 0,
-            marginBottom: 8,
-            color: "var(--color-primary-dark)",
-          }}
-        >
-          New Arrivals
-        </h1>
-        <p
-          style={{ color: "var(--color-primary-dark)", fontSize: 14, margin: 0 }}
-        >
-          Fresh styles just added to the collection.
-        </p>
+      {/* Hero Header */}
+      <div className="bg-[var(--v2-bg-surface,#141414)] border-b border-[var(--v2-glass-border,rgba(255,255,255,0.08))] pt-28 pb-10 md:pt-36 md:pb-14">
+        <div className="max-w-[1400px] mx-auto px-4 md:px-8">
+          <nav className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[var(--v2-text-muted,#666666)] mb-3">
+            <Link href="/" className="hover:text-[var(--v2-accent,#2EE66A)] transition-colors">
+              Home
+            </Link>
+            <span>/</span>
+            <span className="text-[var(--v2-text-primary,#F5F5F5)]">New Arrivals</span>
+          </nav>
+          <span className="v2-section-label mb-2">JUST DROPPED</span>
+          <h1 className="v2-section-title text-[clamp(2.5rem,6vw,4.5rem)] font-black uppercase tracking-tight text-[var(--v2-text-primary,#F5F5F5)] mb-2">
+            New Arrivals
+          </h1>
+          <p className="text-[15px] font-medium text-[var(--v2-text-secondary,#A0A0A0)] m-0 max-w-xl">
+            Fresh styles just added to the collection.
+          </p>
+        </div>
       </div>
 
       {/* Product Grid */}
-      <div className="max-w-content mx-auto px-4 md:px-12 pb-20">
+      <div className="w-full py-4 md:py-8">
         <Products items={dataList} apiEndpoint="/web/products/new" />
       </div>
 
       {/* SEO Footer */}
-      <div
-        style={{
-          borderTop: "1px solid var(--color-default)",
-          padding: "48px 0",
-        }}
-      >
-        <div className="max-w-content mx-auto px-8 lg:px-12">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+      <div className="border-t border-[var(--v2-glass-border,rgba(255,255,255,0.08))] py-12 md:py-16 bg-[var(--v2-bg-surface,#141414)]">
+        <div className="max-w-[1400px] mx-auto px-4 md:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div>
-              <span style={sectionLabel}>Fresh Drops Weekly</span>
-              <p
-                style={{
-                  fontSize: 13,
-                  color: "var(--color-primary-dark)",
-                  margin: 0,
-                }}
-              >
-                We update our collection with the latest releases from global
-                sneaker culture. Premium quality guaranteed.
+              <span className="text-[11px] font-extrabold uppercase tracking-widest text-[var(--v2-accent,#2EE66A)] block mb-2">Fresh Drops Weekly</span>
+              <p className="text-xs text-[var(--v2-text-secondary,#A0A0A0)] leading-relaxed m-0">
+                We update our collection with the latest releases from global sneaker culture. Premium quality guaranteed.
               </p>
             </div>
             <div>
-              <span style={sectionLabel}>Trending Now</span>
-              <ul
-                style={{
-                  fontSize: 13,
-                  color: "var(--color-primary-dark)",
-                  lineHeight: 2,
-                  listStyle: "none",
-                  padding: 0,
-                  margin: 0,
-                }}
-              >
-                <li>Retro High Tops</li>
-                <li>Chunky Dad Shoes</li>
-                <li>Minimalist Slides</li>
+              <span className="text-[11px] font-extrabold uppercase tracking-widest text-[var(--v2-accent,#2EE66A)] block mb-2">Trending Now</span>
+              <ul className="text-xs text-[var(--v2-text-secondary,#A0A0A0)] space-y-1.5 list-none p-0 m-0">
+                <li>• Retro High Tops</li>
+                <li>• Chunky Dad Shoes</li>
+                <li>• Minimalist Slides</li>
               </ul>
             </div>
             <div>
-              <span style={sectionLabel}>Limited Stock</span>
-              <p
-                style={{
-                  fontSize: 13,
-                  color: "var(--color-primary-dark)",
-                  margin: 0,
-                }}
-              >
-                Most new arrivals are limited runs. If you see your size, grab
-                it before it&apos;s gone.
+              <span className="text-[11px] font-extrabold uppercase tracking-widest text-[var(--v2-accent,#2EE66A)] block mb-2">Limited Stock</span>
+              <p className="text-xs text-[var(--v2-text-secondary,#A0A0A0)] leading-relaxed m-0">
+                Most new arrivals are limited runs. If you see your size, grab it before it&apos;s gone.
               </p>
             </div>
           </div>

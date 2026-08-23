@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
 import { showBag } from "@/redux/bagSlice/bagSlice";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { toggleMenu } from "@/redux/headerSlice/headerSlice";
 import {
   IoBagHandleOutline,
@@ -20,6 +20,7 @@ import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import SeasonalPromo from "@/app/(site)/components/SeasonalPromo";
 import SearchDialog from "@/components/SearchDialog";
+import ThemeToggle from "@/components/ThemeToggle";
 import { NavigationItem } from "@/actions/websiteAction";
 import { useProductSearch } from "@/hooks/useProductSearch";
 import { Badge, Input, ConfigProvider, Button, Flex, Typography } from "antd";
@@ -44,6 +45,8 @@ const Header = ({ season, mainNav = [] }: HeaderProps) => {
   const user = useSelector((state: RootState) => state.authSlice.user);
   const dispatch: AppDispatch = useDispatch();
   const router = useRouter();
+  const pathname = usePathname();
+  const isHome = pathname === "/";
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -85,9 +88,11 @@ const Header = ({ season, mainNav = [] }: HeaderProps) => {
 
   return (
     <div className="w-full z-50">
-      {/* 2. MAIN HEADER — Dark sticky nav */}
+      {/* 2. MAIN HEADER — Sticky nav */}
       <header
-        className={`sticky top-0 w-full transition-all duration-300 z-50 header-dark ${scrolled ? "header-dark-scrolled" : ""}`}
+        className={`sticky top-0 w-full transition-all duration-300 z-50 bg-[var(--v2-bg-surface,#141414)]/90 backdrop-blur-md border-b border-[var(--v2-glass-border,rgba(255,255,255,0.08))] ${
+          scrolled ? "shadow-xl" : ""
+        }`}
       >
         <Flex
           justify="space-between"
@@ -112,15 +117,12 @@ const Header = ({ season, mainNav = [] }: HeaderProps) => {
                 <li key={item.title}>
                   <Link
                     href={item.link}
-                    className="relative pb-2 text-[13px] font-bold uppercase tracking-tight text-primary-dark hover:text-accent transition-colors group"
+                    style={{ color: "var(--v2-text-primary)" }}
+                    className="relative pb-2 text-[13px] font-extrabold uppercase tracking-tight hover:text-[var(--v2-accent,#2EE66A)] transition-colors group"
                   >
                     {item.title}
                     <span
-                      className="absolute bottom-0 left-0 w-0 h-[3px] transition-all duration-300 group-hover:w-full"
-                      style={{
-                        background: "var(--color-primary)",
-                        borderRadius: 99,
-                      }}
+                      className="absolute bottom-0 left-0 w-0 h-[3px] bg-[var(--v2-accent,#2EE66A)] rounded-full transition-all duration-300 group-hover:w-full"
                     />
                   </Link>
                 </li>
@@ -130,50 +132,61 @@ const Header = ({ season, mainNav = [] }: HeaderProps) => {
 
           {/* ICONS & SEARCH */}
           <Flex align="center" gap={4} className="lg:gap-[16px]">
+            {/* Dark / Light Mode Switcher (Desktop Only on Header bar) */}
+            <div className="hidden lg:flex">
+              <ThemeToggle />
+            </div>
+
+            {/* Search (Essential — Mobile & Desktop) */}
             <button
               onClick={() => setIsSearchOpen(true)}
-              className="flex shrink-0 items-center justify-center w-[40px] h-[40px] rounded-full hover:bg-surface-3 transition-colors group cursor-pointer border-none bg-transparent outline-none m-0 p-0"
+              className="flex shrink-0 items-center justify-center w-[40px] h-[40px] rounded-full transition-colors group cursor-pointer border-none bg-transparent outline-none m-0 p-0 hover:bg-[var(--v2-glass-bg-hover,rgba(255,255,255,0.08))]"
             >
               <IoSearchOutline
                 size={24}
-                className="text-muted group-hover:text-primary-dark transition-colors"
+                className="text-[var(--v2-text-secondary,#A0A0A0)] group-hover:text-[var(--v2-accent,#2EE66A)] transition-colors"
               />
             </button>
 
+            {/* Account Profile (Desktop Only on Header bar) */}
             <Link
               href="/account"
-              className="flex shrink-0 items-center justify-center w-[40px] h-[40px] rounded-full hover:bg-surface-3 transition-colors group cursor-pointer border-none bg-transparent outline-none m-0 p-0"
+              className="hidden lg:flex shrink-0 items-center justify-center w-[40px] h-[40px] rounded-full transition-colors group cursor-pointer border-none bg-transparent outline-none m-0 p-0 hover:bg-[var(--v2-glass-bg-hover,rgba(255,255,255,0.08))]"
             >
               <IoPersonOutline
                 size={24}
-                className="text-muted group-hover:text-primary-dark transition-colors"
+                className="text-[var(--v2-text-secondary,#A0A0A0)] group-hover:text-[var(--v2-accent,#2EE66A)] transition-colors"
               />
             </Link>
 
+            {/* Wishlist (Desktop Only on Header bar) */}
             <Link
               href="/account/wishlist"
-              className="flex shrink-0 items-center justify-center w-[40px] h-[40px] rounded-full hover:bg-surface-3 transition-colors group cursor-pointer border-none bg-transparent outline-none m-0 p-0"
+              className="hidden lg:flex shrink-0 items-center justify-center w-[40px] h-[40px] rounded-full transition-colors group cursor-pointer border-none bg-transparent outline-none m-0 p-0 hover:bg-[var(--v2-glass-bg-hover,rgba(255,255,255,0.08))]"
             >
               <IoHeartOutline
                 size={24}
-                className="text-muted group-hover:text-primary-dark transition-colors"
+                className="text-[var(--v2-text-secondary,#A0A0A0)] group-hover:text-[var(--v2-accent,#2EE66A)] transition-colors"
               />
             </Link>
 
             <button
               onClick={() => dispatch(showBag())}
-              className="flex shrink-0 items-center justify-center w-[40px] h-[40px] rounded-full hover:bg-surface-3 transition-colors group cursor-pointer border-none bg-transparent outline-none m-0 p-0"
+              className="flex shrink-0 items-center justify-center w-[40px] h-[40px] rounded-full transition-colors group cursor-pointer border-none bg-transparent outline-none m-0 p-0 hover:bg-[var(--v2-glass-bg-hover,rgba(255,255,255,0.08))]"
             >
               <Badge
                 count={bagItems.length}
                 offset={[-2, 6]}
-                color="var(--color-accent)"
+                color="var(--v2-accent,#2EE66A)"
                 size="small"
-                style={{ color: "#fff", fontWeight: 800 }}
+                style={{
+                  color: "#0A0A0A",
+                  fontWeight: 900,
+                }}
               >
                 <IoBagHandleOutline
                   size={24}
-                  className="text-muted group-hover:text-primary-dark transition-colors"
+                  className="text-[var(--v2-text-secondary,#A0A0A0)] group-hover:text-[var(--v2-accent,#2EE66A)] transition-colors"
                 />
               </Badge>
             </button>
@@ -181,11 +194,11 @@ const Header = ({ season, mainNav = [] }: HeaderProps) => {
             <div className="lg:hidden flex items-center justify-center">
               <button
                 onClick={() => dispatch(toggleMenu(true))}
-                className="flex shrink-0 items-center justify-center w-[40px] h-[40px] rounded-full hover:bg-surface-3 transition-colors group cursor-pointer border-none bg-transparent outline-none m-0 p-0"
+                className="flex shrink-0 items-center justify-center w-[40px] h-[40px] rounded-full transition-colors group cursor-pointer border-none bg-transparent outline-none m-0 p-0 hover:bg-[var(--v2-glass-bg-hover,rgba(255,255,255,0.08))]"
               >
                 <IoMenuOutline
                   size={28}
-                  className="text-muted group-hover:text-primary-dark transition-colors"
+                  className="text-[var(--v2-text-secondary,#A0A0A0)] group-hover:text-[var(--v2-accent,#2EE66A)] transition-colors"
                 />
               </button>
             </div>
@@ -201,7 +214,7 @@ const Header = ({ season, mainNav = [] }: HeaderProps) => {
               exit={{ opacity: 0, y: -20 }}
               className="fixed inset-0 z-100 overflow-y-auto"
               style={{
-                background: "rgba(248, 250, 245, 0.96)",
+                background: "var(--v2-bg-void, #0A0A0A)",
                 backdropFilter: "blur(32px)",
                 WebkitBackdropFilter: "blur(32px)",
               }}

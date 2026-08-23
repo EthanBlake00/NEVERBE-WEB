@@ -15,7 +15,7 @@ interface UseProductListingOptions {
 
 export const useProductListing = ({
   apiEndpoint,
-  defaultSize = 12,
+  defaultSize = 16,
 }: UseProductListingOptions) => {
   const router = useRouter();
   const pathname = usePathname();

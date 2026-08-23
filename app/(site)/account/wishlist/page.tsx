@@ -11,8 +11,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { IoHeartDislike, IoTrashOutline } from "react-icons/io5";
 import { motion, AnimatePresence } from "framer-motion";
-import { Button, Typography, Row, Col, Card } from "antd";
-const { Title, Text } = Typography;
+import { Row, Col } from "antd";
 
 const WishlistPage = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -27,50 +26,45 @@ const WishlistPage = () => {
   };
 
   return (
-    <main className="w-full min-h-screen bg-white">
+    <main className="w-full min-h-screen bg-[var(--v2-bg-surface,#141414)] text-[var(--v2-text-primary,#F5F5F5)] pt-28 pb-20">
       {/* Header */}
-      <div className="w-full max-w-content mx-auto px-4 md:px-12 py-12 md:py-20 text-left">
-        <Title
-          level={1}
-          className="text-[28px]! md:text-[42px]! font-medium! tracking-tight! text-primary-dark! leading-none! mb-4!"
-        >
+      <div className="max-w-[1400px] mx-auto px-4 md:px-8 mb-10">
+        <span className="v2-section-label mb-2">SAVED FAVORITES</span>
+        <h1 className="v2-section-title text-[clamp(2.5rem,6vw,4.5rem)] font-black uppercase tracking-tight text-[var(--v2-text-primary,#F5F5F5)] mb-2">
           Your Wishlist
-        </Title>
-        <Text className="text-primary-dark max-w-xl text-md md:text-[18px] font-normal block">
+        </h1>
+        <p className="text-[15px] font-medium text-[var(--v2-text-secondary,#A0A0A0)] m-0">
           {wishlistItems.length > 0
             ? `${wishlistItems.length} saved ${
                 wishlistItems.length === 1 ? "item" : "items"
               }`
             : "Save your favorites to shop later."}
-        </Text>
+        </p>
       </div>
 
-      <div className="w-full max-w-content mx-auto px-4 md:px-12 pb-20">
+      <div className="max-w-[1400px] mx-auto px-4 md:px-8">
         {wishlistItems.length === 0 ? (
           /* Empty State */
-          <div className="flex flex-col items-center justify-center py-20">
-            <div className="w-24 h-24 bg-white border border-default rounded-full flex items-center justify-center mb-6">
-              <IoHeartDislike className="text-accent" size={40} />
+          <div className="py-12 md:py-20 text-center max-w-xl mx-auto flex flex-col items-center">
+            <div className="w-20 h-20 rounded-full bg-[var(--v2-glass-bg,rgba(255,255,255,0.04))] text-[var(--v2-accent,#2EE66A)] border border-[var(--v2-glass-border,rgba(255,255,255,0.08))] flex items-center justify-center mx-auto mb-6">
+              <IoHeartDislike size={36} />
             </div>
-            <Title
-              level={2}
-              className="text-[20px]! font-medium! text-primary-dark! mb-2!"
-            >
-              Your wishlist is empty
-            </Title>
-            <Text className="text-primary-dark text-[15px] mb-8 block">
-              Browse our collection and save items you love.
-            </Text>
+            <h2 className="text-2xl md:text-3xl font-black uppercase text-[var(--v2-text-primary,#F5F5F5)] mb-2">
+              Your Wishlist Is Empty
+            </h2>
+            <p className="text-xs md:text-sm font-medium text-[var(--v2-text-secondary,#A0A0A0)] mb-8 m-0 max-w-sm">
+              Browse our collection and save your favorite items.
+            </p>
             <Link
               href="/collections/products"
-              className="px-8 py-3 bg-accent hover:bg-accent-hover text-white rounded-full font-bold uppercase tracking-widest text-sm transition-all shadow-md hover:shadow-lg"
+              className="inline-block px-8 py-3.5 rounded-full bg-[var(--v2-accent,#2EE66A)] text-[#0A0A0A] font-black uppercase tracking-widest text-xs shadow-lg hover:opacity-90 transition-all"
             >
               Start Shopping
             </Link>
           </div>
         ) : (
           /* Wishlist Grid */
-          <Row gutter={[16, 48]}>
+          <Row gutter={[16, 24]}>
             <AnimatePresence>
               {wishlistItems.map((item) => (
                 <Col
@@ -84,60 +78,53 @@ const WishlistPage = () => {
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.9 }}
-                    className="group"
+                    className="v2-glass rounded-3xl p-3 border border-[var(--v2-glass-border,rgba(255,255,255,0.08))] hover:border-[var(--v2-accent,#2EE66A)] transition-all group relative flex flex-col justify-between h-full"
                   >
-                    <Card
-                      bordered={false}
-                      className="bg-transparent"
-                      bodyStyle={{ padding: 0 }}
-                    >
+                    <div>
+                      {/* Image Container */}
                       <Link href={`/collections/products/${item.productId}`}>
-                        <div className="relative aspect-4/5 bg-white overflow-hidden mb-4 rounded-2xl border border-default">
+                        <div className="relative aspect-square bg-[#0A0A0A] overflow-hidden rounded-2xl mb-3">
                           <Image
                             src={item.thumbnail}
                             alt={item.name}
                             fill
-                            className="object-cover mix-blend-multiply group-hover:scale-105 transition-transform duration-700"
-                          />
-
-                          {/* Remove Button */}
-                          <Button
-                            type="text"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              e.stopPropagation();
-                              handleRemove(item.productId, item.variantId);
-                            }}
-                            className="absolute top-4 right-4 w-10 h-10 bg-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-surface-2 border-none p-0"
-                            aria-label="Remove from wishlist"
-                            icon={
-                              <IoTrashOutline
-                                size={18}
-                                className="text-primary-dark"
-                              />
-                            }
+                            className="object-cover group-hover:scale-105 transition-transform duration-500"
                           />
                         </div>
                       </Link>
 
-                      <div className="flex justify-between items-start gap-4">
-                        <div className="flex-1">
-                          <Link
-                            href={`/collections/products/${item.productId}`}
-                          >
-                            <Title
-                              level={3}
-                              className="text-[15px]! font-medium! text-primary-dark! leading-tight! mb-1! group-hover:text-primary-dark! transition-colors"
-                            >
-                              {item.name}
-                            </Title>
-                          </Link>
-                          <Text className="text-[14px] font-medium text-primary-dark block">
-                            Rs. {item.price.toLocaleString()}
-                          </Text>
-                        </div>
+                      {/* Details */}
+                      <div className="px-1 mb-4">
+                        <span className="text-[9px] font-black uppercase tracking-wider text-[var(--v2-text-muted,#666666)] block mb-1">
+                          {item.variantName || "STANDARD EDITION"}
+                        </span>
+                        <Link href={`/collections/products/${item.productId}`}>
+                          <h3 className="text-xs font-black text-[var(--v2-text-primary,#F5F5F5)] uppercase tracking-tight line-clamp-2 hover:text-[var(--v2-accent,#2EE66A)] transition-colors m-0 mb-2">
+                            {item.name}
+                          </h3>
+                        </Link>
+                        <span className="text-xs font-black text-[var(--v2-accent,#2EE66A)]">
+                          LKR {item.price?.toLocaleString()}
+                        </span>
                       </div>
-                    </Card>
+                    </div>
+
+                    {/* Actions */}
+                    <div className="flex gap-2 pt-2 border-t border-[var(--v2-glass-border,rgba(255,255,255,0.08))]">
+                      <Link
+                        href={`/collections/products/${item.productId}`}
+                        className="flex-1 py-2.5 rounded-full bg-[var(--v2-accent,#2EE66A)] text-[#0A0A0A] font-black uppercase tracking-wider text-[10px] text-center hover:opacity-90 transition-all"
+                      >
+                        View Product
+                      </Link>
+                      <button
+                        onClick={() => handleRemove(item.productId, item.variantId)}
+                        className="w-9 h-9 rounded-full bg-[var(--v2-glass-bg,rgba(255,255,255,0.05))] hover:bg-rose-500/20 text-[var(--v2-text-muted,#666666)] hover:text-rose-400 border border-[var(--v2-glass-border,rgba(255,255,255,0.1))] flex items-center justify-center transition-all cursor-pointer"
+                        aria-label="Remove item"
+                      >
+                        <IoTrashOutline size={16} />
+                      </button>
+                    </div>
                   </motion.div>
                 </Col>
               ))}

@@ -2,66 +2,27 @@
 
 import React from "react";
 import { shippingReturnPolicy } from "@/constants";
-import { Typography, Row, Col } from "antd";
-
-const { Title, Paragraph, Text } = Typography;
 
 const ShippingReturnPolicyContent = () => {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col gap-6">
       {shippingReturnPolicy.map((item, index) => (
-        <Row
+        <div
           key={index}
-          className="group py-10 border-t border-default first:border-none w-full"
-          gutter={[32, 24]}
+          className="v2-glass p-8 rounded-3xl border border-[var(--v2-glass-border,rgba(255,255,255,0.08))] hover:border-[var(--v2-accent,#2EE66A)] transition-all group"
         >
-          {/* Index Number */}
-          <Col xs={24} md={4} lg={3}>
-            <Text
-              className="group-hover:text-primary transition-colors"
-              style={{
-                fontSize: 12,
-                fontWeight: 800,
-                textTransform: "uppercase",
-                letterSpacing: "0.1em",
-                color: "var(--color-text-muted, #9ca3af)",
-              }}
-            >
+          <div className="flex items-center gap-4 mb-3">
+            <span className="text-xs font-black uppercase tracking-widest text-[var(--v2-accent,#2EE66A)]">
               {String(index + 1).padStart(2, "0")}
-            </Text>
-          </Col>
-
-          {/* Content Body */}
-          <Col xs={24} md={20} lg={21}>
-            <div className="flex flex-col gap-3 max-w-3xl">
-              <Title
-                level={2}
-                style={{
-                  fontSize: "1.25rem",
-                  fontWeight: 900,
-                  textTransform: "uppercase",
-                  letterSpacing: "-0.02em",
-                  color: "var(--color-accent)",
-                  marginBottom: 8,
-                }}
-              >
-                {item.title}
-              </Title>
-              <Paragraph
-                style={{
-                  fontSize: "0.875rem",
-                  fontWeight: 500,
-                  color: "var(--color-text-body, #4b5563)",
-                  lineHeight: 1.8,
-                  whiteSpace: "pre-line",
-                  margin: 0,
-                }}
-              >
-                {item.description}
-              </Paragraph>
-            </div>
-          </Col>
-        </Row>
+            </span>
+            <h2 className="text-xl font-black uppercase tracking-tight text-[var(--v2-text-primary,#F5F5F5)] m-0">
+              {item.title}
+            </h2>
+          </div>
+          <p className="text-xs md:text-sm font-medium leading-relaxed text-[var(--v2-text-secondary,#A0A0A0)] whitespace-pre-line m-0">
+            {item.description}
+          </p>
+        </div>
       ))}
     </div>
   );

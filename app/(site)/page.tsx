@@ -1,11 +1,11 @@
-// pages or app route file (your home page)
 import Hero from "@/app/(site)/components/Hero";
-import NewArrivals from "@/app/(site)/components/NewArrivals";
-import WhyUs from "@/app/(site)/components/WhyUs";
-import PopularProducts from "@/app/(site)/components/PopularProducts";
-import BrandsSlider from "./components/BrandsSlider";
-import PromotionalAds from "./components/PromotionalAds";
-import CustomerReviews from "./components/CustomerReviews";
+import TrustStrip from "@/app/(site)/components/TrustStrip";
+import { BentoShowcase } from "@/app/(site)/components/BentoShowcase";
+import ProductShowcase from "@/app/(site)/components/ProductShowcase";
+import BrandMarquee from "@/app/(site)/components/BrandMarquee";
+import SocialProof from "@/app/(site)/components/SocialProof";
+import CTABanner from "@/app/(site)/components/CTABanner";
+import SmoothScroll from "@/app/(site)/components/SmoothScroll";
 
 import { getHotProducts, getRecentItems } from "@/actions/productAction";
 import { getSliders } from "@/actions/slideAction";
@@ -13,10 +13,8 @@ import { getBrands, getFeaturedCategories } from "@/actions/otherAction";
 
 import type { Metadata } from "next";
 import SEOContent from "./components/SEOContent";
-import FeaturedCategories from "./components/FeaturedCategory";
-import TrendingBundles from "./components/TrendingBundles";
 import { getPaginatedCombos } from "@/actions/promotionAction";
-import { Flex } from "antd";
+
 export const metadata: Metadata = {
   title: {
     default:
@@ -67,24 +65,21 @@ export const metadata: Metadata = {
 };
 
 export const revalidate = 3600;
+
 const Page = async () => {
   const dataPromise = Promise.all([
-    getRecentItems().catch((err) => []),
-    getSliders().catch((err) => []),
-    getHotProducts().catch((err) => []),
-    getBrands().catch((err) => []),
-    getPaginatedCombos(1).catch((err) => ({ combos: [] })),
-    getFeaturedCategories().catch((err) => []),
+    getRecentItems().catch(() => []),
+    getSliders().catch(() => []),
+    getHotProducts().catch(() => []),
+    getBrands().catch(() => []),
+    getPaginatedCombos(1).catch(() => ({ combos: [] })),
+    getFeaturedCategories().catch(() => []),
   ]);
 
+  const [arrivals, sliders, hotItems, brands, combosData, featuredCategories] =
+    await dataPromise;
 
-  const [arrivals, sliders, hotItems, brands, combosData, featuredCategories] = await dataPromise;
-  const combos = combosData?.combos || [];
-
-
-  /* STRUCTURED DATA: Organization + ShoeStore + WebSite + FAQPage + BreadcrumbList
-     Enhanced for Google Rich Results with comprehensive business info.
-  */
+  /* STRUCTURED DATA: Organization + ShoeStore + WebSite + BreadcrumbList */
   const structuredData = {
     "@context": "https://schema.org",
     "@graph": [
@@ -165,12 +160,6 @@ const Page = async () => {
           itemListElement: [
             { "@type": "OfferCatalog", name: "Sneakers" },
             { "@type": "OfferCatalog", name: "Running Shoes" },
-            { "@type": "OfferCatalog", name: "Slides & Sandals" },
-            { "@type": "OfferCatalog", name: "Boots" },
-            { "@type": "OfferCatalog", name: "Men's Clothing" },
-            { "@type": "OfferCatalog", name: "Women's Clothing" },
-            { "@type": "OfferCatalog", name: "Activewear & Sportswear" },
-            { "@type": "OfferCatalog", name: "Gym Wear" },
           ],
         },
       },
@@ -179,9 +168,8 @@ const Page = async () => {
         "@id": "https://neverbe.lk/#website",
         url: "https://neverbe.lk",
         name: "Neverbe",
-        description: "Buy Shoes Online in Sri Lanka",
+        description: "Shoes & Clothing in Sri Lanka",
         publisher: { "@id": "https://neverbe.lk/#organization" },
-        inLanguage: "en-LK",
         potentialAction: {
           "@type": "SearchAction",
           target: {
@@ -207,38 +195,54 @@ const Page = async () => {
     ],
   };
 
+  const promotions: Array<{
+    id: string;
+    name: string;
+    bannerUrl?: string;
+    isActive: boolean;
+  }> = [];
+
   return (
-    <div className="bg-[#fcfdfa] min-h-screen w-full relative overflow-x-hidden">
-      <Flex vertical className="w-full relative z-10">
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+    <div className="v2-landing min-h-screen w-full relative overflow-x-hidden bg-[var(--v2-bg-void)]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+
+      <SmoothScroll>
+        {/* 1. Cinematic Hero */}
+        <Hero slides={sliders} />
+
+        {/* 2. Trust & Benefits Strip */}
+        <TrustStrip />
+
+        {/* 3. Bento Grid — Categories & Promos */}
+        <BentoShowcase
+          categories={featuredCategories}
+          promotions={promotions}
         />
 
-        <Flex vertical style={{ width: "100%", flex: "auto" }}>
-          <Hero slides={sliders} />
-          <FeaturedCategories categories={featuredCategories} />
+        {/* 4. Product Showcase — Popular + New Arrivals */}
+        {(hotItems.length > 0 || arrivals.length > 0) && (
+          <ProductShowcase hotItems={hotItems} arrivals={arrivals} />
+        )}
 
-          <PromotionalAds />
+        {/* 5. Brand Marquee */}
+        {brands.length > 0 && <BrandMarquee brands={brands} />}
 
-          {hotItems.length > 0 && <PopularProducts hotItems={hotItems} />}
+        {/* 6. Social Proof — Customer Reviews */}
+        <SocialProof />
 
-          {/* New Bundles Section */}
-          {combos.length > 0 && <TrendingBundles bundles={combos} />}
+        {/* 7. Call-to-Action Banner */}
+        <CTABanner />
 
-          {arrivals.length > 0 && <NewArrivals arrivals={arrivals} />}
-
-          {/* A large visual break for Brands */}
-          {brands.length > 0 && <BrandsSlider items={brands} />}
-
-          {/* Customer Reviews Section */}
-          <CustomerReviews />
-
-          <WhyUs />
+        {/* 8. SEO Content (preserved for search indexing) */}
+        <div style={{ background: "var(--v2-bg-surface)" }}>
           <SEOContent />
-        </Flex>
-      </Flex>
+        </div>
+      </SmoothScroll>
     </div>
   );
 };
+
 export default Page;

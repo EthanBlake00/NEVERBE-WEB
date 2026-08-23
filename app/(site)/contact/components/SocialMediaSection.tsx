@@ -3,9 +3,7 @@ import React from "react";
 import { FaFacebookF, FaInstagram, FaTiktok, FaWhatsapp } from "react-icons/fa";
 import Link from "next/link";
 import { socialMedia } from "@/constants";
-import { Typography, Row, Col, Space } from "antd";
-
-const { Title, Text } = Typography;
+import { Row, Col } from "antd";
 
 const SocialMediaSection = () => {
   const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER;
@@ -13,7 +11,6 @@ const SocialMediaSection = () => {
     "Hello Neverbe, I’d like to get in touch.",
   );
 
-  // Helper to map icons based on URL or logic
   const getIcon = (url: string) => {
     if (url.includes("facebook")) return <FaFacebookF size={18} />;
     if (url.includes("instagram")) return <FaInstagram size={18} />;
@@ -22,42 +19,22 @@ const SocialMediaSection = () => {
   };
 
   return (
-    <section className="flex flex-col gap-8 mt-8 pt-8 border-t border-default">
-      <Title
-        level={2}
-        style={{
-          fontSize: "1.25rem",
-          fontWeight: 900,
-          textTransform: "uppercase",
-          letterSpacing: "-0.02em",
-          margin: 0,
-        }}
-      >
+    <section className="flex flex-col gap-6 mt-8 pt-8 border-t border-[var(--v2-glass-border,rgba(255,255,255,0.08))]">
+      <h2 className="text-xl font-black uppercase tracking-tight text-[var(--v2-text-primary,#F5F5F5)] m-0">
         Follow Us
-      </Title>
+      </h2>
 
       <Row gutter={[16, 16]}>
-        {/* WhatsApp - Primary Action */}
+        {/* WhatsApp */}
         <Col span={24}>
           <Link
             href={`https://wa.me/${whatsappNumber}?text=${message}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-center gap-3 bg-primary text-white px-6 py-4 hover:bg-primary-600 transition-all active:scale-[0.98]"
-            style={{ width: "100%" }}
+            className="flex items-center justify-center gap-3 bg-[var(--v2-accent,#2EE66A)] text-[#0A0A0A] px-6 py-4 rounded-full font-black uppercase text-xs tracking-widest hover:opacity-90 transition-all shadow-lg"
           >
             <FaWhatsapp size={20} />
-            <Text
-              style={{
-                fontWeight: 800,
-                textTransform: "uppercase",
-                letterSpacing: "0.1em",
-                fontSize: 12,
-                color: "white",
-              }}
-            >
-              Chat on WhatsApp
-            </Text>
+            <span>Chat on WhatsApp</span>
           </Link>
         </Col>
 
@@ -68,24 +45,14 @@ const SocialMediaSection = () => {
               href={media.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center gap-3 border border-default px-6 py-4 hover:border-primary hover:bg-surface-2 transition-all group"
-              style={{ width: "100%", height: "100%" }}
+              className="v2-glass p-4 rounded-2xl border border-[var(--v2-glass-border,rgba(255,255,255,0.08))] hover:border-[var(--v2-accent,#2EE66A)] flex items-center justify-center gap-3 group transition-all"
             >
-              <span className="text-muted group-hover:text-primary-dark transition-colors">
+              <span className="text-[var(--v2-text-secondary,#A0A0A0)] group-hover:text-[var(--v2-accent,#2EE66A)] transition-colors">
                 {media.icon ? <media.icon size={18} /> : getIcon(media.url)}
               </span>
-              <Text
-                className="group-hover:text-primary-dark"
-                style={{
-                  fontWeight: 800,
-                  textTransform: "uppercase",
-                  letterSpacing: "0.05em",
-                  fontSize: 12,
-                  color: "var(--color-primary-300)",
-                }}
-              >
+              <span className="text-xs font-black uppercase tracking-wider text-[var(--v2-text-primary,#F5F5F5)] group-hover:text-[var(--v2-accent,#2EE66A)] transition-colors">
                 {media.name}
-              </Text>
+              </span>
             </Link>
           </Col>
         ))}

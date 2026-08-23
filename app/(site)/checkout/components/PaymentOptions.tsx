@@ -3,7 +3,6 @@ import React from "react";
 import { PaymentMethod } from "@/interfaces";
 import { IoCheckmark } from "react-icons/io5";
 import { BagItem } from "@/interfaces/BagItem";
-import { calculateFee } from "@/utils/bagCalculations";
 
 interface PaymentOptionsProps {
   paymentOptions: PaymentMethod[];
@@ -23,7 +22,6 @@ const PaymentOptions: React.FC<PaymentOptionsProps> = ({
   setPaymentTypeId,
   setPaymentFee,
   setMerchantFee,
-  bagItems,
   isHighRisk,
 }) => {
   const handleSelect = (option: PaymentMethod) => {
@@ -45,23 +43,23 @@ const PaymentOptions: React.FC<PaymentOptionsProps> = ({
             key={option.paymentId}
             onClick={() => handleSelect(option)}
             className={`
-              relative group cursor-pointer border p-3 md:p-4 transition-all duration-300 rounded-xl overflow-hidden text-primary-dark
+              relative group cursor-pointer p-4 transition-all duration-300 rounded-2xl overflow-hidden v2-glass border
               ${
                 isSelected
-                  ? "bg-bg-secondary border-accent shadow-sm scale-[1.01] ring-1 ring-accent"
-                  : "bg-surface border-default hover:border-strong hover:shadow-sm"
+                  ? "border-[var(--v2-accent,#2EE66A)] bg-[var(--v2-accent,#2EE66A)]/10 ring-1 ring-[var(--v2-accent,#2EE66A)]/30"
+                  : "border-[var(--v2-glass-border,rgba(255,255,255,0.08))] hover:border-[var(--v2-accent,#2EE66A)]/50"
               }
             `}
           >
-            <div className="flex items-start gap-4">
-              {/* NEVERBE Style Radio Button */}
+            <div className="flex items-center gap-4">
+              {/* Radio */}
               <div
                 className={`
                   flex items-center justify-center h-5 w-5 shrink-0 border-2 rounded-full transition-all
                   ${
                     isSelected
-                      ? "border-accent bg-accent text-white"
-                      : "border-default group-hover:border-accent bg-transparent"
+                      ? "border-[var(--v2-accent,#2EE66A)] bg-[var(--v2-accent,#2EE66A)] text-[#0A0A0A]"
+                      : "border-[var(--v2-glass-border,rgba(255,255,255,0.2))] group-hover:border-[var(--v2-accent,#2EE66A)]"
                   }
                 `}
               >
@@ -74,7 +72,7 @@ const PaymentOptions: React.FC<PaymentOptionsProps> = ({
                 <div className="flex justify-between items-center w-full">
                   <div className="flex items-center gap-3">
                     {option.imageUrl && (
-                      <div className="relative w-8 h-8 rounded-md overflow-hidden bg-white border border-gray-100 flex items-center justify-center p-0.5 shrink-0 shadow-sm">
+                      <div className="relative w-8 h-8 rounded-xl overflow-hidden bg-[#0A0A0A] border border-[var(--v2-glass-border,rgba(255,255,255,0.1))] flex items-center justify-center p-0.5 shrink-0">
                         <img
                           src={option.imageUrl}
                           alt={option.name}
@@ -83,64 +81,25 @@ const PaymentOptions: React.FC<PaymentOptionsProps> = ({
                       </div>
                     )}
                     <div>
-                      <p
-                        className={`text-sm font-display font-black uppercase tracking-wider ${
-                          isSelected ? "text-primary-dark" : "text-primary-dark"
-                        }`}
-                      >
+                      <p className="text-xs font-black uppercase tracking-wider text-[var(--v2-text-primary,#F5F5F5)] m-0">
                         {isCod && isHighRisk ? "COD (Prepaid Delivery Fee Required)" : option.name}
                       </p>
                       {isCod && isHighRisk && (
-                        <span className="inline-block text-[9px] font-bold uppercase tracking-wider text-rose-600 bg-rose-50 border border-rose-200 px-1.5 py-0.5 rounded mt-0.5">
-                          Rs. 450 Delivery Fee Online Prepayment Required
+                        <span className="inline-block text-[9px] font-black uppercase tracking-wider text-rose-400 bg-rose-500/10 border border-rose-500/20 px-2 py-0.5 rounded-md mt-1">
+                          LKR 450 Delivery Fee Online Prepayment Required
                         </span>
                       )}
                     </div>
                   </div>
 
-                  {/* Fee Indicator Tag */}
-                  {hasFee ? (
-                    <span
-                      className={`
-                        text-[10px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest
-                        ${
-                          isSelected
-                            ? "bg-accent text-white"
-                            : "bg-surface-2 text-primary-dark"
-                        }
-                      `}
-                    >
-                      +Rs.{calculateFee(option.customerFee || 0, bagItems).toFixed(2)}
-                    </span>
-                  ) : (
-                    <span
-                      className={`
-                        text-[10px] font-black uppercase tracking-widest
-                        ${isSelected ? "text-accent" : "text-muted"}
-                       `}
-                    >
-                      No Fee
+                  {hasFee && (
+                    <span className="text-[10px] font-black uppercase tracking-widest text-[var(--v2-accent,#2EE66A)]">
+                      + LKR {(option.customerFee || 0).toLocaleString()}
                     </span>
                   )}
                 </div>
-
-                {option.description && (
-                  <p
-                    className={`
-                      text-[10px] font-medium uppercase tracking-wide mt-1.5
-                      ${isSelected ? "text-accent" : "text-muted"}
-                    `}
-                  >
-                    {option.description}
-                  </p>
-                )}
               </div>
             </div>
-
-            {/* Corner Accent for Selected State */}
-            {isSelected && (
-              <div className="absolute top-0 right-0 w-4 h-4 bg-accent rounded-bl-xl" />
-            )}
           </div>
         );
       })}

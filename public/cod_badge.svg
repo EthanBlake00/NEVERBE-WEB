@@ -1,0 +1,31 @@
+<svg width="140" height="32" viewBox="0 0 140 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="codGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFD700" />
+      <stop offset="50%" stop-color="#2EE66A" />
+      <stop offset="100%" stop-color="#00E5FF" />
+    </linearGradient>
+    <linearGradient id="badgeBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1E2022" />
+      <stop offset="100%" stop-color="#121314" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background Pill -->
+  <rect width="140" height="32" rx="8" fill="url(#badgeBg)" stroke="#2EE66A" stroke-width="1.2" stroke-opacity="0.4"/>
+
+  <!-- Colorful Icon: Stack of Cash & Delivery Truck -->
+  <g transform="translate(8, 6)">
+    <!-- Cash Bill -->
+    <rect x="1" y="2" width="14" height="9" rx="1.5" fill="url(#codGrad)" />
+    <circle cx="8" cy="6.5" r="1.8" fill="#121314" />
+
+    <!-- Truck outline -->
+    <path d="M11 7.5H16L19 10.5V14.5H11V7.5Z" fill="url(#codGrad)" opacity="0.9"/>
+    <circle cx="5" cy="14" r="1.8" fill="#FFD700" />
+    <circle cx="16" cy="14" r="1.8" fill="#00E5FF" />
+  </g>
+
+  <!-- Text -->
+  <text x="32" y="20.5" fill="#F5F5F5" font-family="system-ui, -apple-system, sans-serif" font-size="9.5" font-weight="900" letter-spacing="0.8">CASH ON DELIVERY</text>
+</svg>

@@ -2,82 +2,44 @@
 import React from "react";
 import { contactInfo } from "@/constants";
 import Link from "next/link";
-import { Typography, Space } from "antd";
-
-const { Title, Text } = Typography;
 
 const ContactDetailsSection = () => {
   return (
-    <section className="flex flex-col gap-8">
+    <section className="flex flex-col gap-6">
       <div>
-        <Title
-          level={2}
-          style={{
-            fontSize: "1.5rem",
-            fontWeight: 900,
-            textTransform: "uppercase",
-            letterSpacing: "-0.02em",
-            marginBottom: 8,
-          }}
-        >
-          Get in Touch
-        </Title>
-        <div
-          style={{ height: 4, width: 48, background: "var(--color-primary)" }}
-        ></div>
+        <span className="v2-section-label mb-1">DIRECT CONTACT</span>
+        <h2 className="text-2xl font-black uppercase tracking-tight text-[var(--v2-text-primary,#F5F5F5)] m-0 mb-2">
+          Get In Touch
+        </h2>
+        <div className="h-1 w-12 bg-[var(--v2-accent,#2EE66A)] rounded-full" />
       </div>
 
-      <Text
-        style={{
-          fontSize: "0.875rem",
-          fontWeight: 500,
-          color: "var(--color-primary-dark)",
-          lineHeight: 1.6,
-          maxWidth: 400,
-        }}
-      >
-        For inquiries regarding online orders, shipping, or returns, please
-        contact our support team. We typically respond within 24 hours.
-      </Text>
+      <p className="text-xs md:text-sm font-medium leading-relaxed text-[var(--v2-text-secondary,#A0A0A0)] m-0 max-w-md">
+        For inquiries regarding online orders, shipping, or product sizing, contact our team directly. We respond within 24 hours.
+      </p>
 
-      <Space direction="vertical" size={24}>
+      <div className="space-y-4">
         {contactInfo.map((info, idx) => (
           <div key={idx}>
             <Link
               href={info.link}
               target="_blank"
               rel="noopener noreferrer"
-              className="group flex flex-col items-start gap-1"
+              className="v2-glass p-5 rounded-2xl border border-[var(--v2-glass-border,rgba(255,255,255,0.08))] hover:border-[var(--v2-accent,#2EE66A)] transition-all group flex flex-col gap-1"
             >
-              <Text
-                style={{
-                  fontSize: 10,
-                  fontWeight: 800,
-                  textTransform: "uppercase",
-                  letterSpacing: "0.1em",
-                  color: "var(--color-primary-300)",
-                }}
-                className="group-hover:text-primary-dark transition-colors"
-              >
+              <span className="text-[10px] font-black uppercase tracking-widest text-[var(--v2-accent,#2EE66A)]">
                 {(info as any).title || "Contact"}
-              </Text>
+              </span>
               <div className="flex items-center gap-3">
-                <info.icon size={20} className="text-primary-dark" />
-                <Text
-                  style={{
-                    fontSize: "1.125rem",
-                    fontWeight: 800,
-                    color: "var(--color-primary-dark)",
-                  }}
-                  className="border-b border-transparent group-hover:border-primary transition-all"
-                >
+                <info.icon size={20} className="text-[var(--v2-text-primary,#F5F5F5)] group-hover:text-[var(--v2-accent,#2EE66A)] transition-colors" />
+                <span className="text-base font-black text-[var(--v2-text-primary,#F5F5F5)] group-hover:text-[var(--v2-accent,#2EE66A)] transition-colors">
                   {info.content}
-                </Text>
+                </span>
               </div>
             </Link>
           </div>
         ))}
-      </Space>
+      </div>
     </section>
   );
 };

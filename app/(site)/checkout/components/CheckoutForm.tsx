@@ -413,74 +413,66 @@ const CheckoutForm = () => {
         }}
         footer={null}
         centered
-        width={400}
-        closeIcon={<FiX size={24} />}
+        width={420}
+        closeIcon={<FiX size={20} className="text-[var(--v2-text-primary,#F5F5F5)]" />}
         maskClosable={false}
-        className="performance-modal"
+        className="v2-modal"
         styles={{
           body: {
             padding: "32px",
             borderRadius: "24px",
-            background: "#ffffff",
+            background: "var(--v2-bg-surface,#141414)",
+            border: "1px solid var(--v2-glass-border,rgba(255,255,255,0.08))",
+            color: "var(--v2-text-primary,#F5F5F5)",
           },
           mask: {
-            backdropFilter: "blur(12px)",
-            background: "rgba(255, 255, 255, 0.8)",
+            backdropFilter: "blur(16px)",
+            background: "rgba(10, 10, 10, 0.8)",
           },
         }}
       >
         <Flex vertical align="center" gap={8} className="text-center">
-          <Typography.Title
-            level={3}
-            className="uppercase tracking-tighter mb-0"
-            style={{ fontWeight: 900, margin: 0 }}
-          >
+          <span className="v2-section-label text-[9px] mb-0.5">SECURITY VERIFICATION</span>
+          <h2 className="text-2xl font-black uppercase tracking-tight text-[var(--v2-text-primary,#F5F5F5)] m-0">
             Verify Number
-          </Typography.Title>
-          <Typography.Text type="secondary" className="font-medium">
-            Enter the code sent to {otpState.pendingOrder?.customer.phone}
-          </Typography.Text>
+          </h2>
+          <p className="text-xs text-[var(--v2-text-secondary,#A0A0A0)] font-medium m-0">
+            Enter the 6-digit code sent to {otpState.pendingOrder?.customer.phone}
+          </p>
 
           <Flex vertical gap={16} className="w-full mt-6">
-            <Input
+            <input
               type="tel"
               value={otp}
               disabled={otpState.isVerifying}
               onChange={(e) => setOtp(e.target.value)}
               placeholder="000000"
-              className="w-full h-14 text-center text-2xl tracking-[0.5em] font-display font-black border-2 border-default bg-surface-2 rounded-xl focus:border-accent hover:border-accent outline-none transition-colors text-primary-dark"
+              className="w-full h-14 text-center text-2xl tracking-[0.5em] font-extrabold border border-[var(--v2-glass-border,rgba(255,255,255,0.1))] bg-[var(--v2-glass-bg,rgba(255,255,255,0.04))] rounded-2xl focus:border-[var(--v2-accent,#2EE66A)] outline-none transition-colors text-[var(--v2-text-primary,#F5F5F5)] placeholder:text-[var(--v2-text-muted,#666666)]"
               maxLength={6}
             />
-            <Button
-              type="primary"
+            <button
+              type="button"
               onClick={() => handleOTPVerification(otp)}
-              loading={otpState.isVerifying}
-              className="w-full font-display font-black uppercase tracking-widest text-xs transition-all hover:scale-105 shadow-sm"
-              style={{
-                background: "var(--color-accent)",
-                border: "none",
-                borderRadius: 99,
-                color: "white",
-                height: 56,
-              }}
+              disabled={otpState.isVerifying}
+              className="w-full h-14 rounded-full bg-[var(--v2-accent,#2EE66A)] text-[#0A0A0A] font-black uppercase tracking-widest text-xs transition-all hover:opacity-90 active:scale-95 border-none cursor-pointer shadow-lg"
             >
-              Confirm Order
-            </Button>
+              {otpState.isVerifying ? "Verifying..." : "Confirm Order"}
+            </button>
 
-            <Button
-              type="link"
+            <button
+              type="button"
               onClick={() =>
                 handleResendOTP(otpState.pendingOrder!.customer.phone)
               }
               disabled={otpState.isResending || otpState.cooldown > 0}
-              className="text-xs font-black uppercase tracking-widest text-muted hover:text-accent transition-all p-0 h-auto"
+              className="text-xs font-black uppercase tracking-widest text-[var(--v2-text-secondary,#A0A0A0)] hover:text-[var(--v2-accent,#2EE66A)] transition-all border-none bg-transparent cursor-pointer p-0"
             >
               {otpState.cooldown > 0
                 ? `Resend in ${otpState.cooldown}s`
                 : otpState.isResending
-                  ? "Sending..."
-                  : "Resend Code"}
-            </Button>
+                ? "Sending..."
+                : "Resend Code"}
+            </button>
           </Flex>
         </Flex>
       </Modal>

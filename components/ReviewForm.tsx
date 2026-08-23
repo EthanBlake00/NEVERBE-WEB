@@ -46,7 +46,6 @@ const ReviewForm = ({ productId, initialValues, onSuccess, onCancel, open }: Rev
 
       formData.append("data", JSON.stringify(payload));
       
-      // Append images
       fileList.forEach((file) => {
         if (file.originFileObj) {
           formData.append("images", file.originFileObj);
@@ -54,13 +53,11 @@ const ReviewForm = ({ productId, initialValues, onSuccess, onCancel, open }: Rev
       });
 
       if (initialValues) {
-        // Edit mode
         await axiosInstance.patch(`/web/reviews/${initialValues.reviewId}`, formData, {
           headers: { Authorization: `Bearer ${token}` },
         });
         toast.success("Review updated successfully!");
       } else {
-        // Create mode
         await axiosInstance.post("/web/reviews", formData, {
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -72,18 +69,35 @@ const ReviewForm = ({ productId, initialValues, onSuccess, onCancel, open }: Rev
     } catch (error: any) {
       console.error("Failed to submit review", error);
       toast.error(error.response?.data?.error || "Failed to submit review");
-    } finally {
+    } flex: {
       setLoading(false);
     }
   };
 
   return (
     <Modal
-      title={initialValues ? "Edit Review" : "Write a Review"}
+      title={
+        <span className="text-lg font-black uppercase tracking-tight text-[var(--v2-text-primary,#F5F5F5)]">
+          {initialValues ? "Edit Review" : "Write a Review"}
+        </span>
+      }
       open={open}
       onCancel={onCancel}
       footer={null}
       destroyOnClose
+      centered
+      styles={{
+        body: {
+          padding: "24px",
+          borderRadius: "24px",
+          background: "var(--v2-bg-surface,#141414)",
+          color: "var(--v2-text-primary,#F5F5F5)",
+        },
+        mask: {
+          backdropFilter: "blur(16px)",
+          background: "rgba(10, 10, 10, 0.8)",
+        },
+      }}
     >
       <Form
         form={form}
@@ -94,29 +108,43 @@ const ReviewForm = ({ productId, initialValues, onSuccess, onCancel, open }: Rev
       >
         <Form.Item
           name="rating"
-          label="Your Rating"
+          label={
+            <span className="text-xs font-black uppercase tracking-widest text-[var(--v2-text-secondary,#A0A0A0)]">
+              Your Rating *
+            </span>
+          }
           rules={[{ required: true, message: "Please provide a rating" }]}
         >
-          <Rate />
+          <Rate style={{ color: "var(--v2-accent,#2EE66A)" }} />
         </Form.Item>
 
         <Form.Item
           name="review"
-          label="Your Review"
+          label={
+            <span className="text-xs font-black uppercase tracking-widest text-[var(--v2-text-secondary,#A0A0A0)]">
+              Your Review *
+            </span>
+          }
           rules={[{ required: true, message: "Please write your review" }]}
         >
           <Input.TextArea 
             rows={4} 
-            placeholder="Describe your experience..." 
-            style={{ borderRadius: '16px', padding: '16px' }}
+            placeholder="Describe your experience with this product..." 
+            className="rounded-2xl bg-[var(--v2-glass-bg,rgba(255,255,255,0.04))]! border-[var(--v2-glass-border,rgba(255,255,255,0.1))]! text-[var(--v2-text-primary,#F5F5F5)]! p-4 text-xs font-medium"
           />
         </Form.Item>
 
-        <Form.Item label="Upload Images (Max 5MB each)">
+        <Form.Item 
+          label={
+            <span className="text-xs font-black uppercase tracking-widest text-[var(--v2-text-secondary,#A0A0A0)]">
+              Upload Photos (Optional, Max 5MB)
+            </span>
+          }
+        >
           <Upload
             listType="picture-card"
             fileList={fileList}
-            onPreview={() => {}} // Could add preview modal later
+            onPreview={() => {}}
             onChange={({ fileList: newFileList }) => setFileList(newFileList)}
             beforeUpload={(file) => {
               const isLt5M = file.size / 1024 / 1024 < 5;
@@ -124,33 +152,35 @@ const ReviewForm = ({ productId, initialValues, onSuccess, onCancel, open }: Rev
                 toast.error("Image must be smaller than 5MB!");
                 return Upload.LIST_IGNORE;
               }
-              return false; // Prevent auto-upload
+              return false;
             }}
             maxCount={5}
           >
             {fileList.length < 5 && (
-              <div>
+              <div className="text-[var(--v2-text-secondary,#A0A0A0)]">
                 <PlusOutlined />
-                <div style={{ marginTop: 8 }}>Upload</div>
+                <div className="text-[10px] font-bold uppercase mt-1">Add Photo</div>
               </div>
             )}
           </Upload>
         </Form.Item>
 
-        <Form.Item className="mb-0 text-right">
-          <Button onClick={onCancel} className="mr-2" style={{ borderRadius: '12px' }}>
-            Cancel
-          </Button>
-          <Button 
-            type="primary" 
-            htmlType="submit" 
-            loading={loading} 
-            className="bg-accent border-none hover:bg-accent-hover!"
-            style={{ borderRadius: '12px' }}
+        <div className="flex justify-end gap-3 mt-6">
+          <button 
+            type="button"
+            onClick={onCancel} 
+            className="px-6 py-3 rounded-full bg-[var(--v2-glass-bg,rgba(255,255,255,0.04))] border border-[var(--v2-glass-border,rgba(255,255,255,0.1))] text-[var(--v2-text-primary,#F5F5F5)] font-black text-xs uppercase tracking-wider cursor-pointer hover:border-[var(--v2-accent,#2EE66A)] transition-all"
           >
-            {initialValues ? "Update Review" : "Submit Review"}
-          </Button>
-        </Form.Item>
+            Cancel
+          </button>
+          <button 
+            type="submit" 
+            disabled={loading}
+            className="px-6 py-3 rounded-full bg-[var(--v2-accent,#2EE66A)] text-[#0A0A0A] font-black text-xs uppercase tracking-wider border-none cursor-pointer hover:opacity-90 active:scale-95 transition-all shadow-md"
+          >
+            {loading ? "Submitting..." : initialValues ? "Update Review" : "Submit Review"}
+          </button>
+        </div>
       </Form>
     </Modal>
   );

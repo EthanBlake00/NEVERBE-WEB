@@ -70,26 +70,26 @@ const SEOContent = () => {
                 fontSize: 14,
                 textTransform: "uppercase",
                 letterSpacing: "0.05em",
-                color: "var(--color-primary-dark)",
+                color: "var(--v2-text-primary, var(--color-primary-dark))",
               }}
             >
               Premium Fashion & Footwear in Sri Lanka
             </h2>
             <p
               style={{
-                color: "var(--color-primary-dark)",
+                color: "var(--v2-text-secondary, var(--color-primary-dark))",
                 fontSize: 12,
                 marginBottom: 0,
                 lineHeight: 1.8,
               }}
             >
               Neverbe is Sri Lanka&apos;s premier online destination to{" "}
-              <strong>
+              <strong style={{ color: "var(--v2-accent, inherit)" }}>
                 buy shoes, clothing, and fashion accessories
               </strong>
               . We bridge the gap between high-end street culture and
               affordability, offering a curated selection of{" "}
-              <strong>
+              <strong style={{ color: "var(--v2-accent, inherit)" }}>
                 sneakers, activewear, sports apparel, and casual footwear
               </strong>
               . Whether you are in Colombo, Kandy, or Galle, our island-wide
@@ -97,19 +97,19 @@ const SEOContent = () => {
             </p>
             <p
               style={{
-                color: "var(--color-primary-dark)",
+                color: "var(--v2-text-secondary, var(--color-primary-dark))",
                 fontSize: 12,
                 marginBottom: 0,
                 lineHeight: 1.8,
               }}
             >
-              We specialize in <strong>premium quality</strong> footwear,{" "}
-              <strong>men&apos;s and women&apos;s clothing</strong>, and fashion
+              We specialize in <strong style={{ color: "var(--v2-accent, inherit)" }}>premium quality</strong> footwear,{" "}
+              <strong style={{ color: "var(--v2-accent, inherit)" }}>men&apos;s and women&apos;s clothing</strong>, and fashion
               accessories, giving you the look and feel of major global brands
               at a fraction of the cost. From premium shoes to everyday{" "}
-              <strong>apparel and sportswear</strong> — experience iconic
+              <strong style={{ color: "var(--v2-accent, inherit)" }}>apparel and sportswear</strong> — experience iconic
               designs without the premium price tag. Browse our collection of{" "}
-              <strong>t-shirts, hoodies, joggers, gym wear</strong>, and more.
+              <strong style={{ color: "var(--v2-accent, inherit)" }}>t-shirts, hoodies, joggers, gym wear</strong>, and more.
             </p>
           </div>
 
@@ -123,7 +123,7 @@ const SEOContent = () => {
                   fontSize: 14,
                   textTransform: "uppercase",
                   letterSpacing: "0.05em",
-                  color: "var(--color-primary-dark)",
+                  color: "var(--v2-text-primary, var(--color-primary-dark))",
                 }}
               >
                 Shop by Category
@@ -137,9 +137,9 @@ const SEOContent = () => {
                       padding: "4px 14px",
                       fontSize: 11,
                       fontWeight: 600,
-                      border: "1px solid rgba(46, 158, 91, 0.15)",
-                      background: "rgba(46, 158, 91, 0.05)",
-                      color: "var(--color-primary-dark)",
+                      border: "1px solid var(--v2-glass-border, rgba(46, 158, 91, 0.15))",
+                      background: "var(--v2-glass-bg, rgba(46, 158, 91, 0.05))",
+                      color: "var(--v2-text-secondary, var(--color-primary-dark))",
                       cursor: "default",
                     }}
                   >
@@ -153,7 +153,7 @@ const SEOContent = () => {
               style={{
                 margin: 0,
                 border: "none",
-                borderTop: "1px solid rgba(46, 158, 91, 0.08)",
+                borderTop: "1px solid var(--v2-glass-border, rgba(46, 158, 91, 0.08))",
               }}
             />
 
@@ -165,14 +165,14 @@ const SEOContent = () => {
                   fontSize: 14,
                   textTransform: "uppercase",
                   letterSpacing: "0.05em",
-                  color: "var(--color-primary-dark)",
+                  color: "var(--v2-text-primary, var(--color-primary-dark))",
                 }}
               >
                 Why Buy Online with Neverbe?
               </h2>
               <p
                 style={{
-                  color: "var(--color-primary-dark)",
+                  color: "var(--v2-text-secondary, var(--color-primary-dark))",
                   fontSize: 12,
                   marginBottom: 0,
                   lineHeight: 1.8,
@@ -180,13 +180,13 @@ const SEOContent = () => {
               >
                 Stop searching for &quot;shops near me&quot; and trust our
                 secure online platform. We offer{" "}
-                <strong>Cash on Delivery (COD)</strong>, hassle-free exchanges,
+                <strong style={{ color: "var(--v2-accent, inherit)" }}>Cash on Delivery (COD)</strong>, hassle-free exchanges,
                 and dedicated customer support. Join thousands of satisfied
                 customers across Sri Lanka who have upgraded their wardrobe —
-                from <strong>shoes and clothing to accessories</strong> — with
-                Neverbe. Shop <strong>men&apos;s t-shirts, women&apos;s
+                from <strong style={{ color: "var(--v2-accent, inherit)" }}>shoes and clothing to accessories</strong> — with
+                Neverbe. Shop <strong style={{ color: "var(--v2-accent, inherit)" }}>men&apos;s t-shirts, women&apos;s
                 activewear, gym clothing, sportswear</strong>, and{" "}
-                <strong>premium sneakers</strong> all in one place.
+                <strong style={{ color: "var(--v2-accent, inherit)" }}>premium sneakers</strong> all in one place.
               </p>
             </div>
           </div>
@@ -197,7 +197,7 @@ const SEOContent = () => {
           style={{
             marginTop: 48,
             paddingTop: 32,
-            borderTop: "1px solid rgba(46, 158, 91, 0.08)",
+            borderTop: "1px solid var(--v2-glass-border, rgba(46, 158, 91, 0.08))",
           }}
         >
           <span
@@ -206,7 +206,7 @@ const SEOContent = () => {
               fontWeight: 800,
               textTransform: "uppercase",
               letterSpacing: "0.2em",
-              color: "var(--color-primary-dark)",
+              color: "var(--v2-accent, var(--color-primary-dark))",
               display: "block",
               marginBottom: 16,
             }}
@@ -217,7 +217,7 @@ const SEOContent = () => {
             {searchLinks.map((link, i) => (
               <React.Fragment key={i}>
                 {i > 0 && (
-                  <span style={{ color: "rgba(0,0,0,0.1)", fontSize: 12 }}>
+                  <span style={{ color: "var(--v2-text-dim, rgba(0,0,0,0.1))", fontSize: 12 }}>
                     /
                   </span>
                 )}
@@ -228,10 +228,10 @@ const SEOContent = () => {
                     fontWeight: 600,
                     textTransform: "uppercase",
                     letterSpacing: "0.05em",
-                    color: "var(--color-primary-dark)",
+                    color: "var(--v2-text-secondary, var(--color-primary-dark))",
                     transition: "color 0.3s ease",
                   }}
-                  className="hover:text-accent!"
+                  className="hover:text-[var(--v2-accent)]!"
                 >
                   {link.label}
                 </Link>

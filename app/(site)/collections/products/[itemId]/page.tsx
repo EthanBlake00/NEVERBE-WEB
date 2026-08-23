@@ -234,7 +234,7 @@ const Page = async (context: { params: Promise<{ itemId: string }> }) => {
   return (
     <Flex
       vertical
-      className="w-full relative mt-[80px] md:mt-[100px] min-h-screen px-4 md:px-8 bg-white text-primary-dark"
+      className="w-full relative mt-[80px] md:mt-[100px] min-h-screen px-4 md:px-8 bg-[var(--v2-bg-void,#0A0A0A)] text-[var(--v2-text-primary,#F5F5F5)]"
     >
       <script
         type="application/ld+json"

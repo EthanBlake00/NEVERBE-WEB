@@ -15,75 +15,44 @@ interface SearchPageClientProps {
 
 export default function SearchPageClient({ query, products }: SearchPageClientProps) {
   return (
-    <div className="w-full min-h-screen" style={{ background: "#f8faf5" }}>
-      <div className="max-w-content mx-auto px-4 lg:px-12 py-8 lg:py-12 animate-fade">
-        {/* Breadcrumbs */}
-        <nav
-          style={{
-            fontSize: 12,
-            color: "var(--color-primary-dark)",
-            marginBottom: 16,
-            fontWeight: 700,
-            textTransform: "uppercase",
-            letterSpacing: "0.05em",
-          }}
-        >
-          <Link href="/" style={{ color: "var(--color-primary-dark)", opacity: 0.6 }}>
-            Home
-          </Link>
-          <span style={{ margin: "0 8px", opacity: 0.4 }}>/</span>
-          <span>Search</span>
-        </nav>
+    <div className="w-full min-h-screen bg-[var(--v2-bg-surface,#141414)]">
+      {/* Hero Header */}
+      <div className="bg-[var(--v2-bg-surface,#141414)] border-b border-[var(--v2-glass-border,rgba(255,255,255,0.08))] pt-28 pb-10 md:pt-36 md:pb-14">
+        <div className="max-w-[1400px] mx-auto px-4 md:px-8">
+          <nav className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[var(--v2-text-muted,#666666)] mb-3">
+            <Link href="/" className="hover:text-[var(--v2-accent,#2EE66A)] transition-colors">
+              Home
+            </Link>
+            <span>/</span>
+            <span className="text-[var(--v2-text-primary,#F5F5F5)]">Search Results</span>
+          </nav>
 
-        {/* Header Section */}
-        <div className="mb-10">
-          <h1
-            style={{
-              fontSize: "clamp(1.75rem, 5vw, 3rem)",
-              fontWeight: 900,
-              textTransform: "uppercase",
-              letterSpacing: "-0.03em",
-              lineHeight: 1.1,
-              margin: 0,
-              marginBottom: 8,
-              color: "var(--color-primary-dark)",
-            }}
-          >
+          <span className="v2-section-label mb-2">SEARCH RESULTS</span>
+          <h1 className="v2-section-title text-[clamp(2.2rem,5vw,4rem)] font-black uppercase tracking-tight text-[var(--v2-text-primary,#F5F5F5)] mb-3">
             {products.length > 0 ? (
               <>
-                Search results for <span style={{ color: "var(--color-accent)" }}>"{query}"</span>
+                Results for <span className="text-[var(--v2-accent,#2EE66A)]">"{query}"</span>
               </>
             ) : (
               <>
-                No results for <span style={{ color: "var(--color-accent)" }}>"{query}"</span>
+                No results for <span className="text-[var(--v2-accent,#2EE66A)]">"{query}"</span>
               </>
             )}
           </h1>
-          <p
-            style={{
-              color: "var(--color-primary-dark)",
-              fontSize: 12,
-              fontWeight: 800,
-              textTransform: "uppercase",
-              letterSpacing: "0.1em",
-              margin: 0,
-              opacity: 0.6
-            }}
-          >
-            Found <span style={{ color: "var(--color-accent)" }}>{products.length}</span> {products.length === 1 ? "product" : "products"}
+          <p className="text-xs font-extrabold uppercase tracking-widest text-[var(--v2-text-secondary,#A0A0A0)] m-0">
+            Found <span className="text-[var(--v2-accent,#2EE66A)] font-black">{products.length}</span> {products.length === 1 ? "PRODUCT" : "PRODUCTS"}
           </p>
         </div>
+      </div>
 
-        {/* Results Grid */}
+      {/* Results Section */}
+      <div className="max-w-[1400px] mx-auto px-4 md:px-8 py-10 md:py-16">
         <ProductGrid 
           products={products} 
           loading={false} 
           emptyHeading="We couldn't find any matches"
           emptySubHeading="Try checking your spelling or using more general terms."
         />
-        
-        {/* Bottom spacing */}
-        <div className="pb-20" />
       </div>
     </div>
   );

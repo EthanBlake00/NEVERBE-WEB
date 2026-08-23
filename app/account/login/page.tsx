@@ -1,8 +1,7 @@
 "use client";
+
 import React, { useState } from "react";
-import { FirebaseError } from "firebase/app";
-import { Form, Input, ConfigProvider, Button, Typography } from "antd";
-const { Title, Text } = Typography;
+import { Form, Input, Button } from "antd";
 import {
   signInWithEmailAndPassword,
   GoogleAuthProvider,
@@ -14,11 +13,10 @@ import { sendPasswordResetLinkAction } from "@/actions/authAction";
 import { Modal } from "antd";
 import Image from "next/image";
 import Link from "next/link";
-
 import toast from "react-hot-toast";
 import ComponentLoader from "@/components/ComponentLoader";
 import { motion } from "framer-motion";
-import { IoChevronBackOutline, IoArrowForward } from "react-icons/io5";
+import { IoChevronBackOutline, IoLockClosedOutline, IoMailOutline } from "react-icons/io5";
 import { FcGoogle } from "react-icons/fc";
 
 const AuthPage = () => {
@@ -75,173 +73,158 @@ const AuthPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white text-primary-dark flex flex-col items-center justify-center px-6 relative">
+    <div className="min-h-screen bg-[var(--v2-bg-surface,#141414)] text-[var(--v2-text-primary,#F5F5F5)] flex flex-col items-center justify-center p-4 sm:p-6 relative overflow-hidden">
+      {/* Background Gradient Orbs */}
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-[var(--v2-accent,#2EE66A)]/5 rounded-full blur-3xl pointer-events-none" />
+
       {loading && <ComponentLoader />}
 
       <motion.div
-        initial={{ opacity: 0, y: 15 }}
+        initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-[400px] flex flex-col"
+        transition={{ duration: 0.4 }}
+        className="w-full max-w-[420px] relative z-10"
       >
-        {/* Branding */}
-        <div className="mb-12 flex flex-col items-center text-center">
-          <Link href="/" className="mb-8 transition-opacity hover:opacity-70">
-            <Image
-              src="/logo.png"
-              width={130}
-              height={50}
-              alt="Neverbe"
-              priority
-            />
-          </Link>
-          <Title
-            level={1}
-            className="text-3xl! font-display! font-black! uppercase! tracking-tighter! mb-3!"
-          >
-            Login
-          </Title>
-          <Text className="text-muted text-sm font-medium block">
-            Enter your details to access your gear and orders.
-          </Text>
-        </div>
-
-        {/* Auth Form */}
-        <Form
-          onFinish={handleAuth}
-          layout="vertical"
-          disabled={loading}
-          className="space-y-4"
+        {/* Back Link */}
+        <Link
+          href="/"
+          className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-wider text-[var(--v2-text-muted,#666666)] hover:text-[var(--v2-accent,#2EE66A)] transition-colors mb-8"
         >
-          <div className="space-y-4">
+          <IoChevronBackOutline size={16} /> <span>Back to Store</span>
+        </Link>
+
+        {/* Card */}
+        <div className="v2-glass p-8 sm:p-10 rounded-3xl border border-[var(--v2-glass-border,rgba(255,255,255,0.08))] shadow-2xl">
+          {/* Logo Branding */}
+          <div className="flex flex-col items-center text-center mb-8">
+            <Link href="/" className="mb-6 transition-opacity hover:opacity-80">
+              <Image
+                src="/logo.png"
+                width={130}
+                height={45}
+                alt="Neverbe"
+                priority
+                className="brightness-0 invert"
+              />
+            </Link>
+            <span className="v2-section-label mb-1">MEMBER ACCESS</span>
+            <h1 className="text-2xl font-black uppercase tracking-tight text-[var(--v2-text-primary,#F5F5F5)] m-0">
+              Welcome Back
+            </h1>
+            <p className="text-xs text-[var(--v2-text-secondary,#A0A0A0)] mt-1 m-0">
+              Sign in to manage your orders &amp; preferences.
+            </p>
+          </div>
+
+          {/* Form */}
+          <Form layout="vertical" onFinish={handleAuth} requiredMark={false}>
             <Form.Item
               name="email"
-              rules={[
-                { required: true, message: "Please input your email!" },
-                { type: "email", message: "Please enter a valid email!" },
-              ]}
-              className="mb-0"
+              rules={[{ required: true, message: "Please enter your email" }]}
             >
               <Input
-                size="large"
-                placeholder="Email Address"
-                className="w-full bg-white hover:bg-surface-2 focus:bg-white border-default focus:border-accent px-4 py-3 text-sm font-bold rounded-xl transition-all"
-                name="email"
+                prefix={<IoMailOutline className="text-[var(--v2-text-muted,#666666)] mr-2" size={18} />}
+                placeholder="EMAIL ADDRESS"
+                className="h-12 rounded-2xl bg-[var(--v2-glass-bg,rgba(255,255,255,0.04))]! border-[var(--v2-glass-border,rgba(255,255,255,0.1))]! text-[var(--v2-text-primary,#F5F5F5)]! placeholder:text-[var(--v2-text-muted,#666666)] font-bold text-xs"
               />
             </Form.Item>
 
             <Form.Item
               name="password"
-              rules={[
-                { required: true, message: "Please input your password!" },
-              ]}
-              className="mb-0"
+              rules={[{ required: true, message: "Please enter your password" }]}
+              className="mb-2"
             >
               <Input.Password
-                size="large"
-                placeholder="Password"
-                className="w-full bg-white hover:bg-surface-2 focus:bg-white border-default focus:border-accent px-4 py-3 text-sm font-bold rounded-xl transition-all"
-                name="password"
+                prefix={<IoLockClosedOutline className="text-[var(--v2-text-muted,#666666)] mr-2" size={18} />}
+                placeholder="PASSWORD"
+                className="h-12 rounded-2xl bg-[var(--v2-glass-bg,rgba(255,255,255,0.04))]! border-[var(--v2-glass-border,rgba(255,255,255,0.1))]! text-[var(--v2-text-primary,#F5F5F5)]! placeholder:text-[var(--v2-text-muted,#666666)] font-bold text-xs"
               />
             </Form.Item>
-          </div>
 
-          <div className="flex justify-end pr-2">
+            {/* Forgot Password Link */}
+            <div className="flex justify-end mb-6">
+              <button
+                type="button"
+                onClick={() => setResetModalVisible(true)}
+                className="text-[11px] font-extrabold uppercase tracking-wider text-[var(--v2-accent,#2EE66A)] hover:underline cursor-pointer bg-transparent border-none p-0"
+              >
+                Forgot Password?
+              </button>
+            </div>
+
             <Button
-              type="link"
-              onClick={() => setResetModalVisible(true)}
-              className="text-[11px] font-bold uppercase tracking-widest text-muted hover:text-primary-dark transition-colors mt-2 p-0 h-auto"
+              type="primary"
+              htmlType="submit"
+              block
+              className="h-12 rounded-full bg-[var(--v2-accent,#2EE66A)]! text-[#0A0A0A]! font-black uppercase tracking-widest text-xs border-none hover:opacity-90 transition-all cursor-pointer shadow-lg mb-4"
             >
-              Forgot Password?
+              Sign In
             </Button>
+          </Form>
+
+          {/* Divider */}
+          <div className="flex items-center gap-4 my-6">
+            <div className="h-px flex-1 bg-[var(--v2-glass-border,rgba(255,255,255,0.08))]" />
+            <span className="text-[10px] font-extrabold uppercase tracking-widest text-[var(--v2-text-muted,#666666)]">
+              OR CONTINUE WITH
+            </span>
+            <div className="h-px flex-1 bg-[var(--v2-glass-border,rgba(255,255,255,0.08))]" />
           </div>
 
-          <Button
-            type="primary"
-            htmlType="submit"
-            disabled={loading}
-            className="group w-full h-auto bg-accent text-white py-4 rounded-full font-display font-black uppercase tracking-widest text-xs flex items-center justify-center gap-3 transition-all hover:bg-accent-hover shadow-md hover:shadow-lg active:scale-[0.98] disabled:opacity-50 mt-4 border-none"
+          {/* Google SSO Button */}
+          <button
+            onClick={handleGoogleLogin}
+            type="button"
+            className="w-full h-12 rounded-full bg-[var(--v2-glass-bg,rgba(255,255,255,0.04))] border border-[var(--v2-glass-border,rgba(255,255,255,0.1))] hover:border-[var(--v2-accent,#2EE66A)] text-[var(--v2-text-primary,#F5F5F5)] font-extrabold text-xs uppercase tracking-wider flex items-center justify-center gap-3 transition-all cursor-pointer"
           >
-            {loading ? "Signing In..." : "Log In"}
-            <IoArrowForward
-              size={18}
-              className="group-hover:translate-x-1 transition-transform"
-            />
-          </Button>
-        </Form>
+            <FcGoogle size={20} />
+            <span>Google Account</span>
+          </button>
 
-        {/* Divider */}
-        <div className="flex items-center gap-4 my-10">
-          <div className="h-px bg-border-default flex-1"></div>
-          <Text className="text-[10px] font-black text-muted tracking-widest uppercase">
-            Or
-          </Text>
-          <div className="h-px bg-border-default flex-1"></div>
-        </div>
-
-        <Button
-          onClick={handleGoogleLogin}
-          type="default"
-          className="w-full bg-white text-primary-dark border border-default flex items-center justify-center gap-4 py-6 rounded-full font-black uppercase text-xs tracking-widest hover:bg-surface-2 shadow-sm transition-all"
-        >
-          <FcGoogle size={22} />
-          Continue with Google
-        </Button>
-
-        {/* Footer Links */}
-        <div className="mt-8 flex flex-col items-center gap-2">
-          <Text className="text-xs font-semibold text-muted uppercase tracking-widest block">
-            Don't have an account?
-          </Text>
-          <Link
-            href={`/account/register?redirect=${encodeURIComponent(
-              redirectUrl,
-            )}`}
-            className="text-xs font-black uppercase tracking-widest text-primary-dark hover:text-primary-dark underline underline-offset-4 decoration-accent decoration-2 transition-all"
-          >
-            Create an Account
-          </Link>
+          {/* Register Redirect */}
+          <div className="text-center mt-8 pt-6 border-t border-[var(--v2-glass-border,rgba(255,255,255,0.08))]">
+            <p className="text-xs text-[var(--v2-text-secondary,#A0A0A0)] m-0">
+              Don't have an account?{" "}
+              <Link
+                href={`/account/register?redirect=${encodeURIComponent(redirectUrl)}`}
+                className="text-[var(--v2-accent,#2EE66A)] font-black uppercase tracking-wider hover:underline ml-1"
+              >
+                Register Now
+              </Link>
+            </p>
+          </div>
         </div>
       </motion.div>
 
-      {/* Return Link */}
-      <div className="mt-16">
-        <Link
-          href="/"
-          className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-muted hover:text-primary-dark transition-all"
-        >
-          <IoChevronBackOutline size={14} />
-          Return to Store
-        </Link>
-      </div>
-
+      {/* Forgot Password Modal */}
       <Modal
         title={
-          <Title level={4} className="uppercase font-black tracking-tighter mb-0!">
+          <span className="font-black uppercase tracking-tight text-[var(--v2-text-primary,#F5F5F5)]">
             Reset Password
-          </Title>
+          </span>
         }
         open={resetModalVisible}
         onCancel={() => setResetModalVisible(false)}
         footer={null}
         centered
-        className="reset-modal"
+        className="v2-landing"
       >
-        <div className="py-4 space-y-6">
-          <Text className="text-muted text-sm font-medium">
-            Enter your email address and we'll send you a link to reset your password.
-          </Text>
+        <div className="py-4 space-y-4">
+          <p className="text-xs text-[var(--v2-text-secondary,#A0A0A0)] m-0 leading-relaxed">
+            Enter your email address below and we will send you a password reset link.
+          </p>
           <Input
-            size="large"
-            placeholder="Email Address"
+            placeholder="ENTER YOUR EMAIL"
             value={resetEmail}
             onChange={(e) => setResetEmail(e.target.value)}
-            className="w-full bg-surface-2 hover:bg-surface-2 focus:bg-white border-default focus:border-accent px-4 py-3 text-sm font-bold rounded-xl transition-all"
+            className="h-12 rounded-2xl bg-[var(--v2-glass-bg,rgba(255,255,255,0.04))] border-[var(--v2-glass-border,rgba(255,255,255,0.1))] text-[var(--v2-text-primary,#F5F5F5)] font-bold text-xs"
           />
           <Button
+            type="primary"
             onClick={handleResetPassword}
             loading={resetLoading}
-            type="primary"
-            className="w-full bg-accent text-white py-6 rounded-full font-display font-black uppercase tracking-widest text-xs shadow-md hover:bg-accent-hover border-none"
+            block
+            className="h-12 rounded-full bg-[var(--v2-accent,#2EE66A)]! text-[#0A0A0A]! font-black uppercase tracking-widest text-xs border-none hover:opacity-90 cursor-pointer"
           >
             Send Reset Link
           </Button>

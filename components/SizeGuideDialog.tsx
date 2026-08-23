@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { IoClose } from "react-icons/io5";
-import { Button } from "antd";
 
 interface SizeGuideDialogProps {
   isOpen: boolean;
@@ -59,129 +58,97 @@ const SizeGuideDialog: React.FC<SizeGuideDialogProps> = ({
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-100 flex items-center justify-center p-4">
-          {/* Backdrop with High-End Blur */}
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="absolute inset-0 bg-surface/80 backdrop-blur-xl"
+            className="fixed inset-0 bg-[#0A0A0A]/80 backdrop-blur-xl"
           />
 
           {/* Dialog Container */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.9, y: 30 }}
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9, y: 30 }}
+            exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="relative bg-surface w-full max-w-2xl max-h-[85vh] rounded-2xl shadow-hover border border-default overflow-hidden flex flex-col"
+            className="relative bg-[var(--v2-bg-surface,#141414)] text-[var(--v2-text-primary,#F5F5F5)] w-full max-w-2xl max-h-[85vh] rounded-3xl border border-[var(--v2-glass-border,rgba(255,255,255,0.08))] shadow-2xl overflow-hidden flex flex-col z-10 my-auto"
           >
-            {/* Header: Performance Style */}
-            <div className="flex justify-between items-center p-6 md:px-8 border-b border-default shrink-0">
+            {/* Header */}
+            <div className="flex justify-between items-center p-6 border-b border-[var(--v2-glass-border,rgba(255,255,255,0.08))] shrink-0">
               <div className="flex flex-col">
-                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-accent">
-                  Blueprint
-                </span>
-                <h2 className="text-2xl md:text-3xl font-display font-black uppercase tracking-tighter text-primary-dark">
-                  Size Guide
+                <span className="v2-section-label text-[9px] mb-0.5">SPECIFICATIONS</span>
+                <h2 className="text-xl md:text-2xl font-black uppercase tracking-tight text-[var(--v2-text-primary,#F5F5F5)] m-0">
+                  Size Guide &amp; Conversions
                 </h2>
               </div>
-              <Button
-                type="text"
-                icon={<IoClose size={24} />}
+              <button
                 onClick={onClose}
-                className="p-3 bg-surface-2 text-primary-dark hover:bg-dark hover:text-inverse transition-all rounded-full shadow-sm h-auto w-auto border-none"
-              />
+                className="w-9 h-9 rounded-full bg-[var(--v2-glass-bg,rgba(255,255,255,0.05))] hover:bg-[var(--v2-accent,#2EE66A)] hover:text-[#0A0A0A] border border-[var(--v2-glass-border,rgba(255,255,255,0.1))] text-[var(--v2-text-primary,#F5F5F5)] flex items-center justify-center transition-all cursor-pointer"
+                aria-label="Close"
+              >
+                <IoClose size={20} />
+              </button>
             </div>
 
             {/* Content Container */}
-            <div className="p-6 md:p-8 overflow-y-auto hide-scrollbar">
-              <p className="text-base text-muted mb-8 font-medium leading-relaxed">
-                Ensure the perfect fit for your high-performance gear. If you
-                are between sizes, we recommend ordering the next size up for
-                optimal comfort.
+            <div className="p-6 overflow-y-auto hide-scrollbar">
+              <p className="text-xs text-[var(--v2-text-secondary,#A0A0A0)] mb-6 font-medium leading-relaxed m-0">
+                Ensure the perfect fit. If you are between sizes, we recommend ordering the next size up for optimal comfort.
               </p>
 
-              {/* Performance Tabs */}
-              <div className="flex gap-6 mb-8 border-b border-default">
+              {/* Tabs */}
+              <div className="flex gap-4 mb-6 border-b border-[var(--v2-glass-border,rgba(255,255,255,0.08))]">
                 {(["men", "women", "kids"] as const).map((tab) => (
-                  <Button
-                    type="text"
+                  <button
                     key={tab}
                     onClick={() => setActiveTab(tab)}
-                    className={`pb-4 text-sm font-black uppercase tracking-widest transition-all relative h-auto p-0 border-none rounded-none bg-transparent hover:bg-transparent ${
+                    className={`pb-3 text-xs font-black uppercase tracking-widest transition-all relative border-none bg-transparent cursor-pointer ${
                       activeTab === tab
-                        ? "text-accent"
-                        : "text-muted hover:text-primary-dark"
+                        ? "text-[var(--v2-accent,#2EE66A)]"
+                        : "text-[var(--v2-text-muted,#666666)] hover:text-[var(--v2-text-primary,#F5F5F5)]"
                     }`}
                   >
-                    {tab}
+                    <span>{tab}</span>
                     {activeTab === tab && (
                       <motion.div
                         layoutId="activeTabGuide"
-                        className="absolute bottom-0 left-0 right-0 h-1 bg-accent shadow-[0_0_10px_var(--color-accent)]"
+                        className="absolute bottom-0 left-0 right-0 h-0.5 bg-[var(--v2-accent,#2EE66A)]"
                       />
                     )}
-                  </Button>
+                  </button>
                 ))}
               </div>
 
-              {/* Data Table: Technical Spec Look */}
-              <div className="overflow-x-auto rounded-xl border border-default">
-                <table className="w-full text-sm text-left whitespace-nowrap">
-                  <thead className="bg-dark text-accent">
+              {/* Table */}
+              <div className="overflow-x-auto rounded-2xl border border-[var(--v2-glass-border,rgba(255,255,255,0.08))]">
+                <table className="w-full text-xs text-left whitespace-nowrap border-collapse">
+                  <thead className="bg-[#0A0A0A] text-[var(--v2-accent,#2EE66A)] border-b border-[var(--v2-glass-border,rgba(255,255,255,0.08))]">
                     <tr>
-                      <th className="px-6 py-4 font-display font-black uppercase tracking-tighter">
-                        US Size
-                      </th>
-                      <th className="px-6 py-4 font-display font-black uppercase tracking-tighter border-l border-white/10">
-                        UK Size
-                      </th>
-                      <th className="px-6 py-4 font-display font-black uppercase tracking-tighter border-l border-white/10">
-                        EU Size
-                      </th>
-                      <th className="px-6 py-4 font-display font-black uppercase tracking-tighter border-l border-white/10">
-                        CM Length
-                      </th>
+                      <th className="px-5 py-3 font-black uppercase tracking-wider">US Size</th>
+                      <th className="px-5 py-3 font-black uppercase tracking-wider">UK Size</th>
+                      <th className="px-5 py-3 font-black uppercase tracking-wider">EU Size</th>
+                      <th className="px-5 py-3 font-black uppercase tracking-wider">CM Length</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-default bg-surface">
+                  <tbody className="divide-y divide-[var(--v2-glass-border,rgba(255,255,255,0.06))]">
                     {(activeTab === "men"
                       ? menSizes
                       : activeTab === "women"
-                        ? womenSizes
-                        : kidSizes
+                      ? womenSizes
+                      : kidSizes
                     ).map((row, idx) => (
-                      <tr
-                        key={idx}
-                        className="hover:bg-surface-2 transition-colors group"
-                      >
-                        <td className="px-6 py-4 font-black text-primary-dark text-base tracking-tighter group-hover:text-accent transition-colors">
-                          {row.us}
-                        </td>
-                        <td className="px-6 py-4 text-muted font-bold border-l border-default">
-                          {row.uk}
-                        </td>
-                        <td className="px-6 py-4 text-muted font-bold border-l border-default">
-                          {row.eu}
-                        </td>
-                        <td className="px-6 py-4 text-muted font-bold border-l border-default">
-                          {row.cm}
-                        </td>
+                      <tr key={idx} className="hover:bg-[var(--v2-glass-bg,rgba(255,255,255,0.02))] transition-colors">
+                        <td className="px-5 py-3 font-black text-[var(--v2-text-primary,#F5F5F5)]">{row.us}</td>
+                        <td className="px-5 py-3 font-bold text-[var(--v2-text-secondary,#A0A0A0)]">{row.uk}</td>
+                        <td className="px-5 py-3 font-bold text-[var(--v2-text-secondary,#A0A0A0)]">{row.eu}</td>
+                        <td className="px-5 py-3 font-bold text-[var(--v2-text-secondary,#A0A0A0)]">{row.cm}</td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
-              </div>
-
-              {/* Disclaimer */}
-              <div className="mt-8 flex items-center gap-3 p-4 bg-surface-2 rounded-lg border border-default">
-                <div className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
-                <p className="text-[11px] text-muted font-bold uppercase tracking-widest">
-                  Note: Technical specifications may vary slightly by
-                  manufacturer.
-                </p>
               </div>
             </div>
           </motion.div>

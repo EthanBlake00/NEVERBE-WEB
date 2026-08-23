@@ -10,6 +10,7 @@ interface ProductsFilterProps {
     occasion: string[];
     style: string[];
     inStock: boolean;
+    sort: string;
   };
   actions: {
     toggleBrand: (brand: string) => void;
@@ -18,6 +19,7 @@ interface ProductsFilterProps {
     toggleOccasion: (val: string) => void;
     toggleStyle: (val: string) => void;
     setInStock: (val: boolean) => void;
+    setSort: (val: string) => void;
     resetFilters: () => void;
   };
 }
@@ -31,6 +33,8 @@ const ProductsFilter = ({ filters, actions }: ProductsFilterProps) => {
       selectedOccasions={filters.occasion}
       selectedStyles={filters.style}
       inStock={filters.inStock}
+      sortValue={filters.sort}
+      onSortChange={actions.setSort}
       onBrandToggle={actions.toggleBrand}
       onCategoryToggle={actions.toggleCategory}
       onSizeToggle={actions.toggleSize}

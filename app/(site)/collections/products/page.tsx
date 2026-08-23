@@ -186,7 +186,7 @@ const Page = async () => {
   };
 
   return (
-    <main className="w-full min-h-screen" style={{ background: "#f8faf5" }}>
+    <main className="v2-landing w-full min-h-screen bg-[var(--v2-bg-void,#0A0A0A)] text-[var(--v2-text-primary,#F5F5F5)] transition-colors duration-300">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -194,81 +194,52 @@ const Page = async () => {
         }}
       />
 
-      {/* Page Header */}
-      <div className="w-full max-w-content mx-auto px-4 md:px-12 pt-8 pb-6">
-        <nav
-          style={{
-            fontSize: 12,
-            color: "var(--color-primary-dark)",
-            marginBottom: 16,
-          }}
-        >
-          <Link href="/" style={{ color: "var(--color-primary-dark)" }}>
-            Home
-          </Link>
-          <span style={{ margin: "0 8px" }}>/</span>
-          <span>Collection</span>
-        </nav>
-        <h1
-          style={{
-            fontSize: "clamp(2rem, 5vw, 3.5rem)",
-            fontWeight: 900,
-            textTransform: "uppercase",
-            letterSpacing: "-0.03em",
-            lineHeight: 1,
-            margin: 0,
-            marginBottom: 8,
-            color: "var(--color-primary-dark)",
-          }}
-        >
-          All Products
-        </h1>
-        <p
-          style={{ color: "var(--color-primary-dark)", fontSize: 14, margin: 0 }}
-        >
-          Sneakers, activewear, slides, accessories and more.
-        </p>
+      {/* Page Header Hero */}
+      <div className="relative w-full py-12 md:py-16 border-b border-[var(--v2-glass-border,rgba(255,255,255,0.08))] overflow-hidden bg-[var(--v2-bg-surface,#141414)]">
+        {/* Subtle Ambient Glow */}
+        <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(46,230,106,0.08),transparent_70%)]" />
+
+        <div className="relative max-w-[1400px] mx-auto px-4 md:px-8">
+          <nav className="flex items-center gap-2 text-[11px] font-extrabold uppercase tracking-widest text-[var(--v2-text-muted,#666666)] mb-4">
+            <Link href="/" className="hover:text-[var(--v2-accent,#2EE66A)] transition-colors">
+              Home
+            </Link>
+            <span>/</span>
+            <span className="text-[var(--v2-text-primary,#F5F5F5)]">All Products</span>
+          </nav>
+
+          <span className="v2-section-label mb-2">Exclusive Lineup</span>
+          <h1 className="v2-section-title text-[clamp(2.5rem,6vw,4.5rem)] font-black uppercase tracking-tight text-[var(--v2-text-primary,#F5F5F5)] mb-3">
+            All Products
+          </h1>
+          <p className="text-[15px] font-medium text-[var(--v2-text-secondary,#A0A0A0)] max-w-xl">
+            Sneakers, activewear, slides, accessories &amp; lifestyle essentials delivered island-wide.
+          </p>
+        </div>
       </div>
 
-      {/* Product Grid */}
-      <div className="max-w-content mx-auto px-4 md:px-12 pb-20">
+      {/* Product Grid & Filter Layout */}
+      <div className="max-w-[1400px] mx-auto px-4 md:px-8 py-10 md:py-16">
         <Products items={productList} />
       </div>
 
       {/* SEO Footer */}
-      <div
-        style={{
-          borderTop: "1px solid var(--color-default)",
-          padding: "48px 0",
-        }}
-      >
-        <div className="max-w-content mx-auto px-8 lg:px-12">
+      <div className="border-t border-[var(--v2-glass-border,rgba(255,255,255,0.08))] py-16 bg-[var(--v2-bg-surface,#141414)]">
+        <div className="max-w-[1400px] mx-auto px-4 md:px-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
             <div>
-              <span style={sectionLabel}>Premium Fashion in Sri Lanka</span>
-              <p
-                style={{
-                  fontSize: 13,
-                  color: "var(--color-primary-dark)",
-                  margin: 0,
-                }}
-              >
-                Neverbe offers shoes, clothing, activewear, and accessories —
-                all with island-wide Cash on Delivery.
+              <span className="text-[11px] font-extrabold uppercase tracking-widest text-[var(--v2-accent,#2EE66A)] block mb-3">
+                Premium Fashion in Sri Lanka
+              </span>
+              <p className="text-xs text-[var(--v2-text-secondary,#A0A0A0)] leading-relaxed">
+                Neverbe offers shoes, clothing, activewear, and accessories — all with island-wide Cash on Delivery.
               </p>
             </div>
             <div>
-              <span style={sectionLabel}>Popular Collections</span>
-              <ul
-                style={{
-                  fontSize: 13,
-                  color: "var(--color-primary-dark)",
-                  lineHeight: 2,
-                  listStyle: "none",
-                  padding: 0,
-                  margin: 0,
-                }}
-              >
+              <span className="text-[11px] font-extrabold uppercase tracking-widest text-[var(--v2-accent,#2EE66A)] block mb-3">
+                Popular Collections
+              </span>
+              <ul className="text-xs text-[var(--v2-text-secondary,#A0A0A0)] space-y-2 list-none p-0 m-0">
                 <li>Men&apos;s Sneakers</li>
                 <li>Women&apos;s Activewear</li>
                 <li>Slides &amp; Sandals</li>
@@ -276,16 +247,11 @@ const Page = async () => {
               </ul>
             </div>
             <div>
-              <span style={sectionLabel}>Quality Guaranteed</span>
-              <p
-                style={{
-                  fontSize: 13,
-                  color: "var(--color-primary-dark)",
-                  margin: 0,
-                }}
-              >
-                Size exchanges within 7 days. Every product is Premium Grade
-                quality — durability and comfort guaranteed.
+              <span className="text-[11px] font-extrabold uppercase tracking-widest text-[var(--v2-accent,#2EE66A)] block mb-3">
+                Quality Guaranteed
+              </span>
+              <p className="text-xs text-[var(--v2-text-secondary,#A0A0A0)] leading-relaxed">
+                Size exchanges within 7 days. Every product is Premium Grade quality — durability and comfort guaranteed.
               </p>
             </div>
           </div>

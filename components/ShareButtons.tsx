@@ -3,8 +3,6 @@ import React from "react";
 import { IoLogoWhatsapp } from "react-icons/io5";
 import { FaFacebookF, FaLink } from "react-icons/fa";
 import toast from "react-hot-toast";
-import { motion } from "framer-motion";
-import { Button } from "antd";
 
 interface ShareButtonsProps {
   title: string;
@@ -13,10 +11,6 @@ interface ShareButtonsProps {
   className?: string;
 }
 
-/**
- * ShareButtons - NEVERBE Brand Style
- * Optimized for the Sri Lankan market with a performance-driven UI.
- */
 const ShareButtons: React.FC<ShareButtonsProps> = ({
   title,
   url,
@@ -44,62 +38,47 @@ const ShareButtons: React.FC<ShareButtonsProps> = ({
   const copyLink = async () => {
     try {
       await navigator.clipboard.writeText(fullUrl);
-      toast.success("Blueprint link copied!", {
-        style: {
-          background: "var(--color-primary)",
-          color: "var(--color-accent)",
-          fontWeight: "bold",
-          fontSize: "12px",
-          textTransform: "uppercase",
-        },
-      });
+      toast.success("Link copied to clipboard!");
     } catch {
       toast.error("Failed to copy link");
     }
   };
 
   return (
-    <div className={`flex flex-col gap-3 ${className} animate-fade`}>
-      {/* Performance Label */}
-      <span className="text-[10px] font-display font-black uppercase tracking-[0.2em] text-muted">
-        Share the Gear
+    <div className={`flex items-center gap-2 ${className}`}>
+      <span className="text-[10px] font-black uppercase tracking-widest text-[var(--v2-text-secondary,#A0A0A0)] mr-2">
+        Share:
       </span>
 
-      <div className="flex items-center gap-3">
-        <Button
-          type="text"
-          shape="circle"
-          onClick={shareToWhatsApp}
-          className="flex items-center justify-center w-12 h-12 rounded-full bg-primary text-white shadow-lg border border-primary hover:bg-white hover:text-primary-dark hover:shadow-primary/40 hover:-translate-y-1 transition-all active:scale-90 p-0"
-          aria-label="Share on WhatsApp"
-          icon={<IoLogoWhatsapp size={24} />}
-        />
+      {/* WhatsApp */}
+      <button
+        type="button"
+        onClick={shareToWhatsApp}
+        className="w-9 h-9 rounded-full bg-[var(--v2-glass-bg,rgba(255,255,255,0.05))] border border-[var(--v2-glass-border,rgba(255,255,255,0.1))] text-[var(--v2-text-primary,#F5F5F5)] hover:text-[#25D366] hover:border-[#25D366] flex items-center justify-center transition-all cursor-pointer"
+        aria-label="Share on WhatsApp"
+      >
+        <IoLogoWhatsapp size={16} />
+      </button>
 
-        {/* Facebook */}
-        <Button
-          type="text"
-          shape="circle"
-          onClick={shareToFacebook}
-          className="flex items-center justify-center w-12 h-12 rounded-full bg-primary text-white shadow-lg border border-primary hover:bg-white hover:text-primary-dark hover:shadow-primary/40 hover:-translate-y-1 transition-all active:scale-90 p-0"
-          aria-label="Share on Facebook"
-          icon={<FaFacebookF size={20} />}
-        />
+      {/* Facebook */}
+      <button
+        type="button"
+        onClick={shareToFacebook}
+        className="w-9 h-9 rounded-full bg-[var(--v2-glass-bg,rgba(255,255,255,0.05))] border border-[var(--v2-glass-border,rgba(255,255,255,0.1))] text-[var(--v2-text-primary,#F5F5F5)] hover:text-[#1877F2] hover:border-[#1877F2] flex items-center justify-center transition-all cursor-pointer"
+        aria-label="Share on Facebook"
+      >
+        <FaFacebookF size={14} />
+      </button>
 
-        {/* Copy Link - Branded Performance Style */}
-        <Button
-          type="text"
-          shape="circle"
-          onClick={copyLink}
-          className="group flex items-center justify-center w-12 h-12 rounded-full bg-surface-2 text-accent border border-accent/20 shadow-custom hover:bg-accent hover:text-primary-dark hover:shadow-hover hover:-translate-y-1 transition-all active:scale-90 p-0"
-          aria-label="Copy link"
-          icon={
-            <FaLink
-              size={18}
-              className="group-hover:rotate-12 transition-transform"
-            />
-          }
-        />
-      </div>
+      {/* Copy Link */}
+      <button
+        type="button"
+        onClick={copyLink}
+        className="w-9 h-9 rounded-full bg-[var(--v2-glass-bg,rgba(255,255,255,0.05))] border border-[var(--v2-glass-border,rgba(255,255,255,0.1))] text-[var(--v2-text-primary,#F5F5F5)] hover:text-[var(--v2-accent,#2EE66A)] hover:border-[var(--v2-accent,#2EE66A)] flex items-center justify-center transition-all cursor-pointer"
+        aria-label="Copy link"
+      >
+        <FaLink size={14} />
+      </button>
     </div>
   );
 };

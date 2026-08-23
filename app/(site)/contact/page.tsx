@@ -50,7 +50,6 @@ export const metadata: Metadata = {
 };
 
 const ContactPage = () => {
-  /* ✅ Structured Data for Contact Page + Breadcrumb + Organization */
   const structuredData = [
     {
       "@context": "https://schema.org",
@@ -92,7 +91,7 @@ const ContactPage = () => {
   ];
 
   return (
-    <div className="min-h-screen mt-8 lg:mt-12 flex flex-col items-center px-4 sm:px-6 lg:px-12 bg-surface">
+    <div className="min-h-screen pt-28 pb-20 flex flex-col items-center px-4 sm:px-6 lg:px-12 bg-[var(--v2-bg-surface,#141414)] text-[var(--v2-text-primary,#F5F5F5)]">
       {/* Structured Data JSON-LD */}
       <script
         type="application/ld+json"
@@ -100,18 +99,18 @@ const ContactPage = () => {
       />
 
       {/* --- Header Section --- */}
-      <header className="text-center mb-12">
-        <h1 className="text-4xl sm:text-5xl font-display font-black uppercase tracking-tighter text-primary-dark">
+      <header className="text-center mb-12 max-w-2xl mx-auto">
+        <span className="v2-section-label mb-2">WE ARE HERE FOR YOU</span>
+        <h1 className="v2-section-title text-[clamp(2.5rem,6vw,4.5rem)] font-black uppercase tracking-tight text-[var(--v2-text-primary,#F5F5F5)] m-0 leading-none">
           Contact Us
         </h1>
-        <p className="text-muted mt-4 text-base max-w-2xl mx-auto">
-          We'd love to hear from you. Whether you have a question, feedback, or
-          just want to say hello — we're here to help!
+        <p className="text-xs sm:text-sm font-medium text-[var(--v2-text-secondary,#A0A0A0)] mt-4 m-0">
+          Whether you have a question about sizing, order tracking, or feedback — we're ready to assist.
         </p>
       </header>
 
       {/* --- Main Content Section --- */}
-      <div className="w-full max-w-6xl p-6 sm:p-10 space-y-12">
+      <div className="w-full max-w-6xl space-y-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
           <ContactDetailsSection />
           <SocialMediaSection />

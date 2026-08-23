@@ -7,10 +7,10 @@ import {
   IoSettingsOutline,
   IoTimeOutline,
   IoChevronForward,
+  IoLocationOutline,
+  IoHeartOutline,
 } from "react-icons/io5";
-import { Button, Row, Col, Typography, Card } from "antd";
-
-const { Title, Text } = Typography;
+import { Row, Col } from "antd";
 
 interface UserProfile {
   name?: string;
@@ -35,124 +35,158 @@ const ProfileOverview: React.FC<ProfileOverviewProps> = ({
           year: "numeric",
           month: "long",
         })
-      : user?.isAnonymous 
-        ? "Guest Profile"
-        : "New Customer";
+      : user?.isAnonymous
+        ? "Guest Session"
+        : "New Member";
   }, [user?.memberSince]);
 
   return (
-    <div className="space-y-12 animate-fade">
+    <div className="space-y-8">
       {/* Header */}
-      <div className="border-b border-default pb-8">
-        <Text className="block text-[10px] font-black uppercase tracking-[0.3em] text-accent">
-          Account
-        </Text>
-        <Title
-          level={2}
-          className="text-3xl! md:text-4xl! font-display! font-black! uppercase! tracking-tighter! text-primary-dark! mt-2! mb-0!"
-        >
-          Overview
-        </Title>
-        <div className="flex items-center gap-2 mt-4 text-muted">
-          <IoTimeOutline className="text-accent" />
-          <Text className="text-xs font-bold uppercase tracking-widest text-muted">
-            {user?.isAnonymous 
-              ? <span className="text-warning">Temporary Session</span>
-              : <>Customer since <span className="text-primary-dark">{memberDate}</span></>
-            }
-          </Text>
+      <div className="border-b border-[var(--v2-glass-border,rgba(255,255,255,0.08))] pb-6">
+        <span className="v2-section-label mb-1">DASHBOARD</span>
+        <h2 className="text-3xl font-black uppercase tracking-tight text-[var(--v2-text-primary,#F5F5F5)] m-0">
+          Account Overview
+        </h2>
+        <div className="flex items-center gap-2 mt-2">
+          <IoTimeOutline className="text-[var(--v2-accent,#2EE66A)]" size={16} />
+          <span className="text-xs font-bold uppercase tracking-wider text-[var(--v2-text-secondary,#A0A0A0)]">
+            {user?.isAnonymous ? (
+              <span className="text-amber-400">Temporary Session</span>
+            ) : (
+              <>Member since <span className="text-[var(--v2-text-primary,#F5F5F5)] font-extrabold">{memberDate}</span></>
+            )}
+          </span>
         </div>
       </div>
 
       {/* Grid */}
-      <Row gutter={[24, 24]}>
+      <Row gutter={[20, 20]}>
         {/* Orders Tile */}
         <Col xs={24} md={12}>
-          <motion.div whileHover={{ y: -4 }}>
-            <Card
-              bordered={false}
-              className="bg-white flex flex-col justify-between min-h-[280px] rounded-2xl border border-default hover:border-accent transition-all duration-300 group relative overflow-hidden h-full shadow-none hover:shadow-none"
-              bodyStyle={{
-                padding: "32px",
-                height: "100%",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-between",
-              }}
-            >
-              <div className="absolute top-0 right-0 p-6 text-accent/10 transition-transform duration-500 group-hover:scale-110">
-                <IoCubeOutline size={120} />
-              </div>
+          <motion.div
+            whileHover={{ y: -4 }}
+            onClick={() => setActiveTab("orders")}
+            className="v2-glass p-8 rounded-3xl border border-[var(--v2-glass-border,rgba(255,255,255,0.08))] hover:border-[var(--v2-accent,#2EE66A)] transition-all duration-300 group cursor-pointer relative overflow-hidden flex flex-col justify-between min-h-[240px]"
+          >
+            <div className="absolute top-0 right-0 p-6 text-[var(--v2-accent,#2EE66A)]/10 group-hover:scale-110 transition-transform">
+              <IoCubeOutline size={120} />
+            </div>
 
-              <div className="relative z-10 mb-6">
-                <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-accent mb-4 border border-default">
-                  <IoCubeOutline size={24} />
-                </div>
-                <Title
-                  level={3}
-                  className="text-2xl! font-display! font-black! uppercase! tracking-tighter! text-primary-dark! mb-3!"
-                >
-                  Order History
-                </Title>
-                <Text className="text-muted font-medium text-sm leading-relaxed block">
-                  View your past orders and track active shipments.
-                </Text>
+            <div className="relative z-10">
+              <div className="w-12 h-12 rounded-2xl bg-[var(--v2-accent,#2EE66A)]/10 border border-[var(--v2-accent,#2EE66A)]/20 text-[var(--v2-accent,#2EE66A)] flex items-center justify-center mb-4">
+                <IoCubeOutline size={24} />
               </div>
+              <h3 className="text-xl font-black uppercase tracking-tight text-[var(--v2-text-primary,#F5F5F5)] mb-2">
+                Order History
+              </h3>
+              <p className="text-xs text-[var(--v2-text-secondary,#A0A0A0)] leading-relaxed m-0">
+                View your past orders, invoice receipts &amp; active shipments.
+              </p>
+            </div>
 
-              <Button
-                type="primary"
-                onClick={() => setActiveTab("orders")}
-                className="group relative z-10 self-start flex items-center gap-2 bg-accent text-white px-6 py-3 rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-accent-hover shadow-md hover:shadow-lg transition-all border-none h-auto active:scale-[0.98]"
-              >
-                View Orders ({ordersCount})
-                <IoChevronForward className="group-hover:translate-x-1 transition-transform" />
-              </Button>
-            </Card>
+            <div className="relative z-10 pt-6 flex items-center justify-between border-t border-[var(--v2-glass-border,rgba(255,255,255,0.08))]">
+              <span className="text-xs font-black uppercase tracking-widest text-[var(--v2-accent,#2EE66A)]">
+                {ordersCount} {ordersCount === 1 ? "Order" : "Orders"} Placed
+              </span>
+              <div className="w-8 h-8 rounded-full bg-[var(--v2-glass-bg,rgba(255,255,255,0.05))] group-hover:bg-[var(--v2-accent,#2EE66A)] group-hover:text-[#0A0A0A] flex items-center justify-center transition-all text-[var(--v2-text-primary,#F5F5F5)]">
+                <IoChevronForward size={16} />
+              </div>
+            </div>
+          </motion.div>
+        </Col>
+
+        {/* Addresses Tile */}
+        <Col xs={24} md={12}>
+          <motion.div
+            whileHover={{ y: -4 }}
+            onClick={() => setActiveTab("addresses")}
+            className="v2-glass p-8 rounded-3xl border border-[var(--v2-glass-border,rgba(255,255,255,0.08))] hover:border-[var(--v2-accent,#2EE66A)] transition-all duration-300 group cursor-pointer relative overflow-hidden flex flex-col justify-between min-h-[240px]"
+          >
+            <div className="absolute top-0 right-0 p-6 text-[var(--v2-accent,#2EE66A)]/10 group-hover:scale-110 transition-transform">
+              <IoLocationOutline size={120} />
+            </div>
+
+            <div className="relative z-10">
+              <div className="w-12 h-12 rounded-2xl bg-[var(--v2-accent,#2EE66A)]/10 border border-[var(--v2-accent,#2EE66A)]/20 text-[var(--v2-accent,#2EE66A)] flex items-center justify-center mb-4">
+                <IoLocationOutline size={24} />
+              </div>
+              <h3 className="text-xl font-black uppercase tracking-tight text-[var(--v2-text-primary,#F5F5F5)] mb-2">
+                Saved Addresses
+              </h3>
+              <p className="text-xs text-[var(--v2-text-secondary,#A0A0A0)] leading-relaxed m-0">
+                Manage your delivery locations for fast 1-click checkout.
+              </p>
+            </div>
+
+            <div className="relative z-10 pt-6 flex items-center justify-between border-t border-[var(--v2-glass-border,rgba(255,255,255,0.08))]">
+              <span className="text-xs font-black uppercase tracking-widest text-[var(--v2-accent,#2EE66A)]">
+                Manage Destinations
+              </span>
+              <div className="w-8 h-8 rounded-full bg-[var(--v2-glass-bg,rgba(255,255,255,0.05))] group-hover:bg-[var(--v2-accent,#2EE66A)] group-hover:text-[#0A0A0A] flex items-center justify-center transition-all text-[var(--v2-text-primary,#F5F5F5)]">
+                <IoChevronForward size={16} />
+              </div>
+            </div>
           </motion.div>
         </Col>
 
         {/* Settings Tile */}
         <Col xs={24} md={12}>
-          <motion.div whileHover={{ y: -4 }}>
-            <Card
-              bordered={false}
-              className="bg-white flex flex-col justify-between min-h-[280px] rounded-2xl border border-default hover:border-accent transition-all duration-300 group relative overflow-hidden h-full shadow-none hover:shadow-none"
-              bodyStyle={{
-                padding: "32px",
-                height: "100%",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-between",
-              }}
-            >
-              <div className="absolute top-0 right-0 p-6 text-accent/10 transition-transform duration-500 group-hover:scale-110">
-                <IoSettingsOutline size={120} />
+          <motion.div
+            whileHover={{ y: -4 }}
+            onClick={() => setActiveTab("details")}
+            className="v2-glass p-8 rounded-3xl border border-[var(--v2-glass-border,rgba(255,255,255,0.08))] hover:border-[var(--v2-accent,#2EE66A)] transition-all duration-300 group cursor-pointer relative overflow-hidden flex flex-col justify-between min-h-[240px]"
+          >
+            <div className="relative z-10">
+              <div className="w-12 h-12 rounded-2xl bg-[var(--v2-accent,#2EE66A)]/10 border border-[var(--v2-accent,#2EE66A)]/20 text-[var(--v2-accent,#2EE66A)] flex items-center justify-center mb-4">
+                <IoSettingsOutline size={24} />
               </div>
+              <h3 className="text-xl font-black uppercase tracking-tight text-[var(--v2-text-primary,#F5F5F5)] mb-2">
+                Account Settings
+              </h3>
+              <p className="text-xs text-[var(--v2-text-secondary,#A0A0A0)] leading-relaxed m-0">
+                Update personal details, phone number &amp; security password.
+              </p>
+            </div>
 
-              <div className="relative z-10 mb-6">
-                <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-accent mb-4 border border-default">
-                  <IoSettingsOutline size={24} />
-                </div>
-                <Title
-                  level={3}
-                  className="text-2xl! font-display! font-black! uppercase! tracking-tighter! text-primary-dark! mb-3!"
-                >
-                  Account Settings
-                </Title>
-                <Text className="text-muted font-medium text-sm leading-relaxed block">
-                  Update your profile, password, and preferences.
-                </Text>
+            <div className="relative z-10 pt-6 flex items-center justify-between border-t border-[var(--v2-glass-border,rgba(255,255,255,0.08))]">
+              <span className="text-xs font-black uppercase tracking-widest text-[var(--v2-accent,#2EE66A)]">
+                Security &amp; Profile
+              </span>
+              <div className="w-8 h-8 rounded-full bg-[var(--v2-glass-bg,rgba(255,255,255,0.05))] group-hover:bg-[var(--v2-accent,#2EE66A)] group-hover:text-[#0A0A0A] flex items-center justify-center transition-all text-[var(--v2-text-primary,#F5F5F5)]">
+                <IoChevronForward size={16} />
               </div>
+            </div>
+          </motion.div>
+        </Col>
 
-              <Button
-                type="primary"
-                onClick={() => setActiveTab("details")}
-                className="group relative z-10 self-start flex items-center gap-2 bg-accent text-white px-6 py-3 rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-accent-hover shadow-md hover:shadow-lg transition-all border-none h-auto active:scale-[0.98]"
-              >
-                {user?.isAnonymous ? "Secure Profile" : "Manage Settings"}
-                <IoChevronForward className="group-hover:translate-x-1 transition-transform" />
-              </Button>
-            </Card>
+        {/* Wishlist Tile */}
+        <Col xs={24} md={12}>
+          <motion.div
+            whileHover={{ y: -4 }}
+            onClick={() => (window.location.href = "/account/wishlist")}
+            className="v2-glass p-8 rounded-3xl border border-[var(--v2-glass-border,rgba(255,255,255,0.08))] hover:border-[var(--v2-accent,#2EE66A)] transition-all duration-300 group cursor-pointer relative overflow-hidden flex flex-col justify-between min-h-[240px]"
+          >
+            <div className="relative z-10">
+              <div className="w-12 h-12 rounded-2xl bg-[var(--v2-accent,#2EE66A)]/10 border border-[var(--v2-accent,#2EE66A)]/20 text-[var(--v2-accent,#2EE66A)] flex items-center justify-center mb-4">
+                <IoHeartOutline size={24} />
+              </div>
+              <h3 className="text-xl font-black uppercase tracking-tight text-[var(--v2-text-primary,#F5F5F5)] mb-2">
+                My Wishlist
+              </h3>
+              <p className="text-xs text-[var(--v2-text-secondary,#A0A0A0)] leading-relaxed m-0">
+                View your saved favorite sneakers and clothing items.
+              </p>
+            </div>
+
+            <div className="relative z-10 pt-6 flex items-center justify-between border-t border-[var(--v2-glass-border,rgba(255,255,255,0.08))]">
+              <span className="text-xs font-black uppercase tracking-widest text-[var(--v2-accent,#2EE66A)]">
+                Saved Items
+              </span>
+              <div className="w-8 h-8 rounded-full bg-[var(--v2-glass-bg,rgba(255,255,255,0.05))] group-hover:bg-[var(--v2-accent,#2EE66A)] group-hover:text-[#0A0A0A] flex items-center justify-center transition-all text-[var(--v2-text-primary,#F5F5F5)]">
+                <IoChevronForward size={16} />
+              </div>
+            </div>
           </motion.div>
         </Col>
       </Row>

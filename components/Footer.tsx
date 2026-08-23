@@ -1,29 +1,16 @@
 "use client";
+
+import React from "react";
 import Link from "next/link";
-import {
-  address,
-  contactInfo,
-  informationLinks,
-  payHere,
-  socialMedia,
-} from "@/constants";
+import { address, contactInfo, informationLinks, payHere, socialMedia } from "@/constants";
+import { KOKOLogo } from "@/assets/images";
 import Image from "next/image";
 import { GoLocation } from "react-icons/go";
 import { NavigationItem, SocialMediaItem } from "@/actions/websiteAction";
 import { IoLogoFacebook, IoLogoInstagram } from "react-icons/io";
 import { IoLogoTiktok, IoLogoYoutube, IoLogoTwitter } from "react-icons/io5";
 import { IconType } from "react-icons";
-import { Row, Col, Typography, Flex, Divider, Input, Button } from "antd";
-import {
-  SendOutlined,
-  SafetyCertificateOutlined,
-  CarOutlined,
-  DollarCircleOutlined,
-  ReloadOutlined,
-  StarOutlined,
-} from "@ant-design/icons";
-
-const { Title, Text } = Typography;
+import { SendOutlined } from "@ant-design/icons";
 
 const SOCIAL_ICON_MAP: Record<string, IconType> = {
   facebook: IoLogoFacebook,
@@ -60,413 +47,221 @@ const Footer = ({ footerNav = [], socialLinks = [] }: FooterProps) => {
   return (
     <footer
       id="footer"
-      className="w-full rounded-none! border-x-0! border-b-0!"
-      style={{
-        background: "#f8faf5",
-        paddingTop: 0,
-        paddingBottom: 0,
-      }}
+      className="w-full bg-[var(--v2-bg-void,#0A0A0A)] text-[var(--v2-text-primary,#F5F5F5)] relative overflow-hidden transition-colors duration-300 border-t border-[var(--v2-glass-border,rgba(255,255,255,0.08))]"
     >
-      {/* Green gradient top separator */}
-      <div className="green-separator" />
+      {/* Top Green Accent Separator */}
+      <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-[var(--v2-accent,#2EE66A)] to-transparent opacity-50" />
 
-      <div
-        className="max-w-content mx-auto px-6 lg:px-12"
-        style={{ paddingTop: 64 }}
-      >
-        {/* --- Newsletter Section --- */}
-        <div className="flex flex-col items-center gap-8 mb-16 text-center">
-          <div className="flex flex-col items-center gap-2">
-            <Text
-              style={{
-                fontSize: 11,
-                fontWeight: 800,
-                textTransform: "uppercase",
-                letterSpacing: "0.2em",
-                color: "var(--color-accent)",
-              }}
-            >
-              Stay Updated
-            </Text>
-            <Title
-              level={4}
-              style={{
-                margin: 0,
-                color: "var(--color-primary-dark)",
-                fontWeight: 900,
-                textTransform: "uppercase",
-                letterSpacing: "-0.02em",
-              }}
-            >
-              Get The Latest Drops
-            </Title>
-            <Text
-              style={{
-                color: "var(--color-primary-dark)",
-                fontSize: 13,
-                fontWeight: 500,
-              }}
-            >
-              Subscribe for exclusive offers and new arrivals
-            </Text>
-          </div>
-          <div className="flex items-center w-full max-w-[500px] md:max-w-[600px] lg:max-w-[800px] bg-white rounded-full p-2 shadow-sm border border-default focus-within:border-accent focus-within:ring-1 focus-within:ring-accent transition-all">
-            <Input
-              placeholder="Enter your email address"
-              variant="borderless"
-              style={{
-                fontSize: 15,
-                fontWeight: 500,
-                color: "var(--color-primary-dark)",
-                backgroundColor: "transparent",
-              }}
-              className="flex-1 px-4 placeholder:text-muted"
-            />
-            <Button
-              type="primary"
-              icon={<SendOutlined />}
-              style={{
-                background: "var(--color-accent)",
-                border: "none",
-                borderRadius: 99,
-                fontWeight: 800,
-                color: "#fff",
-                height: 46,
-                padding: "0 32px",
-                textTransform: "uppercase",
-                letterSpacing: "0.05em",
-                fontSize: 13,
-              }}
-              className="hover:scale-105 transition-transform shadow-[0_4px_12px_rgba(46,158,91,0.2)]"
-            >
-              Subscribe
-            </Button>
+      {/* Main Footer Container */}
+      <div className="max-w-[1400px] mx-auto px-4 md:px-8 pt-16 pb-12">
+        {/* 1. NEWSLETTER / CLUB CARD */}
+        <div className="relative overflow-hidden rounded-[24px] sm:rounded-[32px] bg-[var(--v2-bg-surface,#141414)] border border-[var(--v2-glass-border,rgba(255,255,255,0.08))] p-5 sm:p-8 md:p-14 mb-16 shadow-2xl">
+          {/* Ambient Glow */}
+          <div className="absolute top-0 right-0 w-[300px] sm:w-[400px] h-[300px] sm:h-[400px] bg-[var(--v2-accent,#2EE66A)]/10 blur-[100px] rounded-full pointer-events-none" />
+
+          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8 items-center">
+            {/* Left Copy */}
+            <div className="lg:col-span-6 flex flex-col gap-2.5">
+              <h3 className="font-display font-black text-2xl sm:text-3xl md:text-5xl uppercase tracking-tight text-[var(--v2-text-primary,#F5F5F5)] m-0 leading-tight">
+                STAY AHEAD OF THE DROP
+              </h3>
+              <p className="text-[13px] sm:text-[14px] text-[var(--v2-text-secondary,#A0A0A0)] m-0 max-w-md">
+                Subscribe for exclusive releases, secret discounts &amp; early access to Sri Lanka&apos;s biggest shoe drops.
+              </p>
+            </div>
+
+            {/* Right Input Form */}
+            <div className="lg:col-span-6 w-full">
+              <form
+                onSubmit={(e) => e.preventDefault()}
+                className="w-full flex flex-col sm:flex-row items-center gap-2.5 p-2 bg-[var(--v2-glass-bg,rgba(255,255,255,0.04))] border border-[var(--v2-glass-border,rgba(255,255,255,0.08))] rounded-2xl sm:rounded-full focus-within:border-[var(--v2-accent,#2EE66A)] focus-within:ring-2 focus-within:ring-[var(--v2-accent,#2EE66A)]/20 transition-all"
+              >
+                <input
+                  type="email"
+                  placeholder="Enter your email address"
+                  className="w-full bg-transparent px-4 py-3 text-[13px] sm:text-[14px] text-[var(--v2-text-primary,#F5F5F5)] placeholder:text-[var(--v2-text-muted,#666666)] border-none outline-none font-medium text-center sm:text-left"
+                />
+                <button
+                  type="submit"
+                  className="w-full sm:w-auto shrink-0 flex items-center justify-center gap-2 px-6 sm:px-8 py-3 sm:py-3.5 bg-[var(--v2-accent,#2EE66A)] text-[#0A0A0A] font-extrabold text-[11px] sm:text-[12px] uppercase tracking-wider rounded-xl sm:rounded-full hover:bg-[#3AF07A] transition-all hover:scale-105 active:scale-95 shadow-lg shadow-[var(--v2-accent,#2EE66A)]/20 cursor-pointer"
+                >
+                  <span>Subscribe</span>
+                  <SendOutlined />
+                </button>
+              </form>
+            </div>
           </div>
         </div>
 
-        <Divider
-          style={{
-            borderColor: "rgba(46, 158, 91, 0.15)",
-            margin: "0 0 48px 0",
-          }}
-        />
+        {/* 2. GIANT BRAND WATERMARK SIGNATURE */}
+        <div className="w-full overflow-hidden my-4 select-none pointer-events-none">
+          <p className="font-display font-black text-[clamp(4rem,17vw,14rem)] uppercase tracking-tighter text-[var(--v2-text-primary)] opacity-5 text-center leading-none m-0">
+            NEVERBE
+          </p>
+        </div>
 
-        {/* --- Primary Navigation Grid --- */}
-        <Row gutter={[32, 48]} className="mb-16">
-          {/* Column 1: Brand & Key Utility */}
-          <Col xs={24} md={12} lg={6}>
-            <Flex vertical gap={24}>
-              <Link
-                href="/"
-                className="inline-block transition-transform hover:scale-105"
-              >
-                <Image
-                  src="/logo.png"
-                  alt="Neverbe"
-                  width={150}
-                  height={50}
-                  className="object-contain"
-                />
-              </Link>
-
-              <Flex vertical gap={12}>
-                <Title
-                  level={5}
-                  style={{
-                    fontSize: 12,
-                    fontWeight: 900,
-                    margin: 0,
-                    textTransform: "uppercase",
-                    letterSpacing: "0.15em",
-                    color: "var(--color-primary-dark)",
-                  }}
-                >
-                  Store Location
-                </Title>
-                <Link
+        {/* 3. FOUR-COLUMN NAVIGATION GRID */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16 pt-4">
+          {/* Col 1: Brand & Location */}
+          <div className="flex flex-col gap-6">
+            <Link href="/" className="inline-block shrink-0">
+              <Image
+                src="/logo.png"
+                alt="Neverbe"
+                width={140}
+                height={45}
+                className="object-contain"
+              />
+            </Link>
+            <p className="text-[13px] text-[var(--v2-text-secondary,#A0A0A0)] leading-relaxed m-0">
+              Sri Lanka&apos;s premier destination for high-end sneakers, streetwear, and activewear. Cash on delivery island-wide.
+            </p>
+            <div className="flex items-start gap-3 p-4 rounded-2xl bg-[var(--v2-glass-bg,rgba(255,255,255,0.04))] border border-[var(--v2-glass-border,rgba(255,255,255,0.08))]">
+              <GoLocation className="text-[var(--v2-accent,#2EE66A)] text-xl shrink-0 mt-0.5" />
+              <div className="flex flex-col gap-1">
+                <span className="text-[11px] font-extrabold uppercase tracking-widest text-[var(--v2-text-primary,#F5F5F5)]">
+                  FLAGSHIP STORE
+                </span>
+                <a
                   href={address.map}
                   target="_blank"
-                  className="group flex items-start gap-3"
+                  rel="noreferrer"
+                  className="text-[12px] text-[var(--v2-text-secondary,#A0A0A0)] hover:text-[var(--v2-accent,#2EE66A)] transition-colors leading-normal"
                 >
-                  <GoLocation
-                    size={18}
-                    className="mt-0.5 text-muted group-hover:text-accent transition-colors"
-                  />
-                  <Text
-                    style={{
-                      fontSize: 11,
-                      fontWeight: 700,
-                      color: "var(--color-primary-dark)",
-                      textTransform: "uppercase",
-                      lineHeight: 1.6,
-                      transition: "color 0.3s ease",
-                    }}
-                    className="group-hover:text-accent!"
-                  >
-                    {address.address}
-                  </Text>
+                  {address.address}
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* Col 2: Quick Links */}
+          <div className="flex flex-col gap-4">
+            <h4 className="text-[12px] font-extrabold uppercase tracking-widest text-[var(--v2-accent,#2EE66A)] m-0">
+              COLLECTIONS
+            </h4>
+            <ul className="flex flex-col gap-2.5 p-0 m-0 list-none text-[13px] font-medium text-[var(--v2-text-secondary,#A0A0A0)]">
+              <li>
+                <Link href="/collections/new-arrivals" className="hover:text-[var(--v2-text-primary,#F5F5F5)] transition-colors">
+                  New Arrivals
                 </Link>
-              </Flex>
-            </Flex>
-          </Col>
+              </li>
+              <li>
+                <Link href="/collections/products" className="hover:text-[var(--v2-text-primary,#F5F5F5)] transition-colors">
+                  Sneakers &amp; Shoes
+                </Link>
+              </li>
+              <li>
+                <Link href="/collections/combos" className="hover:text-[var(--v2-text-primary,#F5F5F5)] transition-colors">
+                  Bundle Offers
+                </Link>
+              </li>
+              <li>
+                <Link href="/collections/offers" className="hover:text-[var(--v2-text-primary,#F5F5F5)] transition-colors">
+                  Clearance Sale
+                </Link>
+              </li>
+            </ul>
+          </div>
 
-          {/* Column 2: Information Lists */}
-          <Col xs={24} md={12} lg={6}>
-            <Flex vertical gap={24}>
-              <Title
-                level={5}
-                style={{
-                  fontSize: 12,
-                  fontWeight: 900,
-                  margin: 0,
-                  textTransform: "uppercase",
-                  letterSpacing: "0.15em",
-                  color: "var(--color-primary-dark)",
-                }}
-              >
-                Get Help
-              </Title>
-              <Flex vertical gap={14}>
-                {helpLinks.map((link, idx) => (
-                  <Link
-                    key={idx}
-                    href={link.link}
-                    style={{
-                      fontSize: 11,
-                      fontWeight: 700,
-                      color: "var(--color-primary-dark)",
-                      textTransform: "uppercase",
-                      letterSpacing: "0.08em",
-                      transition: "color 0.3s ease",
-                    }}
-                    className="hover:text-accent!"
-                  >
-                    {link.title}
+          {/* Col 3: Customer Care */}
+          <div className="flex flex-col gap-4">
+            <h4 className="text-[12px] font-extrabold uppercase tracking-widest text-[var(--v2-accent,#2EE66A)] m-0">
+              CUSTOMER CARE
+            </h4>
+            <ul className="flex flex-col gap-2.5 p-0 m-0 list-none text-[13px] font-medium text-[var(--v2-text-secondary,#A0A0A0)]">
+              {helpLinks.map((item, idx) => (
+                <li key={idx}>
+                  <Link href={item.link} className="hover:text-[var(--v2-text-primary,#F5F5F5)] transition-colors">
+                    {item.title}
                   </Link>
-                ))}
-              </Flex>
-            </Flex>
-          </Col>
+                </li>
+              ))}
+            </ul>
+          </div>
 
-          {/* Column 3: Contact Utility */}
-          <Col xs={24} md={12} lg={6}>
-            <Flex vertical gap={24}>
-              <Title
-                level={5}
-                style={{
-                  fontSize: 12,
-                  fontWeight: 900,
-                  margin: 0,
-                  textTransform: "uppercase",
-                  letterSpacing: "0.15em",
-                  color: "var(--color-primary-dark)",
-                }}
-              >
-                Contact Us
-              </Title>
-              <Flex vertical gap={14}>
-                {contactInfo.map((info, idx) => (
-                  <Link
+          {/* Col 4: Contact & Social */}
+          <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-4">
+              <h4 className="text-[12px] font-extrabold uppercase tracking-widest text-[var(--v2-accent,#2EE66A)] m-0">
+                GET IN TOUCH
+              </h4>
+              <div className="flex flex-col gap-2 text-[13px] text-[var(--v2-text-secondary,#A0A0A0)]">
+                <a href={`mailto:${contactInfo.email}`} className="hover:text-[var(--v2-text-primary,#F5F5F5)] transition-colors">
+                  {contactInfo.email}
+                </a>
+                <a href={`tel:${contactInfo.phone1}`} className="hover:text-[var(--v2-text-primary,#F5F5F5)] transition-colors font-mono">
+                  {contactInfo.phone1}
+                </a>
+                <a href={`tel:${contactInfo.phone2}`} className="hover:text-[var(--v2-text-primary,#F5F5F5)] transition-colors font-mono">
+                  {contactInfo.phone2}
+                </a>
+              </div>
+            </div>
+
+            {/* Social Icons */}
+            <div className="flex items-center gap-3">
+              {socialLinksToRender.map((social, idx) => {
+                const IconComponent = social.Icon;
+                return (
+                  <a
                     key={idx}
-                    href={info.link}
+                    href={social.url}
                     target="_blank"
-                    className="flex items-center gap-3 group"
+                    rel="noreferrer"
+                    aria-label={social.name}
+                    className="w-10 h-10 rounded-full bg-[var(--v2-glass-bg,rgba(255,255,255,0.04))] border border-[var(--v2-glass-border,rgba(255,255,255,0.08))] flex items-center justify-center text-[var(--v2-text-secondary,#A0A0A0)] hover:text-[#0A0A0A] hover:bg-[var(--v2-accent,#2EE66A)] hover:border-[var(--v2-accent,#2EE66A)] transition-all hover:scale-110"
                   >
-                    <info.icon
-                      size={16}
-                      style={{
-                        color: "var(--color-primary-dark)",
-                        transition: "color 0.3s ease",
-                      }}
-                      className="group-hover:text-accent!"
-                    />
-                    <Text
-                      style={{
-                        fontSize: 11,
-                        fontWeight: 700,
-                        color: "var(--color-primary-dark)",
-                        textTransform: "uppercase",
-                        letterSpacing: "0.05em",
-                        transition: "color 0.3s ease",
-                      }}
-                      className="group-hover:text-accent!"
-                    >
-                      {info.content}
-                    </Text>
-                  </Link>
-                ))}
-              </Flex>
-            </Flex>
-          </Col>
+                    <IconComponent size={18} />
+                  </a>
+                );
+              })}
+            </div>
+          </div>
+        </div>
 
-          {/* Column 4: Social Icons */}
-          <Col xs={24} md={12} lg={6}>
-            <Flex vertical gap={24} className="lg:items-end">
-              <Title
-                level={5}
-                className="lg:hidden"
-                style={{
-                  fontSize: 12,
-                  fontWeight: 900,
-                  margin: 0,
-                  textTransform: "uppercase",
-                  letterSpacing: "0.15em",
-                  color: "var(--color-primary-dark)",
-                }}
-              >
-                Follow Us
-              </Title>
-              <Flex gap={12}>
-                {socialLinksToRender.map((media, idx) => (
-                  <Link
-                    key={idx}
-                    href={media.url}
-                    target="_blank"
-                    style={{
-                      padding: 12,
-                      borderRadius: 16,
-                      background: "rgba(46, 158, 91, 0.08)",
-                      border: "1px solid rgba(46, 158, 91, 0.15)",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-                      color: "var(--color-primary-dark)",
-                    }}
-                    className="hover:bg-accent! hover:text-inverse! hover:border-accent!"
-                  >
-                    <media.Icon size={20} />
-                  </Link>
-                ))}
-              </Flex>
-            </Flex>
-          </Col>
-        </Row>
+        {/* 4. BOTTOM BAR & PAYMENTS */}
+        <div className="pt-8 border-t border-[var(--v2-glass-border,rgba(255,255,255,0.08))] flex flex-col md:flex-row items-center justify-between gap-6">
+          <p className="text-[12px] text-[var(--v2-text-muted,#666666)] m-0 text-center md:text-left">
+            &copy; {new Date().getFullYear()} Neverbe Sri Lanka. All rights reserved. Built for 2026.
+          </p>
 
-        {/* --- Trust Badges Row --- */}
-        <Divider
-          style={{
-            borderColor: "rgba(46, 158, 91, 0.15)",
-            margin: "0 0 28px 0",
-          }}
-        />
-        <Flex justify="center" gap={12} wrap style={{ marginBottom: 40 }}>
-          {[
-            { Icon: SafetyCertificateOutlined, label: "Secure Checkout" },
-            { Icon: CarOutlined, label: "Island-wide Delivery" },
-            { Icon: DollarCircleOutlined, label: "Cash on Delivery" },
-            { Icon: ReloadOutlined, label: "Easy Returns" },
-            { Icon: StarOutlined, label: "100% Quality Guaranteed" },
-          ].map((badge) => (
-            <span key={badge.label} className="trust-badge">
-              <badge.Icon
-                style={{ color: "var(--color-accent)", fontSize: 14 }}
-              />
-              {badge.label}
-            </span>
-          ))}
-        </Flex>
-
-        {/* --- Bottom Legal & Credits Row --- */}
-        <Divider
-          style={{
-            borderColor: "rgba(46, 158, 91, 0.15)",
-            margin: "0",
-          }}
-        />
-        <Flex
-          vertical
-          justify="space-between"
-          align="center"
-          gap={32}
-          className="lg:flex-row"
-          style={{ padding: "24px 0" }}
-        >
-          <Flex vertical align="center" gap={24} className="md:flex-row">
-            <Text
-              style={{
-                fontSize: 10,
-                fontWeight: 800,
-                textTransform: "uppercase",
-                letterSpacing: "0.15em",
-                color: "var(--color-primary-dark)",
-              }}
-            >
-              © {new Date().getFullYear()} Neverbe, Inc.
-            </Text>
-            <Text
-              style={{
-                fontSize: 10,
-                fontWeight: 800,
-                textTransform: "uppercase",
-                letterSpacing: "0.15em",
-                color: "var(--color-primary-dark)",
-              }}
-            >
-              | Developed by{" "}
-              <a
-                href="https://vx9studio.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-accent transition-colors underline"
-              >
-                VX9Studio
-              </a>
-            </Text>
-          </Flex>
-
-          <Flex
-            vertical
-            align="center"
-            justify="center"
-            gap={32}
-            className="md:flex-row"
-          >
-            {/* Payment Partners */}
-            <Link
+          <div className="flex flex-wrap items-center justify-center md:justify-end gap-3">
+            <a
               href={payHere.payHereLink}
               target="_blank"
-              className="hover:opacity-80 transition-opacity duration-300"
+              rel="noreferrer"
+              className="flex items-center px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 hover:border-[var(--v2-accent,#2EE66A)] transition-all group"
             >
               <Image
                 src={payHere.longWhiteBanner}
-                width={180}
-                height={40}
-                alt="Secure Payments"
-                className="object-contain h-5 w-auto"
+                alt="PayHere Secured Payments"
+                width={140}
+                height={24}
+                className="object-contain max-h-[22px] w-auto"
               />
-            </Link>
+            </a>
 
-            {/* reCAPTCHA Disclaimer */}
-            <Text
-              style={{
-                fontSize: 10,
-                color: "var(--color-primary-dark)",
-                textAlign: "center",
-              }}
-            >
-              This site is protected by reCAPTCHA and the Google{" "}
-              <a
-                href="https://policies.google.com/privacy"
-                target="_blank"
-                rel="noreferrer"
-                className="hover:text-accent transition-colors underline underline-offset-2"
-              >
-                Privacy Policy
-              </a>{" "}
-              and{" "}
-              <a
-                href="https://policies.google.com/terms"
-                target="_blank"
-                rel="noreferrer"
-                className="hover:text-accent transition-colors underline underline-offset-2"
-              >
-                Terms of Service
-              </a>{" "}
-              apply.
-            </Text>
-          </Flex>
-        </Flex>
+            <div className="flex items-center px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 hover:border-[var(--v2-accent,#2EE66A)] transition-all">
+              <Image
+                src={KOKOLogo}
+                alt="KOKO Pay in 3"
+                width={60}
+                height={24}
+                className="object-contain max-h-[22px] w-auto"
+              />
+            </div>
+
+            <div className="flex items-center px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 hover:border-[var(--v2-accent,#2EE66A)] transition-all">
+              <Image
+                src="/cod_badge.svg"
+                alt="Cash on Delivery"
+                width={140}
+                height={28}
+                className="object-contain max-h-[28px] w-auto"
+              />
+            </div>
+          </div>
+        </div>
       </div>
     </footer>
   );

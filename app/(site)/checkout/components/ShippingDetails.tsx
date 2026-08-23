@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { Customer } from "@/interfaces";
-import { Form, Input, Checkbox, Row, Col, Typography, Flex } from "antd";
+import { Form, Input, Checkbox, Row, Col } from "antd";
 
 const ShippingDetails = ({
   shippingSameAsBilling,
@@ -24,28 +24,26 @@ const ShippingDetails = ({
   };
 
   return (
-    <section className="w-full mx-auto md:px-0 px-2 mt-4 md:mt-0">
-      <Flex align="center" justify="space-between" className="mb-6">
-        <Typography.Title
-          level={4}
-          className="uppercase tracking-tighter"
-          style={{ margin: 0, fontWeight: 900 }}
-        >
-          Shipping
-        </Typography.Title>
-      </Flex>
+    <section className="v2-glass p-6 md:p-8 rounded-3xl border border-[var(--v2-glass-border,rgba(255,255,255,0.08))] w-full">
+      <div className="mb-6 border-b border-[var(--v2-glass-border,rgba(255,255,255,0.08))] pb-4 flex items-center justify-between">
+        <div>
+          <span className="v2-section-label text-[9px] mb-0.5">STEP 2</span>
+          <h2 className="text-xl font-black uppercase tracking-tight text-[var(--v2-text-primary,#F5F5F5)] m-0">
+            Shipping Destination
+          </h2>
+        </div>
+      </div>
 
-      <Flex align="center" gap={12} className="mb-6">
+      <div className="mb-6">
         <Checkbox
           id="sameAddress"
           checked={shippingSameAsBilling}
           onChange={(e) => setShippingSameAsBilling(!shippingSameAsBilling)}
+          className="text-xs font-black uppercase tracking-wider text-[var(--v2-text-primary,#F5F5F5)]"
         >
-          <span className="text-sm font-bold uppercase tracking-wide text-primary-dark font-display">
-            Same as billing address
-          </span>
+          Same as billing address
         </Checkbox>
-      </Flex>
+      </div>
 
       {!shippingSameAsBilling && (
         <Row gutter={[16, 0]} className="w-full animate-fadeIn">
@@ -53,7 +51,7 @@ const ShippingDetails = ({
             <Form.Item
               name="shippingName"
               label={
-                <span className="text-[10px] font-black uppercase tracking-widest text-muted">
+                <span className="text-[10px] font-black uppercase tracking-widest text-[var(--v2-text-secondary,#A0A0A0)]">
                   Recipient Name *
                 </span>
               }
@@ -62,9 +60,9 @@ const ShippingDetails = ({
               ]}
             >
               <Input
-                size="large"
+                placeholder="Recipient Full Name"
                 onChange={handleChange}
-                className="px-4 rounded-xl text-sm font-bold"
+                className="h-12 rounded-2xl bg-[var(--v2-glass-bg,rgba(255,255,255,0.04))]! border-[var(--v2-glass-border,rgba(255,255,255,0.1))]! text-[var(--v2-text-primary,#F5F5F5)]! font-bold text-xs"
               />
             </Form.Item>
           </Col>
@@ -73,8 +71,8 @@ const ShippingDetails = ({
             <Form.Item
               name="shippingPhone"
               label={
-                <span className="text-[10px] font-black uppercase tracking-widest text-muted">
-                  Phone *
+                <span className="text-[10px] font-black uppercase tracking-widest text-[var(--v2-text-secondary,#A0A0A0)]">
+                  Recipient Phone *
                 </span>
               }
               rules={[
@@ -85,9 +83,9 @@ const ShippingDetails = ({
               ]}
             >
               <Input
-                size="large"
+                placeholder="077 123 4567"
                 onChange={handleChange}
-                className="px-4 rounded-xl text-sm font-bold"
+                className="h-12 rounded-2xl bg-[var(--v2-glass-bg,rgba(255,255,255,0.04))]! border-[var(--v2-glass-border,rgba(255,255,255,0.1))]! text-[var(--v2-text-primary,#F5F5F5)]! font-bold text-xs"
               />
             </Form.Item>
           </Col>
@@ -96,8 +94,8 @@ const ShippingDetails = ({
             <Form.Item
               name="shippingAddress"
               label={
-                <span className="text-[10px] font-black uppercase tracking-widest text-muted">
-                  Address *
+                <span className="text-[10px] font-black uppercase tracking-widest text-[var(--v2-text-secondary,#A0A0A0)]">
+                  Shipping Address *
                 </span>
               }
               rules={[
@@ -105,9 +103,9 @@ const ShippingDetails = ({
               ]}
             >
               <Input
-                size="large"
+                placeholder="House No, Street Name"
                 onChange={handleChange}
-                className="px-4 rounded-xl text-sm font-bold"
+                className="h-12 rounded-2xl bg-[var(--v2-glass-bg,rgba(255,255,255,0.04))]! border-[var(--v2-glass-border,rgba(255,255,255,0.1))]! text-[var(--v2-text-primary,#F5F5F5)]! font-bold text-xs"
               />
             </Form.Item>
           </Col>
@@ -116,35 +114,16 @@ const ShippingDetails = ({
             <Form.Item
               name="shippingCity"
               label={
-                <span className="text-[10px] font-black uppercase tracking-widest text-muted">
+                <span className="text-[10px] font-black uppercase tracking-widest text-[var(--v2-text-secondary,#A0A0A0)]">
                   City *
                 </span>
               }
-              rules={[
-                { required: true, message: "Please input shipping city!" },
-              ]}
+              rules={[{ required: true, message: "Please input city!" }]}
             >
               <Input
-                size="large"
+                placeholder="City"
                 onChange={handleChange}
-                className="px-4 rounded-xl text-sm font-bold"
-              />
-            </Form.Item>
-          </Col>
-
-          <Col xs={24} md={12}>
-            <Form.Item
-              name="shippingZip"
-              label={
-                <span className="text-[10px] font-black uppercase tracking-widest text-muted">
-                  Postal Code
-                </span>
-              }
-            >
-              <Input
-                size="large"
-                onChange={handleChange}
-                className="px-4 rounded-xl text-sm font-bold"
+                className="h-12 rounded-2xl bg-[var(--v2-glass-bg,rgba(255,255,255,0.04))]! border-[var(--v2-glass-border,rgba(255,255,255,0.1))]! text-[var(--v2-text-primary,#F5F5F5)]! font-bold text-xs"
               />
             </Form.Item>
           </Col>

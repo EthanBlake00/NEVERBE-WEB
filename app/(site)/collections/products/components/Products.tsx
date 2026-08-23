@@ -38,6 +38,7 @@ const Products = ({
     resetFilters,
   } = useProductListing({
     apiEndpoint,
+    defaultSize: 16,
   });
 
   // Local state for mobile drawer only (UI state, not data state)
@@ -51,8 +52,8 @@ const Products = ({
   const showLoading = loading && displayProducts.length === 0;
 
   return (
-    <section className="w-full max-w-content mx-auto px-4 md:px-8 pb-20 flex gap-0 bg-surface">
-      {/* 1. DESKTOP SIDEBAR - FilterPanel provides its own sticky aside */}
+    <section className="w-full max-w-content mx-auto px-1 sm:px-4 md:px-8 pb-20 flex flex-col gap-0 bg-surface">
+      {/* 1. DESKTOP TOP FILTER TOOLBAR */}
       <ProductsFilter
         filters={filters}
         actions={{
@@ -62,11 +63,12 @@ const Products = ({
           toggleOccasion,
           toggleStyle,
           setInStock,
+          setSort,
           resetFilters,
         }}
       />
 
-      {/* Mobile Filter Drawer - Antd Drawer, no AnimatePresence needed */}
+      {/* Mobile Filter Drawer - Antd Drawer */}
       {showFilter && (
         <PopUpFilterPanel
           selectedBrands={filters.brands}
@@ -87,55 +89,31 @@ const Products = ({
       )}
 
       <div className="flex-1 w-full">
-        <div className="relative z-20 py-4 flex justify-between lg:justify-end items-center gap-3">
-          <div className="flex lg:hidden">
-            <Button
-              onClick={() => setShowFilter(true)}
-              icon={<IoOptionsOutline size={16} />}
-              style={{
-                borderRadius: 99,
-                fontWeight: 700,
-                fontSize: 12,
-                textTransform: "uppercase",
-                letterSpacing: "0.06em",
-                height: 38,
-                padding: "0 16px",
-                border: "1.5px solid rgba(14, 51, 28, 0.2)",
-                background: "#fdfdfd",
-                color: "var(--color-primary-dark)",
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              Filters
-              {filters.brands.length +
-                filters.categories.length +
-                filters.sizes.length +
-                filters.occasion.length +
-                filters.style.length +
-                (filters.inStock ? 1 : 0) >
-                0 && (
-                <span
-                  style={{
-                    marginLeft: 6,
-                    background: "var(--color-accent)",
-                    color: "#fff",
-                    borderRadius: 99,
-                    fontSize: 10,
-                    fontWeight: 900,
-                    padding: "1px 7px",
-                  }}
-                >
-                  {filters.brands.length +
-                    filters.categories.length +
-                    filters.sizes.length +
-                    filters.occasion.length +
-                    filters.style.length +
-                    (filters.inStock ? 1 : 0)}
-                </span>
-              )}
-            </Button>
-          </div>
+        {/* Mobile Filter & Sort Action Row (Hidden on Desktop since it is embedded in top bar) */}
+        <div className="relative z-20 py-2 flex lg:hidden justify-between items-center gap-3">
+          <button
+            onClick={() => setShowFilter(true)}
+            className="flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--v2-glass-bg,rgba(255,255,255,0.05))] border border-[var(--v2-glass-border,rgba(255,255,255,0.1))] text-[var(--v2-text-primary,#F5F5F5)] hover:border-[var(--v2-accent,#2EE66A)] transition-all text-xs font-extrabold uppercase tracking-wider cursor-pointer"
+          >
+            <IoOptionsOutline size={16} className="text-[var(--v2-accent,#2EE66A)]" />
+            <span>Filters</span>
+            {filters.brands.length +
+              filters.categories.length +
+              filters.sizes.length +
+              filters.occasion.length +
+              filters.style.length +
+              (filters.inStock ? 1 : 0) >
+              0 && (
+              <span className="ml-1 px-2 py-0.5 rounded-full bg-[var(--v2-accent,#2EE66A)] text-[#0A0A0A] text-[10px] font-black">
+                {filters.brands.length +
+                  filters.categories.length +
+                  filters.sizes.length +
+                  filters.occasion.length +
+                  filters.style.length +
+                  (filters.inStock ? 1 : 0)}
+              </span>
+            )}
+          </button>
 
           <SortDropdown value={filters.sort} onChange={setSort} />
         </div>

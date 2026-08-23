@@ -1,73 +1,34 @@
 "use client";
 import React from "react";
-import { Flex, Spin, Typography, ConfigProvider } from "antd";
 
-/**
- * CheckoutLoader - Full-page Liquid Glass Loader
- * Premium liquid glass effect with 3-dot animation and processing message.
- */
 const CheckoutLoader = () => {
   return (
-    <Flex
-      vertical
-      align="center"
-      justify="center"
-      className="fixed inset-0 z-300 overflow-hidden"
-    >
-      {/* Liquid Glass Background */}
-      <div
-        className="absolute inset-0 backdrop-blur-2xl"
-        style={{
-          background: `
-            radial-gradient(ellipse at 30% 20%, rgba(46, 158, 91, 0.1) 0%, transparent 50%),
-            radial-gradient(ellipse at 70% 80%, rgba(46, 158, 91, 0.08) 0%, transparent 50%),
-            radial-gradient(ellipse at 50% 50%, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 245, 0.98) 100%)
-          `,
-          boxShadow: `
-            inset 0 1px 0 rgba(255, 255, 255, 0.9),
-            inset 0 -1px 0 rgba(0, 0, 0, 0.03)
-          `,
-        }}
-      />
+    <div className="fixed inset-0 z-50 overflow-hidden flex items-center justify-center">
+      {/* Dark Glass Overlay */}
+      <div className="absolute inset-0 bg-[#0A0A0A]/90 backdrop-blur-2xl" />
 
       {/* Content */}
-      <Flex vertical align="center" gap={40} className="relative z-10">
-        <Flex vertical align="center" gap={16}>
-          {/* Branded Spin */}
-          <div className="relative">
-            <ConfigProvider
-              theme={{
-                token: {
-                  colorPrimary: "var(--color-primary)",
-                },
-              }}
-            >
-              <Spin size="large" />
-            </ConfigProvider>
-          </div>
+      <div className="relative z-10 flex flex-col items-center gap-6 text-center p-8 bg-[var(--v2-bg-surface,#141414)] border border-[var(--v2-glass-border,rgba(255,255,255,0.08))] rounded-3xl max-w-sm w-full mx-4 shadow-2xl">
+        <div className="relative w-12 h-12 flex items-center justify-center">
+          <div className="absolute inset-0 rounded-full border-2 border-[var(--v2-accent,#2EE66A)]/20 animate-ping" />
+          <div className="w-10 h-10 rounded-full border-2 border-t-[var(--v2-accent,#2EE66A)] border-r-[var(--v2-accent,#2EE66A)] border-b-transparent border-l-transparent animate-spin" />
+        </div>
 
-          <Flex vertical align="center" gap={4}>
-            <Typography.Title
-              level={4}
-              className="uppercase tracking-widest text-primary-dark m-0"
-              style={{ margin: 0, fontWeight: 900, fontSize: "1.125rem" }}
-            >
-              Processing Order
-            </Typography.Title>
-            <Typography.Text
-              type="secondary"
-              className="text-xs font-medium text-muted"
-            >
-              Please wait while we secure your order
-            </Typography.Text>
-          </Flex>
-        </Flex>
+        <div className="space-y-1">
+          <span className="v2-section-label text-[9px] mb-0.5">SECURE TRANSACTION</span>
+          <h2 className="text-xl font-black uppercase tracking-tight text-[var(--v2-text-primary,#F5F5F5)] m-0">
+            Processing Order
+          </h2>
+          <p className="text-xs text-[var(--v2-text-secondary,#A0A0A0)] font-medium m-0">
+            Please wait while we confirm your reservation
+          </p>
+        </div>
 
-        <Typography.Text className="text-[10px] uppercase font-black tracking-widest text-accent/60 animate-pulse">
-          Do not close this page
-        </Typography.Text>
-      </Flex>
-    </Flex>
+        <span className="text-[10px] uppercase font-black tracking-widest text-[var(--v2-accent,#2EE66A)] animate-pulse">
+          Do not refresh or close this window
+        </span>
+      </div>
+    </div>
   );
 };
 

@@ -1,5 +1,4 @@
 import React from "react";
-import Link from "next/link";
 import { privacyPolicy } from "@/constants";
 
 const PrivacyPolicyContent = () => {
@@ -7,79 +6,74 @@ const PrivacyPolicyContent = () => {
     if (key === "intro") return null;
 
     return (
-      <section
+      <div
         key={key}
-        className="py-8 border-t border-default first:border-none"
+        className="v2-glass p-8 rounded-3xl border border-[var(--v2-glass-border,rgba(255,255,255,0.08))] hover:border-[var(--v2-accent,#2EE66A)] transition-all group mb-6"
       >
-        <div className="flex flex-col md:flex-row gap-6 md:gap-12">
-          {/* Section Title - Left Sticky-ish feel on Desktop */}
-          <div className="md:w-1/3 shrink-0">
-            <span className="text-[10px] font-bold text-muted uppercase tracking-widest mb-1 block">
-              {String(index).padStart(2, "0")}
-            </span>
-            <h2 className="text-lg md:text-xl font-black uppercase tracking-tight text-accent">
-              {value.title || key.replace(/([A-Z])/g, " $1")}
-            </h2>
-          </div>
-
-          {/* Content - Right */}
-          <div className="md:w-2/3 space-y-4 text-sm md:text-base text-body font-medium leading-relaxed">
-            {typeof value === "string" && <p>{value}</p>}
-
-            {value.description && <p>{value.description}</p>}
-
-            {Array.isArray(value) && (
-              <ul className="space-y-2 mt-2">
-                {value.map((item: string, idx: number) => (
-                  <li key={idx} className="flex items-start gap-3">
-                    <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-primary shrink-0" />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            )}
-
-            {/* Special handling for nested objects */}
-            {typeof value === "object" &&
-              !Array.isArray(value) &&
-              Object.entries(value).map(([subKey, subValue]) => (
-                <div
-                  key={subKey}
-                  className="mt-4 p-4 bg-surface-2 border border-default"
-                >
-                  {typeof subValue === "string" && (
-                    <p className="mb-2">{subValue}</p>
-                  )}
-                  {Array.isArray(subValue) && (
-                    <ul className="space-y-2">
-                      {subValue.map((item: string, idx: number) => (
-                        <li
-                          key={idx}
-                          className="flex items-start gap-2 text-xs md:text-sm"
-                        >
-                          <span className="text-primary font-bold">›</span>{" "}
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
-              ))}
-          </div>
+        <div className="flex items-center gap-4 mb-4">
+          <span className="text-xs font-black uppercase tracking-widest text-[var(--v2-accent,#2EE66A)]">
+            {String(index).padStart(2, "0")}
+          </span>
+          <h2 className="text-xl font-black uppercase tracking-tight text-[var(--v2-text-primary,#F5F5F5)] m-0">
+            {value.title || key.replace(/([A-Z])/g, " $1")}
+          </h2>
         </div>
-      </section>
+
+        <div className="space-y-3 text-xs md:text-sm font-medium leading-relaxed text-[var(--v2-text-secondary,#A0A0A0)]">
+          {typeof value === "string" && <p className="m-0">{value}</p>}
+
+          {value.description && <p className="m-0">{value.description}</p>}
+
+          {Array.isArray(value) && (
+            <ul className="space-y-2 m-0 p-0 list-none">
+              {value.map((item: string, idx: number) => (
+                <li key={idx} className="flex items-start gap-3">
+                  <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-[var(--v2-accent,#2EE66A)] shrink-0" />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+
+          {typeof value === "object" &&
+            !Array.isArray(value) &&
+            Object.entries(value).map(([subKey, subValue]) => (
+              <div
+                key={subKey}
+                className="mt-4 p-4 rounded-2xl bg-[var(--v2-glass-bg,rgba(255,255,255,0.04))] border border-[var(--v2-glass-border,rgba(255,255,255,0.08))]"
+              >
+                {typeof subValue === "string" && (
+                  <p className="mb-2 m-0 text-xs">{subValue}</p>
+                )}
+                {Array.isArray(subValue) && (
+                  <ul className="space-y-2 m-0 p-0 list-none">
+                    {subValue.map((item: string, idx: number) => (
+                      <li
+                        key={idx}
+                        className="flex items-start gap-2 text-xs"
+                      >
+                        <span className="text-[var(--v2-accent,#2EE66A)] font-bold">›</span>{" "}
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            ))}
+        </div>
+      </div>
     );
   };
 
   return (
     <article className="w-full">
       {/* Intro Paragraph */}
-      <div className="mb-16 max-w-3xl">
-        <p className="text-lg md:text-xl font-medium text-body leading-relaxed">
+      <div className="mb-10 max-w-3xl v2-glass p-8 rounded-3xl border border-[var(--v2-glass-border,rgba(255,255,255,0.08))]">
+        <p className="text-sm md:text-base font-medium text-[var(--v2-text-primary,#F5F5F5)] leading-relaxed m-0">
           {privacyPolicy.sections.intro}{" "}
           <a
             href={privacyPolicy.website}
-            className="text-primary underline decoration-1 underline-offset-4 decoration-accent hover:decoration-primary transition-colors"
+            className="text-[var(--v2-accent,#2EE66A)] underline hover:opacity-80 transition-colors"
             target="_blank"
             rel="noopener noreferrer"
           >

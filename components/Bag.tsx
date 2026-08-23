@@ -6,6 +6,7 @@ import {
   IoCloseOutline,
   IoBagHandleOutline,
   IoArrowForward,
+  IoTrashOutline,
 } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
@@ -17,7 +18,6 @@ import {
 } from "@/redux/bagSlice/bagSlice";
 import { useRouter } from "next/navigation";
 import {
-  calculateShippingCost,
   calculateSubTotal,
   calculateTotal,
   calculateTotalDiscount,
@@ -26,7 +26,6 @@ import { BagItem } from "@/interfaces/BagItem";
 import Image from "next/image";
 import usePromotions from "@/hooks/usePromotions";
 import PromotionBanner from "@/components/PromotionBanner";
-import { Button } from "antd";
 import axiosInstance from "@/actions/axiosInstance";
 
 // --- Types ---
@@ -49,42 +48,41 @@ const BundleGroupCard = ({
   const netPrice = bundle.totalPrice - bundle.totalDiscount;
 
   return (
-    <div className="border border-dark bg-surface overflow-hidden shadow-custom">
+    <div className="v2-glass rounded-3xl border border-[var(--v2-glass-border,rgba(255,255,255,0.08))] overflow-hidden">
       {/* Bundle Header */}
-      <div className="bg-dark text-inverse px-4 py-2 flex justify-between items-center">
-        <span className="text-xs font-black uppercase tracking-widest text-accent">
+      <div className="bg-[var(--v2-accent,#2EE66A)]/10 text-[var(--v2-accent,#2EE66A)] px-4 py-2.5 flex justify-between items-center border-b border-[var(--v2-glass-border,rgba(255,255,255,0.08))]">
+        <span className="text-[10px] font-black uppercase tracking-widest text-[var(--v2-accent,#2EE66A)]">
           Bundle Deal
         </span>
-        <span className="text-xs font-bold font-display">
+        <span className="text-xs font-black uppercase tracking-tight text-[var(--v2-text-primary,#F5F5F5)]">
           {bundle.comboName}
         </span>
       </div>
 
       {/* Bundle Items */}
-      <div className="divide-y border-b border-default divide-default">
+      <div className="divide-y divide-[var(--v2-glass-border,rgba(255,255,255,0.06))]">
         {bundle.items.map((item, idx) => (
-          <div key={idx} className="flex gap-3 p-3 bg-surface">
+          <div key={idx} className="flex gap-3 p-3 items-center">
             {/* Thumbnail */}
-            <div className="relative w-16 h-16 bg-surface-2 shrink-0">
+            <div className="relative w-14 h-14 bg-[#0A0A0A] shrink-0 rounded-2xl overflow-hidden border border-[var(--v2-glass-border,rgba(255,255,255,0.1))] p-0.5">
               <Image
                 src={item.thumbnail || ""}
                 alt={item.name}
                 fill
-                className="object-cover mix-blend-multiply"
+                className="object-cover rounded-xl"
               />
-              <span className="absolute top-0 left-0 bg-dark text-inverse text-[9px] font-bold px-1.5">
+              <span className="absolute top-1 left-1 bg-[var(--v2-accent,#2EE66A)] text-[#0A0A0A] text-[8px] font-black px-1 rounded-sm">
                 {idx + 1}
               </span>
             </div>
 
             {/* Details */}
             <div className="flex-1 min-w-0">
-              <p className="text-base font-bold uppercase truncate text-primary-dark">
+              <p className="text-xs font-black uppercase truncate text-[var(--v2-text-primary,#F5F5F5)] m-0">
                 {item.name}
               </p>
-              <p className="text-xs text-primary-dark uppercase">
-                Size:{" "}
-                <span className="text-primary-dark font-medium">{item.size}</span>
+              <p className="text-[10px] text-[var(--v2-text-secondary,#A0A0A0)] uppercase font-bold m-0">
+                Size: <span className="text-[var(--v2-text-primary,#F5F5F5)]">{item.size}</span>
               </p>
             </div>
           </div>
@@ -92,22 +90,21 @@ const BundleGroupCard = ({
       </div>
 
       {/* Bundle Footer */}
-      <div className="px-4 py-3 flex justify-between items-center bg-surface-3">
-        <Button
-          type="link"
+      <div className="px-4 py-3 flex justify-between items-center bg-[var(--v2-glass-bg,rgba(255,255,255,0.02))] border-t border-[var(--v2-glass-border,rgba(255,255,255,0.06))]">
+        <button
           onClick={() => bundle.items.forEach((item) => onRemove(item))}
-          className="text-xs font-bold uppercase tracking-wider text-muted hover:text-error underline underline-offset-4 transition-colors p-0 h-auto"
+          className="text-[10px] font-black uppercase tracking-wider text-[var(--v2-text-muted,#666666)] hover:text-rose-400 transition-colors border-none bg-transparent cursor-pointer p-0"
         >
           Remove Bundle
-        </Button>
+        </button>
         <div className="text-right">
           {bundle.totalDiscount > 0 && (
-            <p className="text-xs text-muted line-through">
-              Rs. {bundle.totalPrice.toLocaleString()}
+            <p className="text-[10px] text-[var(--v2-text-muted,#666666)] line-through m-0">
+              LKR {bundle.totalPrice.toLocaleString()}
             </p>
           )}
-          <p className="text-md font-black text-primary-dark">
-            Rs. {netPrice.toLocaleString()}
+          <p className="text-xs font-black text-[var(--v2-accent,#2EE66A)] m-0">
+            LKR {netPrice.toLocaleString()}
           </p>
         </div>
       </div>
@@ -126,14 +123,14 @@ const SingleItemCard = ({
   const netPrice = totalPrice - item.discount;
 
   return (
-    <div className="flex gap-4 w-full group">
+    <div className="flex gap-4 w-full v2-glass p-3.5 rounded-2xl border border-[var(--v2-glass-border,rgba(255,255,255,0.08))] hover:border-[var(--v2-accent,#2EE66A)] transition-all">
       {/* Image */}
-      <div className="relative w-20 h-20 bg-surface-2 shrink-0 overflow-hidden">
+      <div className="relative w-20 h-20 bg-[#0A0A0A] shrink-0 rounded-2xl overflow-hidden border border-[var(--v2-glass-border,rgba(255,255,255,0.1))] p-0.5">
         <Image
           src={item.thumbnail || ""}
           alt={item.name}
           fill
-          className="object-cover mix-blend-multiply transition-transform duration-500 group-hover:scale-105"
+          className="object-cover rounded-xl"
         />
       </div>
 
@@ -141,45 +138,45 @@ const SingleItemCard = ({
       <div className="flex flex-1 flex-col justify-between py-0.5">
         <div>
           <div className="flex justify-between items-start gap-2">
-            <h3 className="font-bold text-base uppercase leading-tight line-clamp-2 text-primary-dark">
+            <h3 className="font-black text-xs uppercase leading-tight line-clamp-2 text-[var(--v2-text-primary,#F5F5F5)] m-0">
               {item.name}
             </h3>
             <div className="text-right shrink-0">
               {item.discount > 0 ? (
                 <>
-                  <p className="font-bold text-base text-primary-dark">
-                    Rs. {netPrice.toLocaleString()}
+                  <p className="font-black text-xs text-[var(--v2-accent,#2EE66A)] m-0">
+                    LKR {netPrice.toLocaleString()}
                   </p>
-                  <p className="text-xs text-muted line-through">
-                    Rs. {totalPrice.toLocaleString()}
+                  <p className="text-[9px] text-[var(--v2-text-muted,#666666)] line-through m-0">
+                    LKR {totalPrice.toLocaleString()}
                   </p>
                 </>
               ) : (
-                <p className="font-bold text-base text-primary-dark">
-                  Rs. {totalPrice.toLocaleString()}
+                <p className="font-black text-xs text-[var(--v2-accent,#2EE66A)] m-0">
+                  LKR {totalPrice.toLocaleString()}
                 </p>
               )}
             </div>
           </div>
 
-          <div className="mt-1 text-xs text-primary-dark font-medium uppercase space-y-0.5">
+          <div className="mt-1 text-[10px] text-[var(--v2-text-secondary,#A0A0A0)] font-extrabold uppercase space-y-0.5">
             {item.variantName && (
-              <p className="text-primary-dark">{item.variantName}</p>
+              <p className="m-0 text-[var(--v2-text-secondary,#A0A0A0)]">{item.variantName}</p>
             )}
-            <p>
-              Size: <span className="text-primary-dark">{item.size}</span> | Qty:{" "}
-              <span className="text-primary-dark">{item.quantity}</span>
+            <p className="m-0">
+              Size: <span className="text-[var(--v2-text-primary,#F5F5F5)]">{item.size}</span> | Qty:{" "}
+              <span className="text-[var(--v2-text-primary,#F5F5F5)]">{item.quantity}</span>
             </p>
           </div>
         </div>
 
-        <Button
-          type="link"
+        <button
           onClick={() => onRemove(item)}
-          className="text-xs font-bold uppercase tracking-wider text-muted hover:text-error underline underline-offset-4 transition-colors mt-2 self-start p-0 h-auto"
+          className="text-[var(--v2-text-muted,#666666)] hover:text-rose-400 transition-colors border-none bg-transparent cursor-pointer p-0 mt-2 flex items-center gap-1 self-start"
+          aria-label="Remove item"
         >
-          Remove
-        </Button>
+          <IoTrashOutline size={16} />
+        </button>
       </div>
     </div>
   );
@@ -287,36 +284,37 @@ const Bag = () => {
         animate={{ x: 0 }}
         exit={{ x: "100%" }}
         transition={{ type: "tween", ease: "easeOut", duration: 0.3 }}
-        className="w-full sm:w-[450px] bg-surface h-screen flex flex-col shadow-2xl relative"
+        className="w-full sm:w-[460px] bg-[var(--v2-bg-surface,#141414)] text-[var(--v2-text-primary,#F5F5F5)] h-screen flex flex-col shadow-2xl relative border-l border-[var(--v2-glass-border,rgba(255,255,255,0.08))]"
         onClick={(e) => e.stopPropagation()}
       >
         {/* --- Header --- */}
-        <div className="flex justify-between items-center px-6 py-5 border-b border-dark">
+        <div className="flex justify-between items-center px-6 py-5 border-b border-[var(--v2-glass-border,rgba(255,255,255,0.08))]">
           <div>
-            <h2 className="text-2xl font-black uppercase tracking-tighter text-primary-dark">
+            <span className="v2-section-label text-[9px] mb-0.5">SHOPPING BAG</span>
+            <h2 className="text-xl font-black uppercase tracking-tight text-[var(--v2-text-primary,#F5F5F5)] m-0">
               Your Bag
             </h2>
-            <p className="text-xs font-bold uppercase tracking-widest text-muted mt-0.5">
+            <p className="text-[10px] font-extrabold uppercase tracking-widest text-[var(--v2-text-secondary,#A0A0A0)] mt-0.5 m-0">
               {bagItems.length} Items
               {bundles.length > 0 &&
                 ` · ${bundles.length} Bundle${bundles.length > 1 ? "s" : ""}`}
             </p>
           </div>
-          <Button
-            type="text"
+          <button
             onClick={() => dispatch(hideBag())}
-            className="p-2 border border-transparent hover:border-dark text-primary-dark transition-all rounded-full h-auto w-auto"
+            className="w-10 h-10 rounded-full bg-[var(--v2-glass-bg,rgba(255,255,255,0.04))] hover:bg-[var(--v2-accent,#2EE66A)] hover:text-[#0A0A0A] border border-[var(--v2-glass-border,rgba(255,255,255,0.1))] text-[var(--v2-text-primary,#F5F5F5)] flex items-center justify-center transition-all cursor-pointer"
             aria-label="Close Bag"
-            icon={<IoCloseOutline size={28} />}
-          />
+          >
+            <IoCloseOutline size={22} />
+          </button>
         </div>
 
         {/* --- Items List --- */}
-        <div className="flex-1 overflow-y-auto px-6 py-6 scrollbar-thin">
-          <PromotionBanner variant="inline" className="mb-6" />
+        <div className="flex-1 overflow-y-auto px-6 py-6 space-y-4">
+          <PromotionBanner variant="inline" className="mb-4" />
 
           {bagItems.length > 0 ? (
-            <div className="space-y-8 animate-fade">
+            <div className="space-y-4 animate-fade">
               {bundles.map((bundle) => (
                 <BundleGroupCard
                   key={bundle.comboId}
@@ -333,121 +331,103 @@ const Bag = () => {
               ))}
             </div>
           ) : (
-            <div className="h-full flex flex-col items-center justify-center text-center">
-              <IoBagHandleOutline size={64} className="mb-4 text-accent" />
-              <p className="font-black uppercase tracking-tighter text-xl text-muted">
-                Your bag is empty
+            <div className="h-full flex flex-col items-center justify-center text-center py-20">
+              <div className="w-16 h-16 rounded-full bg-[var(--v2-accent,#2EE66A)]/10 border border-[var(--v2-accent,#2EE66A)]/20 text-[var(--v2-accent,#2EE66A)] flex items-center justify-center mb-4">
+                <IoBagHandleOutline size={32} />
+              </div>
+              <p className="font-black uppercase tracking-tight text-lg text-[var(--v2-text-primary,#F5F5F5)] m-0">
+                Your Bag Is Empty
               </p>
-              <Button
-                type="primary"
-                shape="round"
-                size="large"
+              <p className="text-xs text-[var(--v2-text-secondary,#A0A0A0)] mt-1 mb-6 m-0">
+                Explore our collections to add sneakers &amp; clothing.
+              </p>
+              <button
                 onClick={() => dispatch(hideBag())}
-                className="mt-6 font-bold uppercase tracking-widest bg-accent hover:bg-accent-hover border-none px-8"
+                className="px-8 py-3.5 bg-[var(--v2-accent,#2EE66A)] text-[#0A0A0A] font-black uppercase tracking-widest text-xs rounded-full hover:opacity-90 transition-all shadow-lg cursor-pointer"
               >
                 Start Shopping
-              </Button>
+              </button>
             </div>
           )}
         </div>
 
         {/* --- Summary Footer --- */}
         {bagItems.length > 0 && (
-          <div className="border-t-2 border-dark p-6 bg-surface-2 space-y-4">
-            <div className="space-y-2 text-base">
-              <div className="flex justify-between">
-                <span className="text-primary-dark font-medium">Subtotal</span>
-                <span className="font-bold text-primary-dark">
-                  Rs. {calculateTotal(bagItems).toLocaleString()}
+          <div className="border-t border-[var(--v2-glass-border,rgba(255,255,255,0.08))] p-6 bg-[var(--v2-glass-bg,rgba(255,255,255,0.02))] space-y-4">
+            <div className="space-y-2 text-xs font-bold uppercase tracking-wider">
+              <div className="flex justify-between text-[var(--v2-text-secondary,#A0A0A0)]">
+                <span>Subtotal</span>
+                <span className="font-black text-[var(--v2-text-primary,#F5F5F5)]">
+                  LKR {calculateTotal(bagItems).toLocaleString()}
                 </span>
               </div>
 
               {(calculateTotalDiscount(bagItems) > 0 ||
                 promotionDiscount > 0 ||
                 couponDiscount > 0) && (
-                <div className="space-y-2">
+                <div className="space-y-1.5 text-[var(--v2-accent,#2EE66A)]">
                   {calculateTotalDiscount(bagItems) > 0 && (
-                    <div className="flex justify-between text-success">
-                      <span className="font-medium">Discount</span>
-                      <span className="font-bold">
-                        - Rs.{" "}
-                        {calculateTotalDiscount(bagItems).toLocaleString()}
+                    <div className="flex justify-between">
+                      <span>Discount</span>
+                      <span className="font-black">
+                        - LKR {calculateTotalDiscount(bagItems).toLocaleString()}
                       </span>
                     </div>
                   )}
                   {promotionDiscount > 0 && (
-                    <div className="flex justify-between text-success">
-                      <span className="font-medium">Promotion</span>
-                      <span className="font-bold">
-                        - Rs. {promotionDiscount.toLocaleString()}
+                    <div className="flex justify-between">
+                      <span>Promotion</span>
+                      <span className="font-black">
+                        - LKR {promotionDiscount.toLocaleString()}
                       </span>
                     </div>
                   )}
                   {couponDiscount > 0 && (
-                    <div className="flex justify-between text-success">
-                      <span className="font-medium">Coupon Applied</span>
-                      <span className="font-bold">
-                        - Rs. {couponDiscount.toLocaleString()}
+                    <div className="flex justify-between">
+                      <span>Coupon Applied</span>
+                      <span className="font-black">
+                        - LKR {couponDiscount.toLocaleString()}
                       </span>
                     </div>
                   )}
                 </div>
               )}
 
-              <div className="flex justify-between">
-                <span className="text-primary-dark font-medium">Shipping</span>
-                <span className="font-bold text-primary-dark">
+              <div className="flex justify-between text-[var(--v2-text-secondary,#A0A0A0)]">
+                <span>Shipping</span>
+                <span className="font-black text-[var(--v2-text-primary,#F5F5F5)]">
                   {loadingShipping ? (
                     <span className="animate-pulse">...</span>
                   ) : shippingCost === 0 ? (
-                    "FREE"
+                    <span className="text-[var(--v2-accent,#2EE66A)]">FREE</span>
                   ) : (
-                    `Rs. ${shippingCost.toLocaleString()}`
+                    `LKR ${shippingCost.toLocaleString()}`
                   )}
                 </span>
               </div>
             </div>
 
-            <div className="flex justify-between items-end border-t border-dark pt-4">
-              <span className="text-sm font-black uppercase tracking-widest text-primary-dark">
+            <div className="flex justify-between items-end border-t border-[var(--v2-glass-border,rgba(255,255,255,0.08))] pt-4">
+              <span className="text-xs font-black uppercase tracking-widest text-[var(--v2-text-primary,#F5F5F5)]">
                 Total Due
               </span>
-              <span className="font-black text-3xl tracking-tight text-primary-dark">
-                Rs. {Math.max(0, finalTotal).toLocaleString()}
+              <span className="font-black text-2xl tracking-tight text-[var(--v2-accent,#2EE66A)]">
+                LKR {Math.max(0, finalTotal).toLocaleString()}
               </span>
             </div>
 
-            <Button
-              type="primary"
-              shape="round"
-              size="large"
-              style={{ height: "60px" }}
+            <button
               onClick={() => {
                 dispatch(hideBag());
                 router.push("/checkout");
               }}
-              className="group w-full flex items-center justify-between px-8 bg-primary hover:bg-primary-500 border-none"
+              className="w-full py-4 rounded-full bg-[var(--v2-accent,#2EE66A)] text-[#0A0A0A] font-black uppercase tracking-widest text-xs flex items-center justify-between px-6 hover:opacity-90 transition-all shadow-lg cursor-pointer"
             >
-              <span className="text-sm font-black uppercase tracking-widest text-bg-secondary">
-                Checkout Now
-              </span>
-              <div className="bg-accent text-white rounded-full p-2 transition-transform group-hover:translate-x-2 flex items-center justify-center">
-                <IoArrowForward size={20} />
+              <span>Checkout Now</span>
+              <div className="w-8 h-8 rounded-full bg-[#0A0A0A] text-[var(--v2-accent,#2EE66A)] flex items-center justify-center">
+                <IoArrowForward size={16} />
               </div>
-            </Button>
-
-            <div className="flex items-center justify-center gap-6 opacity-60 grayscale hover:grayscale-0 transition-all mt-4">
-              {/* Minimal placeholder for payment icons */}
-              <span className="text-[10px] font-bold uppercase tracking-tighter">
-                PayHere
-              </span>
-              <span className="text-[10px] font-bold uppercase tracking-tighter">
-                KOKO
-              </span>
-              <span className="text-[10px] font-bold uppercase tracking-tighter">
-                Mintpay
-              </span>
-            </div>
+            </button>
           </div>
         )}
       </motion.div>

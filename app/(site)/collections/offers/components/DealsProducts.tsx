@@ -37,8 +37,8 @@ const DealsProducts = ({ items }: { items: Product[] }) => {
   const showLoading = loading && displayProducts.length === 0;
 
   return (
-    <section className="w-full max-w-content mx-auto px-4 md:px-8 pb-20 flex gap-0 bg-surface">
-      {/* 1. DESKTOP SIDEBAR */}
+    <section className="w-full max-w-content mx-auto px-1 sm:px-4 md:px-8 pb-20 flex flex-col gap-0">
+      {/* 1. DESKTOP TOP FILTER TOOLBAR */}
       <DealsFilter
         filters={filters}
         actions={{
@@ -73,14 +73,14 @@ const DealsProducts = ({ items }: { items: Product[] }) => {
       </AnimatePresence>
 
       <div className="flex-1 w-full">
-        {/* Icon-only Toolbar */}
-        <div className="relative z-20 bg-surface/90 backdrop-blur-md py-4 flex justify-between lg:justify-end items-center gap-2">
+        {/* Mobile Action Row */}
+        <div className="relative z-20 py-2 flex lg:hidden justify-between items-center gap-3">
           <button
             onClick={() => setShowFilter(true)}
-            className="flex lg:hidden w-10 h-10 items-center justify-center bg-surface-2 border border-default rounded-full hover:border-accent text-primary-dark hover:text-accent transition-all"
-            aria-label="Open Filters"
+            className="flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--v2-glass-bg,rgba(255,255,255,0.05))] border border-[var(--v2-glass-border,rgba(255,255,255,0.1))] text-[var(--v2-text-primary,#F5F5F5)] hover:border-[var(--v2-accent,#2EE66A)] transition-all text-xs font-extrabold uppercase tracking-wider cursor-pointer"
           >
-            <IoOptionsOutline size={18} />
+            <IoOptionsOutline size={16} className="text-[var(--v2-accent,#2EE66A)]" />
+            <span>Filters</span>
           </button>
 
           <SortDropdown value={filters.sort} onChange={setSort} />

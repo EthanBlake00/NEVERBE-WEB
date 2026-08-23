@@ -2,7 +2,6 @@ import React from "react";
 import axiosInstance from "@/actions/axiosInstance";
 import { formatCurrency } from "@/utils/formatting";
 import { notFound } from "next/navigation";
-import { format } from "date-fns";
 import EBillDownloadButton from "../components/EBillDownloadButton";
 import { BusinessInfo } from "@/config/BusinessInfo";
 import { Metadata } from "next";
@@ -30,7 +29,7 @@ export async function generateMetadata(props: { params: Promise<{ orderId: strin
       images: [ogImage],
     },
     robots: {
-      index: false, // Don't index individual customer receipts in search engines for privacy
+      index: false,
       follow: false,
     },
   };
@@ -54,64 +53,63 @@ const getOrder = async (orderId: string) => {
 
 export default async function EBillPage(props: { params: Promise<{ orderId: string }> }) {
   const { orderId } = await props.params;
-
   const { order, expired, daysRemaining } = await getOrder(orderId);
 
   if (expired) {
     return (
-      <div className="min-h-screen bg-white flex flex-col font-sans text-primary-dark">
+      <div className="min-h-screen bg-[var(--v2-bg-surface,#141414)] text-[var(--v2-text-primary,#F5F5F5)] flex flex-col font-sans">
         {/* HEADER */}
-        <div className="w-full border-b border-default bg-surface-1 p-6 md:p-12">
+        <div className="w-full border-b border-[var(--v2-glass-border,rgba(255,255,255,0.08))] bg-[var(--v2-bg-surface,#141414)] p-6 md:p-12">
           <div className="max-w-5xl mx-auto">
-            <h1 className="text-4xl md:text-6xl font-display font-black uppercase tracking-tighter leading-none">
+            <span className="v2-section-label mb-2">RECEIPT EXPIRED</span>
+            <h1 className="text-3xl md:text-5xl font-black uppercase tracking-tight text-[var(--v2-text-primary,#F5F5F5)] m-0">
               Electronic Receipt
             </h1>
           </div>
         </div>
 
         {/* EXPIRED CONTENT */}
-        <div className="flex-1 w-full p-6 md:p-12 bg-white flex items-center justify-center">
-          <div className="max-w-lg mx-auto text-center space-y-8">
-            {/* Expired Icon */}
-            <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-surface-1 border border-default mx-auto">
-              <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-muted">
+        <div className="flex-1 w-full p-6 md:p-12 bg-[var(--v2-bg-surface,#141414)] flex items-center justify-center">
+          <div className="max-w-lg mx-auto text-center space-y-6 v2-glass p-10 rounded-3xl border border-[var(--v2-glass-border,rgba(255,255,255,0.08))]">
+            <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-[var(--v2-glass-bg,rgba(255,255,255,0.04))] border border-[var(--v2-glass-border,rgba(255,255,255,0.08))] text-amber-400 mx-auto">
+              <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="12" cy="12" r="10" />
                 <polyline points="12 6 12 12 16 14" />
               </svg>
             </div>
 
-            <div className="space-y-4">
-              <h2 className="text-3xl md:text-4xl font-display font-black uppercase tracking-tight">
+            <div className="space-y-2">
+              <h2 className="text-2xl font-black uppercase tracking-tight text-[var(--v2-text-primary,#F5F5F5)] m-0">
                 eBill Expired
               </h2>
-              <p className="text-sm font-bold uppercase tracking-widest text-muted leading-relaxed max-w-sm mx-auto">
-                This electronic receipt has expired. POS receipts are available for 30 days from the date of purchase.
+              <p className="text-xs font-medium text-[var(--v2-text-secondary,#A0A0A0)] leading-relaxed m-0">
+                This electronic receipt has expired. Receipts are accessible for 30 days from the purchase date.
               </p>
             </div>
 
-            <div className="pt-4 space-y-3">
-              <p className="text-[10px] font-black uppercase tracking-[0.3em] text-muted">
+            <div className="pt-2 space-y-2">
+              <p className="text-[10px] font-black uppercase tracking-widest text-[var(--v2-accent,#2EE66A)] m-0">
                 Ref: #{orderId.toUpperCase()}
               </p>
-              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted">
-                If you need assistance, please contact us at {BusinessInfo.phone}
+              <p className="text-[10px] font-medium text-[var(--v2-text-muted,#666666)] uppercase tracking-wider m-0">
+                Need assistance? Contact support at {BusinessInfo.phone}
               </p>
             </div>
 
             <a
               href="https://neverbe.lk"
-              className="inline-block px-8 py-4 bg-primary-dark text-white text-xs font-black uppercase tracking-widest rounded-full hover:bg-accent transition-colors"
+              className="inline-block px-8 py-3.5 bg-[var(--v2-accent,#2EE66A)] text-[#0A0A0A] text-xs font-black uppercase tracking-widest rounded-full hover:opacity-90 transition-all shadow-md mt-4"
             >
-              Visit Neverbe
+              Visit Neverbe Store
             </a>
           </div>
         </div>
 
         {/* FOOTER */}
-        <footer className="w-full border-t border-default p-12 text-center bg-white">
+        <footer className="w-full border-t border-[var(--v2-glass-border,rgba(255,255,255,0.08))] p-8 text-center bg-[var(--v2-bg-surface,#141414)]">
           <a
             href="https://neverbe.lk"
-            className="text-lg font-display font-black uppercase tracking-widest hover:text-accent transition-colors"
+            className="text-sm font-black uppercase tracking-widest text-[var(--v2-text-muted,#666666)] hover:text-[var(--v2-accent,#2EE66A)] transition-colors"
           >
             neverbe.lk
           </a>
@@ -136,29 +134,26 @@ export default async function EBillPage(props: { params: Promise<{ orderId: stri
     0,
   ) || 0;
 
-  // Use the backend-calculated total directly (most reliable)
+  // Use the backend-calculated total directly
   const total = order.total || (rawSubtotal - itemDiscountTotal + (order.shippingFee || 0) + (order.fee || 0));
 
   return (
-    <div className="min-h-screen bg-white flex flex-col font-sans text-primary-dark">
+    <div className="min-h-screen bg-[var(--v2-bg-surface,#141414)] text-[var(--v2-text-primary,#F5F5F5)] flex flex-col font-sans">
       {/* HEADER SECTION */}
-      <div className="w-full border-b border-default bg-surface-1 p-6 md:p-12">
-        <div className="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
-          <div className="space-y-4">
-            <h1 className="text-4xl md:text-6xl font-display font-black uppercase tracking-tighter leading-none">
+      <div className="w-full border-b border-[var(--v2-glass-border,rgba(255,255,255,0.08))] bg-[var(--v2-bg-surface,#141414)] p-6 md:p-12">
+        <div className="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+          <div className="space-y-2">
+            <span className="v2-section-label mb-1">DIGITAL INVOICE</span>
+            <h1 className="text-3xl md:text-5xl font-black uppercase tracking-tight text-[var(--v2-text-primary,#F5F5F5)] m-0">
               Electronic Receipt
             </h1>
-            <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-[10px] md:text-xs font-bold uppercase tracking-widest text-muted">
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] font-extrabold uppercase tracking-wider text-[var(--v2-text-secondary,#A0A0A0)]">
               <span>Ref: #{order.orderId?.toUpperCase()}</span>
-              <span className="hidden sm:inline">|</span>
+              <span className="hidden sm:inline">•</span>
               <span>Issued: {formatSLDate(order.createdAt)}</span>
-              <span className="hidden sm:inline">|</span>
-              <span>
-                Validity: {daysRemaining !== undefined ? (
-                  `Expires in ${daysRemaining} days`
-                ) : (
-                  "Lifetime"
-                )}
+              <span className="hidden sm:inline">•</span>
+              <span className="text-[var(--v2-accent,#2EE66A)]">
+                {daysRemaining !== undefined ? `Expires in ${daysRemaining} days` : "Lifetime Guarantee"}
               </span>
             </div>
           </div>
@@ -167,127 +162,114 @@ export default async function EBillPage(props: { params: Promise<{ orderId: stri
       </div>
 
       {/* CONTENT SECTION */}
-      <div className="flex-1 w-full p-6 md:p-12 bg-white">
-        <div className="max-w-5xl mx-auto space-y-16">
+      <div className="flex-1 w-full p-6 md:p-12 bg-[var(--v2-bg-surface,#141414)]">
+        <div className="max-w-5xl mx-auto space-y-12">
           
           {/* TOP INFO: FROM / TO */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-12 border-b border-default pb-12">
-            <div className="space-y-4">
-              <p className="text-[10px] font-black uppercase tracking-[0.3em] text-accent">From</p>
-              <div className="text-sm font-medium leading-relaxed">
-                <p className="text-xl font-black uppercase tracking-tight mb-1">{BusinessInfo.name}</p>
-                <p className="text-muted">{BusinessInfo.addressLine1}</p>
-                <p className="text-muted">{BusinessInfo.city}, Sri Lanka</p>
-                <p className="text-accent font-bold mt-2">{BusinessInfo.phone}</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 border-b border-[var(--v2-glass-border,rgba(255,255,255,0.08))] pb-10">
+            <div className="v2-glass p-6 rounded-3xl border border-[var(--v2-glass-border,rgba(255,255,255,0.08))]">
+              <span className="text-[10px] font-black uppercase tracking-widest text-[var(--v2-accent,#2EE66A)] block mb-2">Merchant Info</span>
+              <div className="text-xs leading-relaxed space-y-1">
+                <p className="text-base font-black uppercase text-[var(--v2-text-primary,#F5F5F5)] m-0 mb-1">{BusinessInfo.name}</p>
+                <p className="text-[var(--v2-text-secondary,#A0A0A0)] m-0">{BusinessInfo.addressLine1}</p>
+                <p className="text-[var(--v2-text-secondary,#A0A0A0)] m-0">{BusinessInfo.city}, Sri Lanka</p>
+                <p className="text-[var(--v2-accent,#2EE66A)] font-bold m-0 mt-2">{BusinessInfo.phone}</p>
               </div>
             </div>
-            <div className="space-y-4">
-              <p className="text-[10px] font-black uppercase tracking-[0.3em] text-accent">Billed To</p>
+
+            <div className="v2-glass p-6 rounded-3xl border border-[var(--v2-glass-border,rgba(255,255,255,0.08))]">
+              <span className="text-[10px] font-black uppercase tracking-widest text-[var(--v2-accent,#2EE66A)] block mb-2">Billed To</span>
               {order.customer ? (
-                <div className="text-sm font-medium leading-relaxed">
-                  <p className="text-xl font-black uppercase tracking-tight mb-1">
+                <div className="text-xs leading-relaxed space-y-1">
+                  <p className="text-base font-black uppercase text-[var(--v2-text-primary,#F5F5F5)] m-0 mb-1">
                     {order.customer.name || "Valued Customer"}
                   </p>
-                  {order.customer.address && <p className="text-muted">{order.customer.address}</p>}
-                  {order.customer.city && <p className="text-muted">{order.customer.city}</p>}
-                  <p className="text-accent font-bold mt-2">{order.customer.phone}</p>
+                  {order.customer.address && <p className="text-[var(--v2-text-secondary,#A0A0A0)] m-0">{order.customer.address}</p>}
+                  {order.customer.city && <p className="text-[var(--v2-text-secondary,#A0A0A0)] m-0">{order.customer.city}</p>}
+                  <p className="text-[var(--v2-accent,#2EE66A)] font-bold m-0 mt-2">{order.customer.phone}</p>
                 </div>
               ) : (
-                <p className="text-xl font-black uppercase tracking-tight text-muted">Walk-in Customer</p>
+                <p className="text-sm font-black uppercase text-[var(--v2-text-secondary,#A0A0A0)] m-0">Walk-in Customer</p>
               )}
             </div>
           </div>
 
           {/* ITEM LIST SECTION */}
           <div>
-            <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-muted mb-8">Statement of Items</h3>
+            <h3 className="text-xs font-black uppercase tracking-widest text-[var(--v2-text-muted,#666666)] mb-6">
+              Statement of Purchased Items
+            </h3>
             
-            {/* Mobile View: Simplified List */}
-            <div className="block sm:hidden space-y-6">
+            {/* Mobile View */}
+            <div className="block sm:hidden space-y-4">
               {order.items?.map((item: any, idx: number) => {
                 const netPrice = item.price - (item.discount || 0);
                 const hasDiscount = (item.discount || 0) > 0;
                 return (
-                  <div key={idx} className="flex justify-between items-start border-b border-default pb-4">
-                    <div className="flex gap-4">
+                  <div key={idx} className="v2-glass p-4 rounded-2xl border border-[var(--v2-glass-border,rgba(255,255,255,0.08))] flex justify-between items-center">
+                    <div className="flex gap-3 items-center">
                       {item.thumbnail && (
-                        <div className="w-12 h-12 bg-white shrink-0 rounded-lg overflow-hidden border border-default p-1 flex items-center justify-center">
+                        <div className="w-12 h-12 bg-[#0A0A0A] shrink-0 rounded-xl overflow-hidden border border-[var(--v2-glass-border,rgba(255,255,255,0.1))] p-1 flex items-center justify-center">
                           <img
                             src={item.thumbnail}
                             alt={item.name}
-                            className="w-full h-full object-cover mix-blend-multiply"
+                            className="w-full h-full object-cover"
                           />
                         </div>
                       )}
-                      <div className="space-y-1">
-                        <p className="font-display font-black uppercase tracking-tight text-lg leading-none">{item.name}</p>
-                        <p className="text-[10px] font-bold uppercase text-muted tracking-widest">
+                      <div>
+                        <p className="font-black uppercase text-xs text-[var(--v2-text-primary,#F5F5F5)] m-0">{item.name}</p>
+                        <p className="text-[10px] font-bold uppercase text-[var(--v2-text-muted,#666666)] tracking-wider m-0">
                           {item.size || "Free Size"} &times; {item.quantity}
                         </p>
-                        {hasDiscount && (
-                          <p className="text-[9px] font-bold text-accent">
-                            {formatCurrency(item.price)} → {formatCurrency(netPrice)} (-{formatCurrency(item.discount)})
-                          </p>
-                        )}
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className="font-display font-black text-lg">{formatCurrency(netPrice * item.quantity)}</p>
-                      {hasDiscount && (
-                        <p className="text-[9px] text-muted font-bold uppercase line-through opacity-40">{formatCurrency(item.price * item.quantity)}</p>
-                      )}
+                      <p className="font-black text-xs text-[var(--v2-accent,#2EE66A)] m-0">{formatCurrency(netPrice * item.quantity)}</p>
                     </div>
                   </div>
                 );
               })}
             </div>
 
-            {/* Desktop View: Full Table */}
-            <div className="hidden sm:block overflow-x-auto">
+            {/* Desktop View Table */}
+            <div className="hidden sm:block overflow-x-auto v2-glass rounded-3xl border border-[var(--v2-glass-border,rgba(255,255,255,0.08))] p-6">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="border-b-2 border-primary-dark">
-                    <th className="py-4 text-[10px] font-black uppercase tracking-[0.2em] text-muted">Description</th>
-                    <th className="py-4 px-4 text-[10px] font-black uppercase tracking-[0.2em] text-muted text-center">Size</th>
-                    <th className="py-4 px-4 text-[10px] font-black uppercase tracking-[0.2em] text-muted text-center">Qty</th>
-                    <th className="py-4 px-4 text-[10px] font-black uppercase tracking-[0.2em] text-muted text-right">Price</th>
-                    <th className="py-4 px-4 text-[10px] font-black uppercase tracking-[0.2em] text-muted text-right">Discount</th>
-                    <th className="py-4 text-[10px] font-black uppercase tracking-[0.2em] text-muted text-right">Amount</th>
+                  <tr className="border-b border-[var(--v2-glass-border,rgba(255,255,255,0.1))]">
+                    <th className="py-3 text-[10px] font-black uppercase tracking-widest text-[var(--v2-text-muted,#666666)]">Description</th>
+                    <th className="py-3 px-4 text-[10px] font-black uppercase tracking-widest text-[var(--v2-text-muted,#666666)] text-center">Size</th>
+                    <th className="py-3 px-4 text-[10px] font-black uppercase tracking-widest text-[var(--v2-text-muted,#666666)] text-center">Qty</th>
+                    <th className="py-3 px-4 text-[10px] font-black uppercase tracking-widest text-[var(--v2-text-muted,#666666)] text-right">Price</th>
+                    <th className="py-3 px-4 text-[10px] font-black uppercase tracking-widest text-[var(--v2-text-muted,#666666)] text-right">Discount</th>
+                    <th className="py-3 text-[10px] font-black uppercase tracking-widest text-[var(--v2-text-muted,#666666)] text-right">Amount</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-default">
+                <tbody className="divide-y divide-[var(--v2-glass-border,rgba(255,255,255,0.06))]">
                   {order.items?.map((item: any, idx: number) => {
                     const netPrice = item.price - (item.discount || 0);
                     const hasDiscount = (item.discount || 0) > 0;
                     return (
-                      <tr key={idx} className="group transition-colors">
-                        <td className="py-6 pr-4 flex items-center gap-4">
+                      <tr key={idx}>
+                        <td className="py-4 pr-4 flex items-center gap-3">
                           {item.thumbnail && (
-                            <div className="w-12 h-12 bg-white shrink-0 rounded-lg overflow-hidden border border-default p-1 flex items-center justify-center">
+                            <div className="w-10 h-10 bg-[#0A0A0A] shrink-0 rounded-xl overflow-hidden border border-[var(--v2-glass-border,rgba(255,255,255,0.1))] p-0.5 flex items-center justify-center">
                               <img
                                 src={item.thumbnail}
                                 alt={item.name}
-                                className="w-full h-full object-cover mix-blend-multiply"
+                                className="w-full h-full object-cover"
                               />
                             </div>
                           )}
-                          <div>
-                            <p className="font-display font-black uppercase tracking-tight text-lg leading-tight">{item.name}</p>
-                          </div>
+                          <span className="font-bold text-xs uppercase text-[var(--v2-text-primary,#F5F5F5)]">{item.name}</span>
                         </td>
-                        <td className="py-6 px-4 text-center font-bold text-sm">{item.size || "-"}</td>
-                        <td className="py-6 px-4 text-center font-bold text-sm">{item.quantity}</td>
-                        <td className="py-6 px-4 text-right">
-                          <p className="font-bold text-sm">{formatCurrency(item.price)}</p>
+                        <td className="py-4 px-4 text-center font-bold text-xs text-[var(--v2-text-secondary,#A0A0A0)]">{item.size || "-"}</td>
+                        <td className="py-4 px-4 text-center font-bold text-xs text-[var(--v2-text-secondary,#A0A0A0)]">{item.quantity}</td>
+                        <td className="py-4 px-4 text-right font-bold text-xs text-[var(--v2-text-secondary,#A0A0A0)]">{formatCurrency(item.price)}</td>
+                        <td className="py-4 px-4 text-right font-bold text-xs text-[var(--v2-accent,#2EE66A)]">
+                          {hasDiscount ? `-${formatCurrency(item.discount * item.quantity)}` : "-"}
                         </td>
-                        <td className="py-6 px-4 text-right">
-                          {hasDiscount ? (
-                            <p className="font-bold text-sm text-accent">-{formatCurrency(item.discount * item.quantity)}</p>
-                          ) : (
-                            <p className="font-bold text-sm text-muted">-</p>
-                          )}
-                        </td>
-                        <td className="py-6 text-right font-display font-black text-lg">
+                        <td className="py-4 text-right font-black text-xs text-[var(--v2-text-primary,#F5F5F5)]">
                           {formatCurrency(netPrice * item.quantity)}
                         </td>
                       </tr>
@@ -298,70 +280,68 @@ export default async function EBillPage(props: { params: Promise<{ orderId: stri
             </div>
           </div>
 
-          {/* BOTTOM GRID: PAYMENT & SUMMARY */}
-          <div className="flex flex-col lg:flex-row gap-16 pt-8 border-t border-default">
-            
+          {/* BOTTOM SUMMARY */}
+          <div className="flex flex-col lg:flex-row gap-8 pt-6 border-t border-[var(--v2-glass-border,rgba(255,255,255,0.08))]">
             {/* PAYMENT CONTEXT */}
-            <div className="flex-1 space-y-8">
-              <div className="grid grid-cols-2 gap-8">
-                <div>
-                  <p className="text-[10px] font-black uppercase tracking-[0.3em] text-accent mb-2">Payment Method</p>
-                  <p className="text-sm font-black uppercase tracking-widest leading-none">{order.paymentMethod || "CASH"}</p>
+            <div className="flex-1 space-y-6">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="v2-glass p-5 rounded-2xl border border-[var(--v2-glass-border,rgba(255,255,255,0.08))]">
+                  <span className="text-[10px] font-black uppercase tracking-widest text-[var(--v2-accent,#2EE66A)] block mb-1">Payment Method</span>
+                  <span className="text-xs font-black uppercase tracking-wider text-[var(--v2-text-primary,#F5F5F5)]">{order.paymentMethod || "CASH"}</span>
                 </div>
-                <div>
-                  <p className="text-[10px] font-black uppercase tracking-[0.3em] text-accent mb-2">Payment Status</p>
-                  <p className="text-sm font-black uppercase tracking-widest leading-none">{order.paymentStatus || "PAID"}</p>
+                <div className="v2-glass p-5 rounded-2xl border border-[var(--v2-glass-border,rgba(255,255,255,0.08))]">
+                  <span className="text-[10px] font-black uppercase tracking-widest text-[var(--v2-accent,#2EE66A)] block mb-1">Payment Status</span>
+                  <span className="text-xs font-black uppercase tracking-wider text-[var(--v2-text-primary,#F5F5F5)]">{order.paymentStatus || "PAID"}</span>
                 </div>
               </div>
-              <div className="pt-8 text-[10px] font-bold uppercase tracking-[0.3em] text-muted leading-relaxed max-w-xs">
-                <p>Thank you for shopping with Neverbe. This is a system generated receipt.</p>
-              </div>
+              <p className="text-[10px] font-extrabold uppercase tracking-widest text-[var(--v2-text-muted,#666666)] m-0">
+                Thank you for choosing Neverbe. This is an official digital electronic receipt.
+              </p>
             </div>
 
             {/* FINANCIAL SUMMARY CARD */}
-            <div className="w-full lg:w-[400px] bg-surface-1 p-8 md:p-10 rounded-[2.5rem] border border-default space-y-8">
-              <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-muted text-center lg:text-left">Financial Summary</h3>
+            <div className="w-full lg:w-[380px] v2-glass p-8 rounded-3xl border border-[var(--v2-glass-border,rgba(255,255,255,0.08))] space-y-6">
+              <span className="text-[10px] font-black uppercase tracking-widest text-[var(--v2-accent,#2EE66A)] block mb-2">Financial Summary</span>
               
-              <div className="space-y-4">
-                <div className="flex justify-between items-center text-xs font-bold uppercase tracking-widest">
-                  <span className="text-muted">Subtotal</span>
-                  <span className="text-primary-dark font-black">{formatCurrency(rawSubtotal)}</span>
+              <div className="space-y-3">
+                <div className="flex justify-between items-center text-xs font-bold uppercase tracking-wider text-[var(--v2-text-secondary,#A0A0A0)]">
+                  <span>Subtotal</span>
+                  <span className="text-[var(--v2-text-primary,#F5F5F5)] font-black">{formatCurrency(rawSubtotal)}</span>
                 </div>
 
                 {itemDiscountTotal > 0 && (
-                  <div className="flex justify-between items-center text-xs font-bold uppercase tracking-widest text-accent">
-                    <span>Item Discounts</span>
+                  <div className="flex justify-between items-center text-xs font-bold uppercase tracking-wider text-[var(--v2-accent,#2EE66A)]">
+                    <span>Discounts</span>
                     <span className="font-black">- {formatCurrency(itemDiscountTotal)}</span>
                   </div>
                 )}
 
                 {order.shippingFee > 0 && (
-                  <div className="flex justify-between items-center text-xs font-bold uppercase tracking-widest">
-                    <span className="text-muted">Shipping</span>
-                    <span className="text-primary-dark font-black">{formatCurrency(order.shippingFee)}</span>
+                  <div className="flex justify-between items-center text-xs font-bold uppercase tracking-wider text-[var(--v2-text-secondary,#A0A0A0)]">
+                    <span>Shipping</span>
+                    <span className="text-[var(--v2-text-primary,#F5F5F5)] font-black">{formatCurrency(order.shippingFee)}</span>
                   </div>
                 )}
 
-                <div className="pt-6 border-t border-primary-dark/20">
-                  <div className="flex flex-col gap-3">
-                    <span className="text-[10px] font-black uppercase tracking-[0.3em] text-accent text-center lg:text-left">Grand Total Due</span>
-                    <p className="text-[44px] md:text-5xl font-display font-black tracking-tighter text-center lg:text-left leading-none">
+                <div className="pt-4 border-t border-[var(--v2-glass-border,rgba(255,255,255,0.1))]">
+                  <div className="flex flex-col gap-1">
+                    <span className="text-[10px] font-black uppercase tracking-widest text-[var(--v2-accent,#2EE66A)]">Grand Total</span>
+                    <p className="text-3xl md:text-4xl font-display font-black tracking-tight text-[var(--v2-accent,#2EE66A)] leading-none m-0">
                       {formatCurrency(total)}
                     </p>
                   </div>
                 </div>
               </div>
             </div>
-
           </div>
         </div>
       </div>
 
       {/* FOOTER */}
-      <footer className="w-full border-t border-default p-12 text-center bg-white">
+      <footer className="w-full border-t border-[var(--v2-glass-border,rgba(255,255,255,0.08))] p-8 text-center bg-[var(--v2-bg-surface,#141414)]">
         <a 
           href="https://neverbe.lk" 
-          className="text-lg font-display font-black uppercase tracking-widest hover:text-accent transition-colors"
+          className="text-xs font-black uppercase tracking-widest text-[var(--v2-text-muted,#666666)] hover:text-[var(--v2-accent,#2EE66A)] transition-colors"
         >
           neverbe.lk
         </a>
