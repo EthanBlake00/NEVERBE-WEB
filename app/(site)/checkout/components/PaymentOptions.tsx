@@ -58,13 +58,13 @@ const PaymentOptions: React.FC<PaymentOptionsProps> = ({
                   flex items-center justify-center h-5 w-5 shrink-0 border-2 rounded-full transition-all
                   ${
                     isSelected
-                      ? "border-[var(--v2-accent,#2EE66A)] bg-[var(--v2-accent,#2EE66A)] text-[#0A0A0A]"
+                      ? "border-[var(--v2-accent,#2EE66A)] bg-[var(--v2-accent,#2EE66A)] text-[var(--v2-accent-text,#0A0A0A)]"
                       : "border-[var(--v2-glass-border,rgba(255,255,255,0.2))] group-hover:border-[var(--v2-accent,#2EE66A)]"
                   }
                 `}
               >
                 {isSelected && (
-                  <IoCheckmark size={12} className="stroke-[3px]" />
+                  <IoCheckmark size={12} className="stroke-[3px] text-[var(--v2-accent-text,#0A0A0A)]" />
                 )}
               </div>
 
@@ -72,7 +72,7 @@ const PaymentOptions: React.FC<PaymentOptionsProps> = ({
                 <div className="flex justify-between items-center w-full">
                   <div className="flex items-center gap-3">
                     {option.imageUrl && (
-                      <div className="relative w-8 h-8 rounded-xl overflow-hidden bg-[#0A0A0A] border border-[var(--v2-glass-border,rgba(255,255,255,0.1))] flex items-center justify-center p-0.5 shrink-0">
+                      <div className="relative w-8 h-8 rounded-xl overflow-hidden bg-[var(--v2-bg-elevated,#1E1E1E)] border border-[var(--v2-glass-border,rgba(255,255,255,0.1))] flex items-center justify-center p-0.5 shrink-0">
                         <img
                           src={option.imageUrl}
                           alt={option.name}

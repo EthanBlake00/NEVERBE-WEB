@@ -1,3 +1,4 @@
+import React, { Suspense } from "react";
 import {
   getActivePromotions,
   getActiveCoupons,
@@ -6,6 +7,7 @@ import { getDealsProducts } from "@/actions/productAction";
 import CouponCard from "./components/CouponCard";
 import DealsProducts from "./components/DealsProducts";
 import CampaignCarousel from "./components/CampaignCarousel";
+import ComponentLoader from "@/components/ComponentLoader";
 import Image from "next/image";
 import Link from "next/link";
 import { Metadata } from "next";
@@ -192,7 +194,7 @@ const OffersPage = async () => {
       />
 
       {/* Hero Header */}
-      <div className="bg-[var(--v2-bg-surface,#141414)] border-b border-[var(--v2-glass-border,rgba(255,255,255,0.08))] pt-28 pb-10 md:pt-36 md:pb-14">
+      <div className="bg-[var(--v2-bg-surface,#141414)] border-b border-[var(--v2-glass-border,rgba(255,255,255,0.08))] pt-16 pb-6 md:pt-20 md:pb-8">
         <div className="max-w-[1400px] mx-auto px-4 md:px-8">
           <nav className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[var(--v2-text-muted,#666666)] mb-3">
             <Link href="/" className="hover:text-[var(--v2-accent,#2EE66A)] transition-colors">
@@ -211,7 +213,7 @@ const OffersPage = async () => {
         </div>
       </div>
 
-      <div className="max-w-[1400px] mx-auto px-4 md:px-8 py-10 md:py-16 space-y-16">
+      <div className="max-w-[1400px] mx-auto px-4 md:px-8 py-8 md:py-12 space-y-12">
         {/* Campaign Hero Banner */}
         <section>
           <CampaignCarousel />
@@ -230,7 +232,7 @@ const OffersPage = async () => {
                   className="v2-glass p-6 rounded-3xl relative overflow-hidden flex flex-col justify-between"
                 >
                   <div>
-                    <span className="px-3 py-1 text-[10px] font-extrabold uppercase tracking-wider rounded-full bg-[var(--v2-accent,#2EE66A)] text-[#0A0A0A] inline-block mb-3">
+                    <span className="px-3 py-1 text-[10px] font-extrabold uppercase tracking-wider rounded-full bg-[var(--v2-accent,#2EE66A)] text-[var(--v2-accent-text,#0A0A0A)] inline-block mb-3">
                       {promo.type}
                     </span>
                     <h3 className="font-display font-bold text-xl uppercase text-[var(--v2-text-primary,#F5F5F5)] mb-2">
@@ -289,7 +291,9 @@ const OffersPage = async () => {
               View Bundle Deals →
             </Link>
           </div>
-          <DealsProducts items={dealsList} />
+          <Suspense fallback={<ComponentLoader />}>
+            <DealsProducts items={dealsList} />
+          </Suspense>
         </section>
       </div>
 

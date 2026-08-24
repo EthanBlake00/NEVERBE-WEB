@@ -98,6 +98,30 @@ const BundleCard = ({ bundle }: { bundle: BundleGroup }) => {
   );
 };
 
+const FALLBACK_PAYMENT_METHODS: PaymentMethod[] = [
+  {
+    paymentId: "cod_default",
+    name: "Cash on Delivery",
+    fee: 0,
+    customerFee: 0,
+    isActive: true,
+  },
+  {
+    paymentId: "koko_default",
+    name: "Koko Pay (3 Easy Installments)",
+    fee: 0,
+    customerFee: 0,
+    isActive: true,
+  },
+  {
+    paymentId: "card_default",
+    name: "Credit / Debit Card",
+    fee: 0,
+    customerFee: 0,
+    isActive: true,
+  },
+];
+
 const PaymentDetails: React.FC<PaymentDetailsProps> = ({
   paymentType,
   setPaymentType,
@@ -108,7 +132,7 @@ const PaymentDetails: React.FC<PaymentDetailsProps> = ({
   shippingCost,
   isHighRisk,
 }) => {
-  const [paymentOptions, setPaymentOptions] = useState<PaymentMethod[]>([]);
+  const [paymentOptions, setPaymentOptions] = useState<PaymentMethod[]>(FALLBACK_PAYMENT_METHODS);
   const [isPaymentLoading, setIsPaymentLoading] = useState(true);
 
   const bagItems = useSelector((state: RootState) => state.bag.bag);
@@ -151,19 +175,44 @@ const PaymentDetails: React.FC<PaymentDetailsProps> = ({
     const fetchPaymentMethods = async () => {
       setIsPaymentLoading(true);
       try {
-        const response = await axiosInstance.get("/web/payments");
-        if (response.data) {
-          const list: PaymentMethod[] = response.data;
-          setPaymentOptions(list);
-          if (list.length > 0) {
-            setPaymentType(list[0].name);
-            setPaymentTypeId(list[0].paymentId);
-            setPaymentFee(list[0].customerFee || 0);
-            if (setMerchantFee) setMerchantFee(list[0].fee || 0);
-          }
+        const response = await axiosInstance.get("/web/payment-methods");
+        const data = response?.data;
+        const rawList: any[] = Array.isArray(data)
+          ? data
+          : Array.isArray(data?.paymentMethods)
+          ? data.paymentMethods
+          : Array.isArray(data?.payments)
+          ? data.payments
+          : Array.isArray(data?.data)
+          ? data.data
+          : [];
+
+        const mappedList: PaymentMethod[] = rawList.map((p: any) => ({
+          paymentId: p.paymentId || p.id || p.name || "",
+          name: p.name || p.title || "Payment Method",
+          fee: typeof p.fee === "number" ? p.fee : 0,
+          customerFee: typeof p.customerFee === "number" ? p.customerFee : (typeof p.fee === "number" ? p.fee : 0),
+          imageUrl: p.imageUrl || p.icon || p.logo || "",
+          isActive: p.isActive !== false,
+        }));
+
+        const activeList = mappedList.filter((p) => p.isActive);
+        const finalList = activeList.length > 0 ? activeList : FALLBACK_PAYMENT_METHODS;
+
+        setPaymentOptions(finalList);
+        if (finalList.length > 0) {
+          setPaymentType(finalList[0].name);
+          setPaymentTypeId(finalList[0].paymentId);
+          setPaymentFee(finalList[0].customerFee || 0);
+          if (setMerchantFee) setMerchantFee(finalList[0].fee || 0);
         }
       } catch (err) {
-        console.error("Failed to fetch payment methods", err);
+        console.error("Failed to fetch payment methods from /web/payment-methods:", err);
+        setPaymentOptions(FALLBACK_PAYMENT_METHODS);
+        setPaymentType(FALLBACK_PAYMENT_METHODS[0].name);
+        setPaymentTypeId(FALLBACK_PAYMENT_METHODS[0].paymentId);
+        setPaymentFee(0);
+        if (setMerchantFee) setMerchantFee(0);
       } finally {
         setIsPaymentLoading(false);
       }
@@ -186,14 +235,13 @@ const PaymentDetails: React.FC<PaymentDetailsProps> = ({
 
   return (
     <div className="w-full">
-      <div className="v2-glass p-6 md:p-8 rounded-3xl border border-[var(--v2-glass-border,rgba(255,255,255,0.08))]">
-        {/* Header */}
-        <div className="mb-6 border-b border-[var(--v2-glass-border,rgba(255,255,255,0.08))] pb-4">
-          <span className="v2-section-label text-[9px] mb-0.5">ORDER SUMMARY</span>
-          <h2 className="text-xl font-black uppercase tracking-tight text-[var(--v2-text-primary,#F5F5F5)] m-0">
-            Payment &amp; Review
-          </h2>
-        </div>
+      {/* Header */}
+      <div className="mb-6 border-b border-[var(--v2-glass-border,rgba(255,255,255,0.08))] pb-4">
+        <span className="v2-section-label text-[9px] mb-0.5">ORDER SUMMARY</span>
+        <h2 className="text-xl font-black uppercase tracking-tight text-[var(--v2-text-primary,#F5F5F5)] m-0">
+          Payment &amp; Review
+        </h2>
+      </div>
 
         {/* Promotion Banner */}
         <PromotionBanner variant="inline" className="mb-6" />
@@ -302,10 +350,10 @@ const PaymentDetails: React.FC<PaymentDetailsProps> = ({
           type="primary"
           htmlType="submit"
           disabled={bagItems.length === 0 || !paymentType}
-          className="w-full h-14 rounded-full bg-[var(--v2-accent,#2EE66A)]! text-[#0A0A0A]! font-black uppercase tracking-widest text-xs border-none flex items-center justify-between px-6 cursor-pointer shadow-lg hover:opacity-90 active:scale-95 transition-all"
+          className="w-full h-14 rounded-full bg-[var(--v2-accent,#2EE66A)]! text-[var(--v2-accent-text,#0A0A0A)]! font-black uppercase tracking-widest text-xs border-none flex items-center justify-between px-6 cursor-pointer shadow-lg hover:opacity-90 active:scale-95 transition-all"
         >
-          <span>Complete Order</span>
-          <div className="w-8 h-8 rounded-full bg-[#0A0A0A] text-[var(--v2-accent,#2EE66A)] flex items-center justify-center">
+          <span className="text-[var(--v2-accent-text,#0A0A0A)] font-black">Complete Order</span>
+          <div className="w-8 h-8 rounded-full bg-[var(--v2-accent-text,#0A0A0A)] text-[var(--v2-accent,#2EE66A)] flex items-center justify-center">
             <IoArrowForward size={16} />
           </div>
         </Button>
@@ -323,7 +371,6 @@ const PaymentDetails: React.FC<PaymentDetailsProps> = ({
           </p>
         </div>
       </div>
-    </div>
   );
 };
 

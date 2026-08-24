@@ -43,7 +43,7 @@ const SizeGrid: React.FC<SizeGridProps> = ({
               flex items-center justify-center rounded-2xl border font-black uppercase tracking-wider w-full cursor-pointer
               ${
                 isSelected
-                  ? "bg-[var(--v2-accent)] text-[#0A0A0A] border-[var(--v2-accent)] shadow-lg shadow-[var(--v2-accent)]/20 scale-105"
+                  ? "bg-[var(--v2-accent)] text-[var(--v2-accent-text,#0A0A0A)] border-[var(--v2-accent)] shadow-lg shadow-[var(--v2-accent)]/20 scale-105"
                   : isOutOfStock
                   ? "bg-[var(--v2-glass-bg)] text-[var(--v2-text-muted)] border-[var(--v2-glass-border)] cursor-not-allowed opacity-40"
                   : "bg-[var(--v2-glass-bg)] text-[var(--v2-text-primary)] border-[var(--v2-glass-border)] hover:border-[var(--v2-accent)] hover:text-[var(--v2-accent)]"

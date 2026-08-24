@@ -1,5 +1,7 @@
+import React, { Suspense } from "react";
 import Products from "@/app/(site)/collections/products/components/Products";
 import { getProducts } from "@/actions/productAction";
+import ComponentLoader from "@/components/ComponentLoader";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -220,7 +222,9 @@ const Page = async () => {
 
       {/* Product Grid & Filter Layout */}
       <div className="max-w-[1400px] mx-auto px-4 md:px-8 py-10 md:py-16">
-        <Products items={productList} />
+        <Suspense fallback={<ComponentLoader />}>
+          <Products items={productList} />
+        </Suspense>
       </div>
 
       {/* SEO Footer */}

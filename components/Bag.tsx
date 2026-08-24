@@ -302,10 +302,10 @@ const Bag = () => {
           </div>
           <button
             onClick={() => dispatch(hideBag())}
-            className="w-10 h-10 rounded-full bg-[var(--v2-glass-bg,rgba(255,255,255,0.04))] hover:bg-[var(--v2-accent,#2EE66A)] hover:text-[#0A0A0A] border border-[var(--v2-glass-border,rgba(255,255,255,0.1))] text-[var(--v2-text-primary,#F5F5F5)] flex items-center justify-center transition-all cursor-pointer"
+            className="w-10 h-10 rounded-full bg-[var(--v2-accent,#2EE66A)] text-[var(--v2-accent-text,#0A0A0A)] border border-[var(--v2-accent,#2EE66A)] hover:opacity-90 flex items-center justify-center transition-all cursor-pointer shadow-md"
             aria-label="Close Bag"
           >
-            <IoCloseOutline size={22} />
+            <IoCloseOutline size={22} className="text-[var(--v2-accent-text,#0A0A0A)]" />
           </button>
         </div>
 
@@ -421,11 +421,11 @@ const Bag = () => {
                 dispatch(hideBag());
                 router.push("/checkout");
               }}
-              className="w-full py-4 rounded-full bg-[var(--v2-accent,#2EE66A)] text-[#0A0A0A] font-black uppercase tracking-widest text-xs flex items-center justify-between px-6 hover:opacity-90 transition-all shadow-lg cursor-pointer"
+              className="w-full py-4 rounded-full bg-[var(--v2-accent,#2EE66A)] text-[var(--v2-accent-text,#0A0A0A)] font-black uppercase tracking-widest text-xs flex items-center justify-between px-6 hover:opacity-90 transition-all shadow-lg cursor-pointer"
             >
-              <span className="text-[#0A0A0A] font-black">Checkout Now</span>
-              <div className="w-8 h-8 rounded-full bg-[#0A0A0A] text-[var(--v2-accent,#2EE66A)] flex items-center justify-center">
-                <IoArrowForward size={16} />
+              <span className="text-[var(--v2-accent-text,#0A0A0A)] font-black text-xs uppercase tracking-widest">Checkout Now</span>
+              <div className="w-8 h-8 rounded-full bg-[var(--v2-accent-text,#0A0A0A)] text-[var(--v2-accent,#2EE66A)] flex items-center justify-center">
+                <IoArrowForward size={16} className="text-[var(--v2-accent,#2EE66A)]" />
               </div>
             </button>
           </div>

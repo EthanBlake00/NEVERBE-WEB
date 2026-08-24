@@ -158,7 +158,7 @@ export function BentoShowcase({ categories, promotions }: BentoShowcaseProps) {
               />
 
               <div className="absolute inset-x-0 bottom-0 p-6 z-30 flex justify-between items-end">
-                <h3 className="text-[14px] font-[800] uppercase tracking-wide text-[var(--v2-text-primary)] group-hover:text-[var(--v2-accent)] transition-colors duration-300 m-0">
+                <h3 className="text-[14px] font-[800] uppercase tracking-wide text-white group-hover:text-[var(--v2-accent)] transition-colors duration-300 m-0">
                   {item.label}
                 </h3>
 

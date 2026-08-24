@@ -4,8 +4,8 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import { AppDispatch, RootState } from "@/redux/store";
-import { Form, Input, Button, Row, Col, Modal, Flex, Typography } from "antd";
-import { FiX, FiAlertTriangle } from "react-icons/fi";
+import { Form, Modal, Flex } from "antd";
+import { FiX, FiAlertTriangle, FiArrowRight, FiArrowLeft, FiCheckCircle } from "react-icons/fi";
 import { evaluateCustomerFraudRisk, CompositeRiskResult } from "@/actions/thirdPartyRiskAction";
 import BillingDetails from "./BillingDetails";
 import ShippingDetails from "./ShippingDetails";
@@ -18,36 +18,29 @@ import { signInAnonymously } from "firebase/auth";
 import { usePayment } from "@/hooks/usePayment";
 import usePromotions from "@/hooks/usePromotions";
 import axiosInstance from "@/actions/axiosInstance";
-const formatSriLankanPhoneNumber = (phone: string) => {
-  // Remove any non-digit characters
-  const cleaned = phone.replace(/\D/g, "");
 
-  // If it starts with 0 (e.g., 0771234567), replace 0 with +94
+const formatSriLankanPhoneNumber = (phone: string) => {
+  const cleaned = phone.replace(/\D/g, "");
   if (cleaned.startsWith("0") && cleaned.length === 10) {
     return `+94${cleaned.slice(1)}`;
   }
-
-  // If it's already in 94 format (e.g., 94771234567), add +
   if (cleaned.startsWith("94") && cleaned.length === 11) {
     return `+${cleaned}`;
   }
-
-  // If it's a 9 digit number without prefix (e.g. 771234567), add +94
   if (cleaned.length === 9) {
     return `+94${cleaned}`;
   }
-
   return phone;
 };
 
 const createCustomerFromForm = (values: any): Customer => {
-  const name = `${values.first_name} ${values.last_name}`;
+  const name = `${values.first_name || ""} ${values.last_name || ""}`.trim();
   return {
     name,
-    email: values.email,
-    phone: formatSriLankanPhoneNumber(values.phone),
-    address: values.address,
-    city: values.city,
+    email: values.email || "",
+    phone: formatSriLankanPhoneNumber(values.phone || ""),
+    address: values.address || "",
+    city: values.city || "",
     zip: values.zip || "",
     id: window.crypto.randomUUID().toLowerCase(),
     createdAt: new Date().toISOString(),
@@ -60,7 +53,9 @@ const CheckoutForm = () => {
   const router = useRouter();
   const [form] = Form.useForm();
 
-  // Ensure promotions are calculated
+  // Onboarding Flow Step State (1: Contact & Shipping, 2: Billing & Notes, 3: Payment & Place Order)
+  const [currentStep, setCurrentStep] = useState<number>(1);
+
   usePromotions();
 
   const bagItems = useSelector((state: RootState) => state.bag.bag);
@@ -113,14 +108,10 @@ const CheckoutForm = () => {
     }
   };
 
-  // 1. Auth Guard: Ensure Anonymous Sign-in
   useEffect(() => {
     const checkAuth = async () => {
       try {
         if (!auth.currentUser) {
-          console.log(
-            "[CheckoutAuth] No user found, signing in anonymously...",
-          );
           await signInAnonymously(auth);
         }
       } catch (error) {
@@ -130,13 +121,11 @@ const CheckoutForm = () => {
         setIsCheckingAuth(false);
       }
     };
-
     checkAuth();
   }, []);
 
-  // Initialize billing customer with user data if available
   const initialCustomerState: Customer = {
-    id: user?.uid || "", // Firebase user UID
+    id: user?.uid || "",
     name: user?.displayName || "",
     email: user?.email || "",
     phone: user?.phoneNumber || "",
@@ -154,7 +143,6 @@ const CheckoutForm = () => {
 
   const [shippingCost, setShippingCost] = useState<number>(0);
 
-  // Fetch dynamic shipping cost
   useEffect(() => {
     const fetchShipping = async () => {
       try {
@@ -172,13 +160,11 @@ const CheckoutForm = () => {
         setShippingCost(data.cost || 0);
       } catch (error) {
         console.error("Failed to fetch shipping cost", error);
-        // Fallback logic could go here, but API handles defaults
       }
     };
     fetchShipping();
   }, [bagItems]);
 
-  // Initialize Payment Hook
   const {
     isProcessing,
     otpState,
@@ -189,7 +175,6 @@ const CheckoutForm = () => {
     handleResendOTP,
     closeOTPModal,
     openOTPModal,
-    resetOTPState,
   } = usePayment({
     paymentMethodId: paymentTypeId,
     paymentMethodName: paymentType,
@@ -209,55 +194,53 @@ const CheckoutForm = () => {
           });
           
           if (res.data) {
-            const { shipping, billing } = res.data;
-            
+            const { billing } = res.data;
             if (billing) {
               setBillingCustomer(prev => ({
                 ...prev,
-                address: billing.address,
-                city: billing.city,
-                phone: billing.phone,
+                address: billing.address || "",
+                city: billing.city || "",
+                phone: billing.phone || "",
               }));
-              
-              // Dynamically update form fields
-              form.setFieldsValue({
-                address: billing.address,
-                city: billing.city,
-                phone: billing.phone,
-              });
-            }
-            
-            if (shipping) {
-              setShippingCustomer({
-                shippingName: user.displayName || "",
-                shippingAddress: shipping.address,
-                shippingCity: shipping.city,
-                shippingPhone: shipping.phone,
-              });
-              
-              // If shipping and billing are different, turn off "Same as Billing"
-              if (billing && (shipping.address !== billing.address || shipping.city !== billing.city)) {
-                setShippingSameAsBilling(false);
-              }
             }
           }
-        } catch (error) {
-          console.error("Autofill fetch failed", error);
+        } catch (e) {
+          console.warn("Autofill fetch error", e);
         }
       }
     };
     fetchAutofill();
   }, [user]);
 
+  const validateStep1 = async () => {
+    try {
+      await form.validateFields(["first_name", "last_name", "phone", "email", "address", "city"]);
+      setCurrentStep(2);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } catch (err) {
+      toast.error("Please fill in all required contact and address fields.");
+    }
+  };
+
+  const validateStep2 = async () => {
+    try {
+      const values = form.getFieldsValue();
+      await evaluateFullFraudRisk(values);
+    } catch (err) {
+      console.warn("Risk eval warning", err);
+    } finally {
+      setCurrentStep(3);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
   const handlePaymentSubmit = async (values: any) => {
     try {
-      // If we already have a pending order (e.g. they closed the modal), just reopen it
       if (otpState.pendingOrder) {
         openOTPModal();
         return;
       }
 
-      // Validate Logic
       const newBilling = createCustomerFromForm(values);
       const userId = user?.uid || null;
 
@@ -272,21 +255,19 @@ const CheckoutForm = () => {
               shippingPhone: newBilling.phone,
             }
           : {
-              shippingName: shippingCustomer?.shippingName || "",
-              shippingAddress: shippingCustomer?.shippingAddress || "",
-              shippingCity: shippingCustomer?.shippingCity || "",
-              shippingZip: shippingCustomer?.shippingZip || "",
-              shippingPhone: shippingCustomer?.shippingPhone || "",
+              shippingName: shippingCustomer?.shippingName || newBilling.name,
+              shippingAddress: shippingCustomer?.shippingAddress || newBilling.address,
+              shippingCity: shippingCustomer?.shippingCity || newBilling.city,
+              shippingZip: shippingCustomer?.shippingZip || newBilling.zip,
+              shippingPhone: shippingCustomer?.shippingPhone || newBilling.phone,
             }),
       };
 
-      // 0. Ensure Customer Risk Evaluation is executed
       let currentRisk = riskResult;
       if (!currentRisk) {
         currentRisk = await evaluateFullFraudRisk(values);
       }
 
-      // 1. Calculate Totals
       const totals = calculateTotals(
         bagItems,
         couponDiscount,
@@ -294,14 +275,13 @@ const CheckoutForm = () => {
         shippingCost,
       );
 
-      // 2. Build Order Payload
       const newOrder = buildOrderPayload(
         orderCustomer,
         bagItems,
         totals,
         userId,
         {
-          appliedPromotionId: promotionIds[0] || null, // Assuming first is primary if needed
+          appliedPromotionId: promotionIds[0] || null,
           appliedPromotionIds: promotionIds,
         },
         undefined,
@@ -316,9 +296,6 @@ const CheckoutForm = () => {
           : undefined
       );
 
-      console.log("New Order Payload:", newOrder);
-
-      // 3. Process Payment (Delegated to hook)
       await processPayment(newOrder, orderCustomer);
     } catch (err: any) {
       console.error("Payment Submission Error:", err);
@@ -331,7 +308,7 @@ const CheckoutForm = () => {
   }
 
   return (
-    <>
+    <div className="w-full max-w-[1400px] mx-auto">
       <Form
         form={form}
         layout="vertical"
@@ -354,14 +331,100 @@ const CheckoutForm = () => {
         }}
         className="w-full"
       >
-        <Row
-          gutter={[16, 32]}
-          align="stretch"
-          className="w-full mx-auto md:gutter-[32, 32]"
-        >
-          {/* --- LEFT COLUMN: FORMS --- */}
-          <Col xs={24} lg={14}>
-            <Flex vertical gap={24} className="md:gap-[40px]">
+        {/* --- FULL WIDTH ONBOARDING WIZARD CARD --- */}
+        <div className="v2-glass p-4 sm:p-6 md:p-8 rounded-3xl border border-[var(--v2-glass-border,rgba(255,255,255,0.08))] shadow-2xl space-y-6 sm:space-y-8">
+          {/* --- STEP WIZARD PROGRESS BAR --- */}
+          <div className="border-b border-[var(--v2-glass-border,rgba(255,255,255,0.08))] pb-4 sm:pb-6">
+            <div className="flex items-center justify-between gap-2 mb-2">
+              {/* Step 1 Pill */}
+              <div
+                onClick={() => setCurrentStep(1)}
+                className={`flex items-center gap-2 cursor-pointer transition-all ${
+                  currentStep === 1
+                    ? "text-[var(--v2-accent,#2EE66A)] font-black"
+                    : currentStep > 1
+                    ? "text-[var(--v2-text-primary,#F5F5F5)]"
+                    : "text-[var(--v2-text-muted,#666666)] opacity-60"
+                }`}
+              >
+                <div
+                  className={`w-7 h-7 rounded-xl flex items-center justify-center text-xs font-black transition-all ${
+                    currentStep === 1
+                      ? "bg-[var(--v2-accent,#2EE66A)] text-[var(--v2-accent-text,#0A0A0A)] shadow-md"
+                      : currentStep > 1
+                      ? "bg-[var(--v2-accent,#2EE66A)]/20 text-[var(--v2-accent,#2EE66A)] border border-[var(--v2-accent,#2EE66A)]/50"
+                      : "bg-[var(--v2-glass-bg)] border border-[var(--v2-glass-border)] text-[var(--v2-text-muted)]"
+                  }`}
+                >
+                  {currentStep > 1 ? <FiCheckCircle size={14} /> : "1"}
+                </div>
+                <span className="text-[11px] uppercase tracking-wider font-extrabold hidden sm:inline">Shipping</span>
+              </div>
+
+              <div className="h-0.5 flex-1 mx-2 bg-[var(--v2-glass-border,rgba(255,255,255,0.1))] rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-[var(--v2-accent,#2EE66A)] transition-all duration-500"
+                  style={{ width: currentStep >= 2 ? "100%" : "0%" }}
+                />
+              </div>
+
+              {/* Step 2 Pill */}
+              <div
+                onClick={() => currentStep >= 2 && setCurrentStep(2)}
+                className={`flex items-center gap-2 ${currentStep >= 2 ? "cursor-pointer" : "cursor-not-allowed"} transition-all ${
+                  currentStep === 2
+                    ? "text-[var(--v2-accent,#2EE66A)] font-black"
+                    : currentStep > 2
+                    ? "text-[var(--v2-text-primary,#F5F5F5)]"
+                    : "text-[var(--v2-text-muted,#666666)] opacity-60"
+                }`}
+              >
+                <div
+                  className={`w-7 h-7 rounded-xl flex items-center justify-center text-xs font-black transition-all ${
+                    currentStep === 2
+                      ? "bg-[var(--v2-accent,#2EE66A)] text-[var(--v2-accent-text,#0A0A0A)] shadow-md"
+                      : currentStep > 2
+                      ? "bg-[var(--v2-accent,#2EE66A)]/20 text-[var(--v2-accent,#2EE66A)] border border-[var(--v2-accent,#2EE66A)]/50"
+                      : "bg-[var(--v2-glass-bg)] border border-[var(--v2-glass-border)] text-[var(--v2-text-muted)]"
+                  }`}
+                >
+                  {currentStep > 2 ? <FiCheckCircle size={14} /> : "2"}
+                </div>
+                <span className="text-[11px] uppercase tracking-wider font-extrabold hidden sm:inline">Billing &amp; Notes</span>
+              </div>
+
+              <div className="h-0.5 flex-1 mx-2 bg-[var(--v2-glass-border,rgba(255,255,255,0.1))] rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-[var(--v2-accent,#2EE66A)] transition-all duration-500"
+                  style={{ width: currentStep === 3 ? "100%" : "0%" }}
+                />
+              </div>
+
+              {/* Step 3 Pill */}
+              <div
+                className={`flex items-center gap-2 transition-all ${
+                  currentStep === 3
+                    ? "text-[var(--v2-accent,#2EE66A)] font-black"
+                    : "text-[var(--v2-text-muted,#666666)] opacity-60"
+                }`}
+              >
+                <div
+                  className={`w-7 h-7 rounded-xl flex items-center justify-center text-xs font-black transition-all ${
+                    currentStep === 3
+                      ? "bg-[var(--v2-accent,#2EE66A)] text-[var(--v2-accent-text,#0A0A0A)] shadow-md"
+                      : "bg-[var(--v2-glass-bg)] border border-[var(--v2-glass-border)] text-[var(--v2-text-muted)]"
+                  }`}
+                >
+                  3
+                </div>
+                <span className="text-[11px] uppercase tracking-wider font-extrabold hidden sm:inline">Payment &amp; Place Order</span>
+              </div>
+            </div>
+          </div>
+
+          {/* --- STEP 1 FORM CONTENT: CONTACT & SHIPPING --- */}
+          {currentStep === 1 && (
+            <div className="space-y-6">
               <BillingDetails
                 saveAddress={saveAddress}
                 setSaveAddress={setSaveAddress}
@@ -369,42 +432,94 @@ const CheckoutForm = () => {
                 onPhoneBlur={evaluateFullFraudRisk}
               />
 
+              <div className="pt-6 border-t border-[var(--v2-glass-border,rgba(255,255,255,0.08))] flex justify-end">
+                <button
+                  type="button"
+                  onClick={validateStep1}
+                  className="w-full sm:w-auto px-8 py-4 rounded-full bg-[var(--v2-accent,#2EE66A)] text-[var(--v2-accent-text,#0A0A0A)] font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 hover:scale-105 active:scale-95 transition-all cursor-pointer shadow-lg"
+                >
+                  <span>Continue to Billing &amp; Notes</span>
+                  <FiArrowRight size={16} />
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* --- STEP 2 FORM CONTENT: BILLING & DELIVERY NOTES --- */}
+          {currentStep === 2 && (
+            <div className="space-y-6">
               <ShippingDetails
                 shippingSameAsBilling={shippingSameAsBilling}
                 setShippingSameAsBilling={setShippingSameAsBilling}
                 shippingCustomer={shippingCustomer}
                 setShippingCustomer={setShippingCustomer}
               />
-            </Flex>
-          </Col>
 
-          {/* --- RIGHT COLUMN: SUMMARY & PAYMENT --- */}
-          <Col xs={24} lg={10}>
-            {riskResult?.isHighRisk && (
-              <div className="bg-rose-50 border border-rose-200 rounded-xl p-4 mb-4 flex items-start gap-3 text-rose-800">
-                <FiAlertTriangle className="text-rose-500 shrink-0 mt-0.5" size={20} />
-                <div>
-                  <p className="text-xs font-black uppercase tracking-wider">High Delivery Risk Flagged</p>
-                  <p className="text-xs mt-1 font-medium leading-relaxed">
-                    {riskResult.noticeMessage || "Due to high return/spam risk on past network activity, delivery fee prepayment (Rs. 450) is required for COD orders."}
-                  </p>
-                </div>
+              <div className="pt-6 border-t border-[var(--v2-glass-border,rgba(255,255,255,0.08))] flex flex-col-reverse sm:flex-row justify-between items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => setCurrentStep(1)}
+                  className="w-full sm:w-auto px-6 py-3.5 rounded-full bg-[var(--v2-glass-bg)] border border-[var(--v2-glass-border)] text-[var(--v2-text-primary,#F5F5F5)] font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 hover:border-[var(--v2-accent,#2EE66A)] transition-all cursor-pointer"
+                >
+                  <FiArrowLeft size={16} />
+                  <span>Back</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={validateStep2}
+                  className="w-full sm:w-auto px-8 py-4 rounded-full bg-[var(--v2-accent,#2EE66A)] text-[var(--v2-accent-text,#0A0A0A)] font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 hover:scale-105 active:scale-95 transition-all cursor-pointer shadow-lg"
+                >
+                  <span>Continue to Payment</span>
+                  <FiArrowRight size={16} />
+                </button>
               </div>
-            )}
-            <PaymentDetails
-              setPaymentType={setPaymentType}
-              paymentType={paymentType || ""}
-              setPaymentTypeId={setPaymentTypeId}
-              setPaymentFee={setPaymentFee}
-              setMerchantFee={setMerchantFee}
-              selectedPaymentFee={paymentFee}
-              shippingCost={shippingCost}
-              isHighRisk={riskResult?.isHighRisk}
-            />
-          </Col>
-        </Row>
+            </div>
+          )}
+
+          {/* --- STEP 3 FORM CONTENT: PAYMENT METHOD & ORDER SUMMARY --- */}
+          {currentStep === 3 && (
+            <div className="space-y-6">
+              <div className="flex justify-between items-center mb-2">
+                <span className="v2-section-label text-[9px] m-0">STEP 3 OF 3</span>
+                <button
+                  type="button"
+                  onClick={() => setCurrentStep(2)}
+                  className="px-4 py-2 rounded-full bg-[var(--v2-glass-bg)] border border-[var(--v2-glass-border)] text-[var(--v2-text-primary,#F5F5F5)] font-bold text-xs uppercase tracking-wider flex items-center gap-2 hover:border-[var(--v2-accent,#2EE66A)] transition-all cursor-pointer"
+                >
+                  <FiArrowLeft size={14} />
+                  <span>Back to Billing</span>
+                </button>
+              </div>
+
+              {riskResult?.isHighRisk && (
+                <div className="bg-rose-50 border border-rose-200 rounded-2xl p-4 flex items-start gap-3 text-rose-800">
+                  <FiAlertTriangle className="text-rose-500 shrink-0 mt-0.5" size={20} />
+                  <div>
+                    <p className="text-xs font-black uppercase tracking-wider">High Delivery Risk Flagged</p>
+                    <p className="text-xs mt-1 font-medium leading-relaxed">
+                      {riskResult.noticeMessage || "Due to high return/spam risk on past network activity, delivery fee prepayment (Rs. 450) is required for COD orders."}
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              <PaymentDetails
+                setPaymentType={setPaymentType}
+                paymentType={paymentType || ""}
+                setPaymentTypeId={setPaymentTypeId}
+                setPaymentFee={setPaymentFee}
+                setMerchantFee={setMerchantFee}
+                selectedPaymentFee={paymentFee}
+                shippingCost={shippingCost}
+                isHighRisk={riskResult?.isHighRisk}
+              />
+            </div>
+          )}
+        </div>
       </Form>
 
+      {/* OTP Verification Modal */}
       <Modal
         open={otpState.showModal && !!otpState.pendingOrder}
         onCancel={() => {
@@ -427,7 +542,7 @@ const CheckoutForm = () => {
           },
           mask: {
             backdropFilter: "blur(16px)",
-            background: "rgba(10, 10, 10, 0.8)",
+            background: "var(--v2-backdrop-bg, rgba(10, 10, 10, 0.8))",
           },
         }}
       >
@@ -454,7 +569,7 @@ const CheckoutForm = () => {
               type="button"
               onClick={() => handleOTPVerification(otp)}
               disabled={otpState.isVerifying}
-              className="w-full h-14 rounded-full bg-[var(--v2-accent,#2EE66A)] text-[#0A0A0A] font-black uppercase tracking-widest text-xs transition-all hover:opacity-90 active:scale-95 border-none cursor-pointer shadow-lg"
+              className="w-full h-14 rounded-full bg-[var(--v2-accent,#2EE66A)] text-[var(--v2-accent-text,#0A0A0A)] font-black uppercase tracking-widest text-xs transition-all hover:opacity-90 active:scale-95 border-none cursor-pointer shadow-lg"
             >
               {otpState.isVerifying ? "Verifying..." : "Confirm Order"}
             </button>
@@ -464,7 +579,7 @@ const CheckoutForm = () => {
               onClick={() =>
                 handleResendOTP(otpState.pendingOrder!.customer.phone)
               }
-              disabled={otpState.isResending || otpState.cooldown > 0}
+              disabled={otpState.cooldown > 0 || otpState.isResending}
               className="text-xs font-black uppercase tracking-widest text-[var(--v2-text-secondary,#A0A0A0)] hover:text-[var(--v2-accent,#2EE66A)] transition-all border-none bg-transparent cursor-pointer p-0"
             >
               {otpState.cooldown > 0
@@ -478,7 +593,7 @@ const CheckoutForm = () => {
       </Modal>
 
       {isProcessing && <CheckoutLoader />}
-    </>
+    </div>
   );
 };
 

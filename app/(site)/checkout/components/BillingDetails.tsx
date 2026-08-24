@@ -17,11 +17,11 @@ const BillingDetails: React.FC<BillingDetailsProps> = ({
   onPhoneBlur,
 }) => {
   return (
-    <section className="v2-glass p-6 md:p-8 rounded-3xl border border-[var(--v2-glass-border,rgba(255,255,255,0.08))] w-full">
+    <div className="w-full">
       <div className="mb-6 border-b border-[var(--v2-glass-border,rgba(255,255,255,0.08))] pb-4">
-        <span className="v2-section-label text-[9px] mb-0.5">STEP 1</span>
+        <span className="v2-section-label text-[9px] mb-0.5">CONTACT &amp; SHIPPING</span>
         <h2 className="text-xl font-black uppercase tracking-tight text-[var(--v2-text-primary,#F5F5F5)] m-0">
-          Billing &amp; Contact Details
+          Delivery Address
         </h2>
       </div>
 
@@ -31,7 +31,7 @@ const BillingDetails: React.FC<BillingDetailsProps> = ({
             name="first_name"
             label={
               <span className="text-[10px] font-black uppercase tracking-widest text-[var(--v2-text-secondary,#A0A0A0)]">
-                First Name *
+                First Name <span className="text-rose-500 font-black ml-0.5">*</span>
               </span>
             }
             rules={[
@@ -50,7 +50,7 @@ const BillingDetails: React.FC<BillingDetailsProps> = ({
             name="last_name"
             label={
               <span className="text-[10px] font-black uppercase tracking-widest text-[var(--v2-text-secondary,#A0A0A0)]">
-                Last Name *
+                Last Name <span className="text-rose-500 font-black ml-0.5">*</span>
               </span>
             }
             rules={[
@@ -69,7 +69,7 @@ const BillingDetails: React.FC<BillingDetailsProps> = ({
             name="address"
             label={
               <span className="text-[10px] font-black uppercase tracking-widest text-[var(--v2-text-secondary,#A0A0A0)]">
-                Street Address *
+                Street Address <span className="text-rose-500 font-black ml-0.5">*</span>
               </span>
             }
             rules={[{ required: true, message: "Please input your address!" }]}
@@ -86,7 +86,7 @@ const BillingDetails: React.FC<BillingDetailsProps> = ({
             name="city"
             label={
               <span className="text-[10px] font-black uppercase tracking-widest text-[var(--v2-text-secondary,#A0A0A0)]">
-                City *
+                City <span className="text-rose-500 font-black ml-0.5">*</span>
               </span>
             }
             rules={[{ required: true, message: "Please input your city!" }]}
@@ -103,7 +103,7 @@ const BillingDetails: React.FC<BillingDetailsProps> = ({
             name="phone"
             label={
               <span className="text-[10px] font-black uppercase tracking-widest text-[var(--v2-text-secondary,#A0A0A0)]">
-                Phone Number *
+                Phone Number <span className="text-rose-500 font-black ml-0.5">*</span>
               </span>
             }
             rules={[
@@ -123,7 +123,7 @@ const BillingDetails: React.FC<BillingDetailsProps> = ({
             name="email"
             label={
               <span className="text-[10px] font-black uppercase tracking-widest text-[var(--v2-text-secondary,#A0A0A0)]">
-                Email Address *
+                Email Address <span className="text-rose-500 font-black ml-0.5">*</span>
               </span>
             }
             rules={[
@@ -148,7 +148,7 @@ const BillingDetails: React.FC<BillingDetailsProps> = ({
           </Checkbox>
         </Col>
       </Row>
-    </section>
+    </div>
   );
 };
 

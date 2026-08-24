@@ -106,9 +106,9 @@ const CouponInput: React.FC<CouponInputProps> = ({
             type="text"
             value={couponState.code}
             onChange={(e) => setCode(e.target.value)}
-            placeholder={isBlocked ? "Promotions locked" : "PROMO CODE"}
+            placeholder={isBlocked ? "Locked" : "PROMO CODE"}
             disabled={couponState.isApplied || isBlocked}
-            className={`w-full h-12 px-4 bg-[var(--v2-glass-bg,rgba(255,255,255,0.04))] border rounded-full text-xs font-extrabold tracking-widest uppercase text-[var(--v2-text-primary,#F5F5F5)] placeholder:text-[var(--v2-text-muted,#666666)] outline-none transition-all ${
+            className={`w-full h-12 px-3 sm:px-4 bg-[var(--v2-glass-bg,rgba(255,255,255,0.04))] border rounded-full text-[11px] sm:text-xs font-extrabold tracking-wider uppercase text-[var(--v2-text-primary,#F5F5F5)] placeholder:text-[var(--v2-text-muted,#666666)] outline-none transition-all ${
               isBlocked
                 ? "opacity-50 cursor-not-allowed border-[var(--v2-glass-border,rgba(255,255,255,0.08))]"
                 : couponState.isApplied
@@ -120,7 +120,7 @@ const CouponInput: React.FC<CouponInputProps> = ({
           />
 
           {couponState.code && !isBlocked && (
-            <div className="absolute right-4 top-1/2 -translate-y-1/2">
+            <div className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2">
               {getMessageIcon()}
             </div>
           )}
@@ -131,7 +131,7 @@ const CouponInput: React.FC<CouponInputProps> = ({
           <button
             type="button"
             onClick={removeCouponFromCart}
-            className="px-6 h-12 bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-black uppercase tracking-wider rounded-full hover:bg-rose-500/20 transition-all cursor-pointer"
+            className="px-4 sm:px-6 h-12 bg-rose-500/10 border border-rose-500/20 text-rose-400 text-[11px] sm:text-xs font-black uppercase tracking-wider rounded-full hover:bg-rose-500/20 transition-all cursor-pointer shrink-0"
           >
             Remove
           </button>
@@ -142,7 +142,7 @@ const CouponInput: React.FC<CouponInputProps> = ({
             disabled={
               !couponState.code || couponState.isValidating || isBlocked
             }
-            className="px-6 h-12 bg-[var(--v2-accent,#2EE66A)] text-[#0A0A0A] text-xs font-black uppercase tracking-wider rounded-full hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer border-none shadow-md"
+            className="px-4 sm:px-6 h-12 bg-[var(--v2-accent,#2EE66A)] text-[var(--v2-accent-text,#0A0A0A)] text-[11px] sm:text-xs font-black uppercase tracking-wider rounded-full hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer border-none shadow-md shrink-0"
           >
             {couponState.isValidating ? "..." : "Apply"}
           </button>

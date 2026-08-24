@@ -18,6 +18,7 @@ import {
   hasDiscount as checkHasDiscount,
 } from "@/utils/pricing";
 import { isVariantEligibleForPromotion } from "@/utils/promotionUtils";
+import { motion } from "framer-motion";
 
 interface ItemCardProps {
   item: Product;
@@ -86,7 +87,11 @@ export default function ItemCard({ item, priority = false }: ItemCardProps) {
     : null;
 
   return (
-    <div className="group relative w-full h-full flex flex-col justify-between rounded-[16px] bg-[var(--v2-bg-card,#181818)] border border-[var(--v2-glass-border,rgba(255,255,255,0.08))] hover:border-[var(--v2-accent,#2EE66A)] transition-all duration-400 hover:shadow-2xl overflow-hidden">
+    <motion.div
+      whileHover={{ y: -4 }}
+      transition={{ duration: 0.3, ease: "easeOut" }}
+      className="group relative w-full h-full flex flex-col justify-between rounded-[16px] bg-[var(--v2-bg-card,#181818)] border border-[var(--v2-glass-border,rgba(255,255,255,0.08))] hover:border-[var(--v2-accent,#2EE66A)] transition-all duration-400 hover:shadow-2xl overflow-hidden"
+    >
       {/* IMAGE CONTAINER — Compact & Wide Aspect Ratio */}
       <div className="relative aspect-[4/3.4] w-full shrink-0 overflow-hidden bg-[var(--v2-bg-elevated,#1E1E1E)]">
         <Link href={`/collections/products/${item?.id}`} className="block w-full h-full">
@@ -111,7 +116,7 @@ export default function ItemCard({ item, priority = false }: ItemCardProps) {
                   ? "bg-red-500/80 text-white border-red-400/30"
                   : item?.isRestockingSoon
                   ? "bg-amber-500/80 text-white border-amber-400/30"
-                  : "bg-[var(--v2-accent,#2EE66A)] text-[#0A0A0A] border-[var(--v2-accent,#2EE66A)]"
+                  : "bg-[var(--v2-accent,#2EE66A)] text-[var(--v2-accent-text,#0A0A0A)] border-[var(--v2-accent,#2EE66A)]"
               }`}
             >
               {badgeText}
@@ -127,7 +132,7 @@ export default function ItemCard({ item, priority = false }: ItemCardProps) {
               e.stopPropagation();
               openQuickView(item);
             }}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-[var(--v2-accent,#2EE66A)] text-[#0A0A0A] font-extrabold text-[10px] uppercase tracking-wider shadow-xl hover:scale-105 transition-transform cursor-pointer"
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-[var(--v2-accent,#2EE66A)] text-[var(--v2-accent-text,#0A0A0A)] font-extrabold text-[10px] uppercase tracking-wider shadow-xl hover:scale-105 transition-transform cursor-pointer"
           >
             <Eye size={13} />
             Quick View
@@ -167,7 +172,7 @@ export default function ItemCard({ item, priority = false }: ItemCardProps) {
                     }}
                     className={`shrink-0 relative cursor-pointer focus:outline-none px-1.5 py-0.5 sm:px-2.5 sm:py-1 text-[8px] sm:text-[10px] font-extrabold uppercase tracking-wider rounded-md transition-all duration-200 ${
                       isSelected
-                        ? "bg-[var(--v2-accent,#2EE66A)] text-[#0A0A0A] border border-[var(--v2-accent,#2EE66A)] shadow-sm scale-105"
+                        ? "bg-[var(--v2-accent,#2EE66A)] text-[var(--v2-accent-text,#0A0A0A)] border border-[var(--v2-accent,#2EE66A)] shadow-sm scale-105"
                         : "bg-[var(--v2-glass-bg,rgba(255,255,255,0.05))] text-[var(--v2-text-secondary,#A0A0A0)] border border-[var(--v2-glass-border,rgba(255,255,255,0.1))] hover:border-[var(--v2-accent,#2EE66A)] hover:text-[var(--v2-text-primary,#F5F5F5)]"
                     }`}
                   >
@@ -221,6 +226,6 @@ export default function ItemCard({ item, priority = false }: ItemCardProps) {
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

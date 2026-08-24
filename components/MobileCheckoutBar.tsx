@@ -72,7 +72,7 @@ const MobileCheckoutBar = () => {
                 if (showBag) dispatch(hideBag());
                 router.push("/checkout");
               }}
-              className="shrink-0 h-auto py-1.5 px-4 bg-accent text-dark border-none rounded-full font-display font-black uppercase tracking-widest text-[9px] flex items-center justify-center gap-1 shadow-custom active:scale-95 transition-all w-auto"
+              className="shrink-0 h-auto py-1.5 px-4 bg-[var(--v2-accent,#2EE66A)] text-[var(--v2-accent-text,#0A0A0A)] border-none rounded-full font-display font-black uppercase tracking-widest text-[9px] flex items-center justify-center gap-1 shadow-custom active:scale-95 transition-all w-auto"
             >
               Checkout
               <div className="bg-dark text-inverse rounded-full p-0.5 flex items-center justify-center">

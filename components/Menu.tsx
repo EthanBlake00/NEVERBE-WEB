@@ -123,9 +123,9 @@ export default function Menu({ mainNav = [] }: { mainNav?: NavigationItem[] }) {
           <button
             onClick={handleClose}
             aria-label="Close menu"
-            className="w-9 h-9 rounded-full bg-[var(--v2-glass-bg,rgba(255,255,255,0.05))] border border-[var(--v2-glass-border,rgba(255,255,255,0.1))] text-[var(--v2-text-primary,#F5F5F5)] hover:border-[var(--v2-accent,#2EE66A)] flex items-center justify-center transition-all cursor-pointer"
+            className="w-9 h-9 rounded-full bg-[var(--v2-accent,#2EE66A)] text-[var(--v2-accent-text,#0A0A0A)] border border-[var(--v2-accent,#2EE66A)] hover:opacity-90 flex items-center justify-center transition-all cursor-pointer shadow-md"
           >
-            <IoCloseOutline size={20} />
+            <IoCloseOutline size={20} className="text-[var(--v2-accent-text,#0A0A0A)]" />
           </button>
         </div>
 

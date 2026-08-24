@@ -22,7 +22,7 @@ const DropShadow = ({
       exit={{ opacity: 0 }}
       transition={{ duration: 0.3, ease: "easeOut" }}
       onClick={onClick}
-      className={`fixed inset-0 z-[100] flex bg-black/60 backdrop-blur-md transition-all ${containerStyle || ""}`}
+      className={`fixed inset-0 z-[100] flex v2-dialog-backdrop transition-all ${containerStyle || ""}`}
     >
       {children}
     </motion.div>

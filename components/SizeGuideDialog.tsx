@@ -65,7 +65,7 @@ const SizeGuideDialog: React.FC<SizeGuideDialogProps> = ({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-[#0A0A0A]/80 backdrop-blur-xl"
+            className="fixed inset-0 v2-dialog-backdrop"
           />
 
           {/* Dialog Container */}
@@ -86,10 +86,10 @@ const SizeGuideDialog: React.FC<SizeGuideDialogProps> = ({
               </div>
               <button
                 onClick={onClose}
-                className="w-9 h-9 rounded-full bg-[var(--v2-glass-bg,rgba(255,255,255,0.05))] hover:bg-[var(--v2-accent,#2EE66A)] hover:text-[#0A0A0A] border border-[var(--v2-glass-border,rgba(255,255,255,0.1))] text-[var(--v2-text-primary,#F5F5F5)] flex items-center justify-center transition-all cursor-pointer"
+                className="w-9 h-9 rounded-full bg-[var(--v2-accent,#2EE66A)] text-[var(--v2-accent-text,#0A0A0A)] border border-[var(--v2-accent,#2EE66A)] hover:opacity-90 flex items-center justify-center transition-all cursor-pointer shadow-md"
                 aria-label="Close"
               >
-                <IoClose size={20} />
+                <IoClose className="text-[var(--v2-accent-text,#0A0A0A)]" size={20} />
               </button>
             </div>
 

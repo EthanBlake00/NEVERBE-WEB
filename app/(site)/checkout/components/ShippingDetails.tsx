@@ -24,12 +24,12 @@ const ShippingDetails = ({
   };
 
   return (
-    <section className="v2-glass p-6 md:p-8 rounded-3xl border border-[var(--v2-glass-border,rgba(255,255,255,0.08))] w-full">
+    <div className="w-full">
       <div className="mb-6 border-b border-[var(--v2-glass-border,rgba(255,255,255,0.08))] pb-4 flex items-center justify-between">
         <div>
-          <span className="v2-section-label text-[9px] mb-0.5">STEP 2</span>
+          <span className="v2-section-label text-[9px] mb-0.5">BILLING &amp; NOTES</span>
           <h2 className="text-xl font-black uppercase tracking-tight text-[var(--v2-text-primary,#F5F5F5)] m-0">
-            Shipping Destination
+            Shipping &amp; Delivery Preferences
           </h2>
         </div>
       </div>
@@ -52,7 +52,7 @@ const ShippingDetails = ({
               name="shippingName"
               label={
                 <span className="text-[10px] font-black uppercase tracking-widest text-[var(--v2-text-secondary,#A0A0A0)]">
-                  Recipient Name *
+                  Recipient Name <span className="text-rose-500 font-black ml-0.5">*</span>
                 </span>
               }
               rules={[
@@ -72,7 +72,7 @@ const ShippingDetails = ({
               name="shippingPhone"
               label={
                 <span className="text-[10px] font-black uppercase tracking-widest text-[var(--v2-text-secondary,#A0A0A0)]">
-                  Recipient Phone *
+                  Recipient Phone <span className="text-rose-500 font-black ml-0.5">*</span>
                 </span>
               }
               rules={[
@@ -95,7 +95,7 @@ const ShippingDetails = ({
               name="shippingAddress"
               label={
                 <span className="text-[10px] font-black uppercase tracking-widest text-[var(--v2-text-secondary,#A0A0A0)]">
-                  Shipping Address *
+                  Shipping Address <span className="text-rose-500 font-black ml-0.5">*</span>
                 </span>
               }
               rules={[
@@ -115,7 +115,7 @@ const ShippingDetails = ({
               name="shippingCity"
               label={
                 <span className="text-[10px] font-black uppercase tracking-widest text-[var(--v2-text-secondary,#A0A0A0)]">
-                  City *
+                  City <span className="text-rose-500 font-black ml-0.5">*</span>
                 </span>
               }
               rules={[{ required: true, message: "Please input city!" }]}
@@ -129,7 +129,7 @@ const ShippingDetails = ({
           </Col>
         </Row>
       )}
-    </section>
+    </div>
   );
 };
 

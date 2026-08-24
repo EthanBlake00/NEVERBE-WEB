@@ -16,6 +16,7 @@ import { PromotionsProvider } from "@/components/PromotionsProvider";
 import QuickViewProvider from "@/components/QuickViewProvider";
 import RecentlyViewedProvider from "@/components/RecentlyViewedProvider";
 import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
+import SmoothScroll from "@/app/(site)/components/SmoothScroll";
 
 interface GlobalProviderProps {
   children: ReactNode;
@@ -57,7 +58,7 @@ const GlobalProvider = ({
           <RecentlyViewedProvider>
             <QuickViewProvider>
               <Header season={season} mainNav={mainNav} />
-              {children}
+              <SmoothScroll>{children}</SmoothScroll>
               <Footer footerNav={footerNav} socialLinks={socialLinks} />
               <AnimatePresence>{showBag && <Bag />}</AnimatePresence>
               <AnimatePresence>

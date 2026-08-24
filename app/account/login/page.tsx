@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
-import { Form, Input, Button } from "antd";
+import React, { useState, Suspense } from "react";
+import { Form, Input, Button, Modal } from "antd";
 import {
   signInWithEmailAndPassword,
   GoogleAuthProvider,
@@ -10,7 +10,6 @@ import {
 import { useRouter, useSearchParams } from "next/navigation";
 import { auth } from "@/firebase/firebaseClient";
 import { sendPasswordResetLinkAction } from "@/actions/authAction";
-import { Modal } from "antd";
 import Image from "next/image";
 import Link from "next/link";
 import toast from "react-hot-toast";
@@ -19,7 +18,7 @@ import { motion } from "framer-motion";
 import { IoChevronBackOutline, IoLockClosedOutline, IoMailOutline } from "react-icons/io5";
 import { FcGoogle } from "react-icons/fc";
 
-const AuthPage = () => {
+const LoginForm = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectUrl = searchParams.get("redirect") || "/account";
@@ -112,20 +111,41 @@ const AuthPage = () => {
               Welcome Back
             </h1>
             <p className="text-xs text-[var(--v2-text-secondary,#A0A0A0)] mt-1 m-0">
-              Sign in to manage your orders &amp; preferences.
+              Sign in to manage orders, addresses &amp; wishlist.
             </p>
           </div>
 
-          {/* Form */}
+          {/* Social Sign-In */}
+          <Button
+            onClick={handleGoogleLogin}
+            block
+            className="h-12 rounded-2xl bg-[var(--v2-glass-bg,rgba(255,255,255,0.04))]! border-[var(--v2-glass-border,rgba(255,255,255,0.1))]! text-[var(--v2-text-primary,#F5F5F5)]! font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-3 hover:border-[var(--v2-accent,#2EE66A)]! transition-all mb-6 cursor-pointer"
+          >
+            <FcGoogle size={20} />
+            <span>Continue with Google</span>
+          </Button>
+
+          <div className="relative flex items-center justify-center mb-6">
+            <div className="border-t border-[var(--v2-glass-border,rgba(255,255,255,0.08))] w-full" />
+            <span className="bg-[var(--v2-bg-surface,#141414)] px-3 text-[10px] font-black uppercase tracking-widest text-[var(--v2-text-muted,#666666)] absolute">
+              OR EMAIL
+            </span>
+          </div>
+
+          {/* Login Form */}
           <Form layout="vertical" onFinish={handleAuth} requiredMark={false}>
             <Form.Item
               name="email"
-              rules={[{ required: true, message: "Please enter your email" }]}
+              rules={[
+                { required: true, message: "Please enter your email" },
+                { type: "email", message: "Enter a valid email" },
+              ]}
+              className="mb-4"
             >
               <Input
-                prefix={<IoMailOutline className="text-[var(--v2-text-muted,#666666)] mr-2" size={18} />}
+                prefix={<IoMailOutline size={18} className="text-[var(--v2-text-muted,#666666)] mr-2" />}
                 placeholder="EMAIL ADDRESS"
-                className="h-12 rounded-2xl bg-[var(--v2-glass-bg,rgba(255,255,255,0.04))]! border-[var(--v2-glass-border,rgba(255,255,255,0.1))]! text-[var(--v2-text-primary,#F5F5F5)]! placeholder:text-[var(--v2-text-muted,#666666)] font-bold text-xs"
+                className="h-12 rounded-2xl bg-[var(--v2-glass-bg,rgba(255,255,255,0.04))] border-[var(--v2-glass-border,rgba(255,255,255,0.1))] text-[var(--v2-text-primary,#F5F5F5)] font-bold text-xs"
               />
             </Form.Item>
 
@@ -135,18 +155,17 @@ const AuthPage = () => {
               className="mb-2"
             >
               <Input.Password
-                prefix={<IoLockClosedOutline className="text-[var(--v2-text-muted,#666666)] mr-2" size={18} />}
+                prefix={<IoLockClosedOutline size={18} className="text-[var(--v2-text-muted,#666666)] mr-2" />}
                 placeholder="PASSWORD"
-                className="h-12 rounded-2xl bg-[var(--v2-glass-bg,rgba(255,255,255,0.04))]! border-[var(--v2-glass-border,rgba(255,255,255,0.1))]! text-[var(--v2-text-primary,#F5F5F5)]! placeholder:text-[var(--v2-text-muted,#666666)] font-bold text-xs"
+                className="h-12 rounded-2xl bg-[var(--v2-glass-bg,rgba(255,255,255,0.04))] border-[var(--v2-glass-border,rgba(255,255,255,0.1))] text-[var(--v2-text-primary,#F5F5F5)] font-bold text-xs"
               />
             </Form.Item>
 
-            {/* Forgot Password Link */}
             <div className="flex justify-end mb-6">
               <button
                 type="button"
                 onClick={() => setResetModalVisible(true)}
-                className="text-[11px] font-extrabold uppercase tracking-wider text-[var(--v2-accent,#2EE66A)] hover:underline cursor-pointer bg-transparent border-none p-0"
+                className="text-[11px] font-extrabold uppercase tracking-wider text-[var(--v2-text-muted,#666666)] hover:text-[var(--v2-accent,#2EE66A)] transition-colors bg-transparent border-none cursor-pointer p-0"
               >
                 Forgot Password?
               </button>
@@ -156,42 +175,23 @@ const AuthPage = () => {
               type="primary"
               htmlType="submit"
               block
-              className="h-12 rounded-full bg-[var(--v2-accent,#2EE66A)]! text-[#0A0A0A]! font-black uppercase tracking-widest text-xs border-none hover:opacity-90 transition-all cursor-pointer shadow-lg mb-4"
+              className="h-13 rounded-full bg-[var(--v2-accent,#2EE66A)]! text-white dark:text-[#0A0A0A]! font-black uppercase tracking-widest text-xs border-none hover:opacity-90 transition-all shadow-lg cursor-pointer"
             >
               Sign In
             </Button>
           </Form>
 
-          {/* Divider */}
-          <div className="flex items-center gap-4 my-6">
-            <div className="h-px flex-1 bg-[var(--v2-glass-border,rgba(255,255,255,0.08))]" />
-            <span className="text-[10px] font-extrabold uppercase tracking-widest text-[var(--v2-text-muted,#666666)]">
-              OR CONTINUE WITH
-            </span>
-            <div className="h-px flex-1 bg-[var(--v2-glass-border,rgba(255,255,255,0.08))]" />
-          </div>
-
-          {/* Google SSO Button */}
-          <button
-            onClick={handleGoogleLogin}
-            type="button"
-            className="w-full h-12 rounded-full bg-[var(--v2-glass-bg,rgba(255,255,255,0.04))] border border-[var(--v2-glass-border,rgba(255,255,255,0.1))] hover:border-[var(--v2-accent,#2EE66A)] text-[var(--v2-text-primary,#F5F5F5)] font-extrabold text-xs uppercase tracking-wider flex items-center justify-center gap-3 transition-all cursor-pointer"
-          >
-            <FcGoogle size={20} />
-            <span>Google Account</span>
-          </button>
-
-          {/* Register Redirect */}
+          {/* Footer Link */}
           <div className="text-center mt-8 pt-6 border-t border-[var(--v2-glass-border,rgba(255,255,255,0.08))]">
-            <p className="text-xs text-[var(--v2-text-secondary,#A0A0A0)] m-0">
-              Don't have an account?{" "}
-              <Link
-                href={`/account/register?redirect=${encodeURIComponent(redirectUrl)}`}
-                className="text-[var(--v2-accent,#2EE66A)] font-black uppercase tracking-wider hover:underline ml-1"
-              >
-                Register Now
-              </Link>
-            </p>
+            <span className="text-xs text-[var(--v2-text-secondary,#A0A0A0)]">
+              Don&apos;t have an account?{" "}
+            </span>
+            <Link
+              href={`/account/register?redirect=${encodeURIComponent(redirectUrl)}`}
+              className="text-xs font-black uppercase tracking-wider text-[var(--v2-accent,#2EE66A)] hover:underline ml-1"
+            >
+              Create One →
+            </Link>
           </div>
         </div>
       </motion.div>
@@ -224,7 +224,7 @@ const AuthPage = () => {
             onClick={handleResetPassword}
             loading={resetLoading}
             block
-            className="h-12 rounded-full bg-[var(--v2-accent,#2EE66A)]! text-[#0A0A0A]! font-black uppercase tracking-widest text-xs border-none hover:opacity-90 cursor-pointer"
+            className="h-12 rounded-full bg-[var(--v2-accent,#2EE66A)]! text-white dark:text-[#0A0A0A]! font-black uppercase tracking-widest text-xs border-none hover:opacity-90 cursor-pointer"
           >
             Send Reset Link
           </Button>
@@ -234,4 +234,10 @@ const AuthPage = () => {
   );
 };
 
-export default AuthPage;
+export default function AuthPage() {
+  return (
+    <Suspense fallback={<ComponentLoader />}>
+      <LoginForm />
+    </Suspense>
+  );
+}

@@ -78,10 +78,10 @@ const ProductReviews = ({ product }: ProductReviewsProps) => {
 
         <button
           onClick={handleWriteReview}
-          className="flex items-center justify-center gap-2 px-8 py-3.5 rounded-full bg-[var(--v2-accent,#2EE66A)] text-[#0A0A0A] font-black uppercase text-xs tracking-widest hover:opacity-90 transition-all border-none cursor-pointer shadow-lg w-full md:w-auto"
+          className="flex items-center justify-center gap-2 px-8 py-3.5 rounded-full bg-[var(--v2-accent,#2EE66A)] text-[var(--v2-accent-text,#0A0A0A)] font-black uppercase text-xs tracking-widest hover:opacity-90 transition-all border-none cursor-pointer shadow-lg w-full md:w-auto"
         >
-          <IoCreateOutline size={18} />
-          <span>Write a Review</span>
+          <IoCreateOutline size={18} className="text-[var(--v2-accent-text,#0A0A0A)] shrink-0" />
+          <span className="text-[var(--v2-accent-text,#0A0A0A)] font-black">Write a Review</span>
         </button>
       </div>
 
@@ -103,7 +103,7 @@ const ProductReviews = ({ product }: ProductReviewsProps) => {
                 className="p-6 v2-glass rounded-3xl border border-[var(--v2-glass-border,rgba(255,255,255,0.08))] hover:border-[var(--v2-accent,#2EE66A)]/30 transition-all group"
               >
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-full bg-[var(--v2-accent,#2EE66A)] text-[#0A0A0A] font-black uppercase flex items-center justify-center text-xs shrink-0">
+                  <div className="w-10 h-10 rounded-full bg-[var(--v2-accent,#2EE66A)] text-white dark:text-[#0A0A0A] font-black uppercase flex items-center justify-center text-xs shrink-0">
                     {review.userName?.[0] || "U"}
                   </div>
                   <div>

@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import { IoChevronBack, IoChevronForward } from "react-icons/io5";
-import { Button } from "antd";
 
 interface PaginationProps {
   count: number;
@@ -11,8 +10,7 @@ interface PaginationProps {
 }
 
 /**
- * Pagination - NEVERBE Brand Style
- * Focuses on circular precision, high-contrast states, and performance typography.
+ * Pagination - NEVERBE Theme (Supports Light & Dark Modes)
  */
 const Pagination: React.FC<PaginationProps> = ({
   count,
@@ -63,83 +61,81 @@ const Pagination: React.FC<PaginationProps> = ({
 
   return (
     <nav
-      className="flex items-center justify-center gap-2 py-12 animate-fade"
+      className="flex items-center justify-center gap-2 py-4 md:py-6 animate-fade"
       aria-label="Pagination"
     >
       {/* --- PREVIOUS BUTTON --- */}
-      <Button
-        type="text"
+      <button
+        type="button"
         onClick={() => page > 1 && onChange(page - 1)}
         disabled={page === 1}
         className={`
-          group flex items-center justify-center w-12 h-12 rounded-full border transition-all duration-300 p-0
+          group flex items-center justify-center w-10 h-10 rounded-full border transition-all duration-300 p-0
           ${
             page === 1
-              ? "border-border-primary text-muted opacity-40 cursor-not-allowed"
-              : "border-border-dark text-primary-dark hover:bg-dark hover:text-inverse shadow-sm"
+              ? "border-[var(--v2-glass-border,rgba(255,255,255,0.08))] text-[var(--v2-text-muted,#666666)] opacity-40 cursor-not-allowed bg-transparent"
+              : "border-[var(--v2-glass-border,rgba(255,255,255,0.15))] text-[var(--v2-text-primary,#F5F5F5)] bg-[var(--v2-glass-bg,rgba(255,255,255,0.04))] hover:border-[var(--v2-accent,#2EE66A)] hover:text-[var(--v2-accent,#2EE66A)] cursor-pointer shadow-sm"
           }
         `}
         aria-label="Previous page"
-        icon={
-          <IoChevronBack
-            size={20}
-            className="transition-transform group-hover:-translate-x-0.5"
-          />
-        }
-      />
+      >
+        <IoChevronBack
+          size={18}
+          className="transition-transform group-hover:-translate-x-0.5"
+        />
+      </button>
 
       {/* --- PAGE NUMBERS --- */}
-      <div className="flex items-center gap-1.5 mx-4">
+      <div className="flex items-center gap-1.5 mx-2">
         {pages.map((p, idx) =>
           p === "..." ? (
             <span
               key={`dots-${idx}`}
-              className="px-3 text-muted font-black tracking-widest"
+              className="px-2 text-[var(--v2-text-muted,#666666)] font-black tracking-widest text-xs"
             >
               ···
             </span>
           ) : (
-            <Button
-              type="text"
+            <button
+              type="button"
               key={p}
               onClick={() => onChange(p)}
               className={`
-                w-12 h-12 rounded-full text-base font-display transition-all duration-300 tabular-nums p-0
+                w-10 h-10 rounded-full text-xs font-black transition-all duration-300 tabular-nums p-0 flex items-center justify-center cursor-pointer
                 ${
                   p === page
-                    ? "bg-accent text-dark font-black tracking-tighter shadow-custom scale-110 hover:bg-accent hover:text-dark"
-                    : "text-muted font-bold hover:text-primary-dark hover:bg-surface-2"
+                    ? "bg-[var(--v2-accent,#2EE66A)] text-[var(--v2-accent-text,#0A0A0A)] font-black shadow-md scale-105 border border-[var(--v2-accent,#2EE66A)]"
+                    : "text-[var(--v2-text-secondary,#A0A0A0)] bg-[var(--v2-glass-bg,rgba(255,255,255,0.04))] border border-[var(--v2-glass-border,rgba(255,255,255,0.08))] hover:text-[var(--v2-text-primary,#F5F5F5)] hover:border-[var(--v2-accent,#2EE66A)]"
                 }
               `}
               aria-current={p === page ? "page" : undefined}
             >
               {p}
-            </Button>
+            </button>
           ),
         )}
       </div>
 
       {/* --- NEXT BUTTON --- */}
-      <Button
-        type="text"
+      <button
+        type="button"
         onClick={() => page < count && onChange(page + 1)}
         disabled={page === count}
         className={`
-          group flex items-center justify-center w-12 h-12 rounded-full border transition-all duration-300 p-0
+          group flex items-center justify-center w-10 h-10 rounded-full border transition-all duration-300 p-0
           ${
             page === count
-              ? "border-border-primary text-muted opacity-40 cursor-not-allowed"
-              : "border-border-dark text-primary-dark hover:bg-dark hover:text-inverse shadow-sm"
+              ? "border-[var(--v2-glass-border,rgba(255,255,255,0.08))] text-[var(--v2-text-muted,#666666)] opacity-40 cursor-not-allowed bg-transparent"
+              : "border-[var(--v2-glass-border,rgba(255,255,255,0.15))] text-[var(--v2-text-primary,#F5F5F5)] bg-[var(--v2-glass-bg,rgba(255,255,255,0.04))] hover:border-[var(--v2-accent,#2EE66A)] hover:text-[var(--v2-accent,#2EE66A)] cursor-pointer shadow-sm"
           }
         `}
         aria-label="Next page"
-        icon={
-          <IoChevronForward
-            size={20}
-            className="transition-transform group-hover:translate-x-0.5"
-          />
-        }
-      />
+      >
+        <IoChevronForward
+          size={18}
+          className="transition-transform group-hover:translate-x-0.5"
+        />
+      </button>
     </nav>
   );
 };

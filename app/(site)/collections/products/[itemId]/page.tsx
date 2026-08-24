@@ -234,7 +234,7 @@ const Page = async (context: { params: Promise<{ itemId: string }> }) => {
   return (
     <Flex
       vertical
-      className="w-full relative mt-[80px] md:mt-[100px] min-h-screen px-4 md:px-8 bg-[var(--v2-bg-void,#0A0A0A)] text-[var(--v2-text-primary,#F5F5F5)]"
+      className="w-full relative mt-[72px] md:mt-[80px] min-h-screen bg-[var(--v2-bg-void,#0A0A0A)] text-[var(--v2-text-primary,#F5F5F5)]"
     >
       <script
         type="application/ld+json"
@@ -245,13 +245,11 @@ const Page = async (context: { params: Promise<{ itemId: string }> }) => {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
       />
       {/* Breadcrumbs Navigation */}
-      <Flex
-        vertical
-        gap={16}
-        className="w-full max-w-[1600px] mx-auto pt-4 pb-2 text-primary-dark px-4 md:px-10 lg:px-16 bg-[var(--v2-bg-surface,#141414)] border-b border-[var(--v2-glass-border,rgba(255,255,255,0.08))]"
-      >
-        <Breadcrumbs items={breadcrumbItems} />
-      </Flex>
+      <div className="w-full bg-[var(--v2-bg-surface,#141414)] border-b border-[var(--v2-glass-border,rgba(255,255,255,0.08))] py-3.5">
+        <div className="max-w-[1400px] mx-auto px-4 md:px-8">
+          <Breadcrumbs items={breadcrumbItems} />
+        </div>
+      </div>
       <ProductHero item={item} />
       <ProductReviews product={item} />
       <ProductFAQ />

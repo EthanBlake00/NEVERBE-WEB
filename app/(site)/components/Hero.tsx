@@ -169,7 +169,7 @@ export default function Hero({ slides = [] }: HeroProps) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1.2, duration: 0.8 }}
       >
-        <span className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[var(--v2-text-secondary)] group-hover:text-white transition-colors">
+        <span className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-white/80 group-hover:text-white transition-colors">
           Scroll to explore
         </span>
         <ChevronDown

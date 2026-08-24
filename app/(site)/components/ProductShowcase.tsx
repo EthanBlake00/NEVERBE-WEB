@@ -75,7 +75,7 @@ export default function ProductShowcase({
                         : "transparent",
                     color:
                       activeTab === tab.id
-                        ? "#0A0A0A"
+                        ? "var(--v2-accent-text)"
                         : "var(--v2-text-secondary)",
                   }}
                 >

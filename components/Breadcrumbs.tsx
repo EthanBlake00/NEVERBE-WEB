@@ -15,7 +15,7 @@ interface BreadcrumbsProps {
 }
 
 /**
- * Breadcrumbs - NEVERBE Theme (Supports Light & Dark Modes)
+ * Breadcrumbs - NEVERBE CSS Variable Dynamic Contrast Theme
  */
 const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items, className = "" }) => {
   if (items.length === 0) return null;
@@ -23,30 +23,30 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items, className = "" }) => {
   return (
     <nav
       aria-label="Breadcrumb"
-      className={`flex items-center gap-2 text-xs font-extrabold uppercase tracking-wider overflow-x-auto hide-scrollbar max-w-full py-2 ${className}`}
+      className={`flex items-center gap-2 text-xs font-extrabold uppercase tracking-wider overflow-x-auto hide-scrollbar max-w-full py-0.5 ${className}`}
     >
       {/* Home Icon */}
       <Link
         href="/"
-        className="text-[var(--v2-text-secondary)] hover:text-[var(--v2-accent)] transition-colors flex items-center shrink-0"
+        className="v2-breadcrumb-link flex items-center shrink-0"
         aria-label="Home"
       >
-        <IoHomeOutline size={16} className="shrink-0 text-[var(--v2-text-secondary)]" />
+        <IoHomeOutline size={16} className="v2-breadcrumb-icon shrink-0" />
       </Link>
 
       {items.map((item, index) => (
         <React.Fragment key={index}>
-          <IoChevronForward size={12} className="text-[var(--v2-text-muted)] shrink-0 opacity-70" />
+          <IoChevronForward size={12} className="v2-breadcrumb-icon shrink-0 opacity-70" />
 
           {item.href && index < items.length - 1 ? (
             <Link
               href={item.href}
-              className="text-[var(--v2-text-secondary)] hover:text-[var(--v2-accent)] transition-colors shrink-0 truncate max-w-[160px] md:max-w-none"
+              className="v2-breadcrumb-link shrink-0 truncate max-w-[160px] md:max-w-none"
             >
               {item.label}
             </Link>
           ) : (
-            <span className="text-[var(--v2-text-primary)] font-black shrink-0 truncate max-w-[200px] md:max-w-none">
+            <span className="v2-breadcrumb-current shrink-0 truncate max-w-[200px] md:max-w-none">
               {item.label}
             </span>
           )}

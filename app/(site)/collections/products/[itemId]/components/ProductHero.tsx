@@ -236,7 +236,7 @@ const ProductHero = ({ item }: { item: Product }) => {
           </AnimatePresence>
 
           {item.discount > 0 && (
-            <div className="absolute top-4 left-4 bg-[var(--v2-accent,#2EE66A)] text-[#0A0A0A] px-4 py-1.5 rounded-full font-black text-[10px] uppercase tracking-widest shadow-lg">
+            <div className="absolute top-4 left-4 bg-[var(--v2-accent,#2EE66A)] text-[var(--v2-accent-text,#0A0A0A)] px-4 py-1.5 rounded-full font-black text-[10px] uppercase tracking-widest shadow-lg">
               {item.discount}% Off
             </div>
           )}
@@ -431,7 +431,7 @@ const ProductHero = ({ item }: { item: Product }) => {
                     ? "bg-rose-500/20 text-rose-400 cursor-not-allowed"
                     : !selectedSize
                     ? "bg-[var(--v2-glass-bg,rgba(255,255,255,0.05))] text-[var(--v2-text-muted,#666666)] cursor-not-allowed border border-[var(--v2-glass-border,rgba(255,255,255,0.1))]"
-                    : "bg-[var(--v2-accent,#2EE66A)] text-[#0A0A0A] hover:opacity-90 active:scale-95"
+                    : "bg-[var(--v2-accent,#2EE66A)] text-[var(--v2-accent-text,#0A0A0A)] hover:opacity-90 active:scale-95"
                 }`}
               >
                 {!item.inStock || (availableStock === 0 && selectedSize)
@@ -448,7 +448,7 @@ const ProductHero = ({ item }: { item: Product }) => {
                 onClick={handleToggleWishlist}
                 className={`w-14 h-14 rounded-full border flex items-center justify-center transition-all cursor-pointer ${
                   isInWishlist
-                    ? "bg-[var(--v2-accent,#2EE66A)] border-[var(--v2-accent,#2EE66A)] text-[#0A0A0A]"
+                    ? "bg-[var(--v2-accent,#2EE66A)] border-[var(--v2-accent,#2EE66A)] text-[var(--v2-accent-text,#0A0A0A)]"
                     : "bg-[var(--v2-glass-bg,rgba(255,255,255,0.05))] border-[var(--v2-glass-border,rgba(255,255,255,0.1))] text-[var(--v2-text-primary,#F5F5F5)] hover:border-[var(--v2-accent,#2EE66A)]"
                 }`}
               >
@@ -475,10 +475,10 @@ const ProductHero = ({ item }: { item: Product }) => {
               href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER}`}
               target="_blank"
               rel="noreferrer"
-              className="flex items-center gap-2 text-[var(--v2-text-primary,#F5F5F5)] hover:text-[var(--v2-accent,#2EE66A)] font-black text-xs uppercase tracking-wider transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#25D366]/15 border border-[#25D366]/40 hover:bg-[#25D366]/25 hover:scale-105 font-extrabold text-xs uppercase tracking-wider transition-all cursor-pointer"
             >
-              <FaWhatsapp size={18} className="text-[#25D366]" />
-              <span>Chat with Specialist</span>
+              <FaWhatsapp size={18} className="text-[#25D366] shrink-0" />
+              <span className="text-[var(--v2-text-primary,#F5F5F5)] font-black text-xs tracking-wider">Chat with Specialist</span>
             </a>
           </div>
         </div>

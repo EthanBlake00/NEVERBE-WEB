@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, Suspense } from "react";
 import { Form, Input, Button } from "antd";
 import {
   createUserWithEmailAndPassword,
@@ -17,7 +17,7 @@ import ComponentLoader from "@/components/ComponentLoader";
 import { motion } from "framer-motion";
 import { IoChevronBackOutline, IoLockClosedOutline, IoMailOutline, IoPersonOutline } from "react-icons/io5";
 
-const RegisterPage = () => {
+const RegisterForm = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectUrl = searchParams.get("redirect") || "/account";
@@ -102,26 +102,27 @@ const RegisterPage = () => {
 
           {/* Form */}
           <Form layout="vertical" onFinish={handleRegister} requiredMark={false}>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-3 mb-4">
               <Form.Item
                 name="firstName"
-                rules={[{ required: true, message: "First name" }]}
+                rules={[{ required: true, message: "First name required" }]}
+                className="mb-0"
               >
                 <Input
-                  prefix={<IoPersonOutline className="text-[var(--v2-text-muted,#666666)] mr-1" size={16} />}
+                  prefix={<IoPersonOutline size={16} className="text-[var(--v2-text-muted,#666666)] mr-1.5" />}
                   placeholder="FIRST NAME"
-                  className="h-12 rounded-2xl bg-[var(--v2-glass-bg,rgba(255,255,255,0.04))]! border-[var(--v2-glass-border,rgba(255,255,255,0.1))]! text-[var(--v2-text-primary,#F5F5F5)]! placeholder:text-[var(--v2-text-muted,#666666)] font-bold text-xs"
+                  className="h-12 rounded-2xl bg-[var(--v2-glass-bg,rgba(255,255,255,0.04))] border-[var(--v2-glass-border,rgba(255,255,255,0.1))] text-[var(--v2-text-primary,#F5F5F5)] font-bold text-xs"
                 />
               </Form.Item>
 
               <Form.Item
                 name="lastName"
-                rules={[{ required: true, message: "Last name" }]}
+                rules={[{ required: true, message: "Last name required" }]}
+                className="mb-0"
               >
                 <Input
-                  prefix={<IoPersonOutline className="text-[var(--v2-text-muted,#666666)] mr-1" size={16} />}
                   placeholder="LAST NAME"
-                  className="h-12 rounded-2xl bg-[var(--v2-glass-bg,rgba(255,255,255,0.04))]! border-[var(--v2-glass-border,rgba(255,255,255,0.1))]! text-[var(--v2-text-primary,#F5F5F5)]! placeholder:text-[var(--v2-text-muted,#666666)] font-bold text-xs"
+                  className="h-12 rounded-2xl bg-[var(--v2-glass-bg,rgba(255,255,255,0.04))] border-[var(--v2-glass-border,rgba(255,255,255,0.1))] text-[var(--v2-text-primary,#F5F5F5)] font-bold text-xs"
                 />
               </Form.Item>
             </div>
@@ -129,29 +130,30 @@ const RegisterPage = () => {
             <Form.Item
               name="email"
               rules={[
-                { required: true, message: "Please enter your email" },
+                { required: true, message: "Please enter email address" },
                 { type: "email", message: "Enter a valid email" },
               ]}
+              className="mb-4"
             >
               <Input
-                prefix={<IoMailOutline className="text-[var(--v2-text-muted,#666666)] mr-2" size={18} />}
+                prefix={<IoMailOutline size={18} className="text-[var(--v2-text-muted,#666666)] mr-2" />}
                 placeholder="EMAIL ADDRESS"
-                className="h-12 rounded-2xl bg-[var(--v2-glass-bg,rgba(255,255,255,0.04))]! border-[var(--v2-glass-border,rgba(255,255,255,0.1))]! text-[var(--v2-text-primary,#F5F5F5)]! placeholder:text-[var(--v2-text-muted,#666666)] font-bold text-xs"
+                className="h-12 rounded-2xl bg-[var(--v2-glass-bg,rgba(255,255,255,0.04))] border-[var(--v2-glass-border,rgba(255,255,255,0.1))] text-[var(--v2-text-primary,#F5F5F5)] font-bold text-xs"
               />
             </Form.Item>
 
             <Form.Item
               name="password"
               rules={[
-                { required: true, message: "Please enter a password" },
-                { min: 6, message: "At least 6 characters" },
+                { required: true, message: "Password required" },
+                { min: 6, message: "Minimum 6 characters" },
               ]}
               className="mb-6"
             >
               <Input.Password
-                prefix={<IoLockClosedOutline className="text-[var(--v2-text-muted,#666666)] mr-2" size={18} />}
-                placeholder="PASSWORD (MIN. 6 CHARS)"
-                className="h-12 rounded-2xl bg-[var(--v2-glass-bg,rgba(255,255,255,0.04))]! border-[var(--v2-glass-border,rgba(255,255,255,0.1))]! text-[var(--v2-text-primary,#F5F5F5)]! placeholder:text-[var(--v2-text-muted,#666666)] font-bold text-xs"
+                prefix={<IoLockClosedOutline size={18} className="text-[var(--v2-text-muted,#666666)] mr-2" />}
+                placeholder="PASSWORD (MIN 6 CHARACTERS)"
+                className="h-12 rounded-2xl bg-[var(--v2-glass-bg,rgba(255,255,255,0.04))] border-[var(--v2-glass-border,rgba(255,255,255,0.1))] text-[var(--v2-text-primary,#F5F5F5)] font-bold text-xs"
               />
             </Form.Item>
 
@@ -159,23 +161,23 @@ const RegisterPage = () => {
               type="primary"
               htmlType="submit"
               block
-              className="h-12 rounded-full bg-[var(--v2-accent,#2EE66A)]! text-[#0A0A0A]! font-black uppercase tracking-widest text-xs border-none hover:opacity-90 transition-all cursor-pointer shadow-lg mb-4"
+              className="h-13 rounded-full bg-[var(--v2-accent,#2EE66A)]! text-white dark:text-[#0A0A0A]! font-black uppercase tracking-widest text-xs border-none hover:opacity-90 transition-all shadow-lg cursor-pointer"
             >
               Create Account
             </Button>
           </Form>
 
-          {/* Login Redirect */}
+          {/* Footer Link */}
           <div className="text-center mt-8 pt-6 border-t border-[var(--v2-glass-border,rgba(255,255,255,0.08))]">
-            <p className="text-xs text-[var(--v2-text-secondary,#A0A0A0)] m-0">
-              Already have an account?{" "}
-              <Link
-                href={`/account/login?redirect=${encodeURIComponent(redirectUrl)}`}
-                className="text-[var(--v2-accent,#2EE66A)] font-black uppercase tracking-wider hover:underline ml-1"
-              >
-                Sign In
-              </Link>
-            </p>
+            <span className="text-xs text-[var(--v2-text-secondary,#A0A0A0)]">
+              Already a member?{" "}
+            </span>
+            <Link
+              href={`/account/login?redirect=${encodeURIComponent(redirectUrl)}`}
+              className="text-xs font-black uppercase tracking-wider text-[var(--v2-accent,#2EE66A)] hover:underline ml-1"
+            >
+              Sign In →
+            </Link>
           </div>
         </div>
       </motion.div>
@@ -183,4 +185,10 @@ const RegisterPage = () => {
   );
 };
 
-export default RegisterPage;
+export default function RegisterPage() {
+  return (
+    <Suspense fallback={<ComponentLoader />}>
+      <RegisterForm />
+    </Suspense>
+  );
+}

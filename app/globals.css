@@ -17,6 +17,7 @@ html.dark {
   --v2-bg-elevated: #1E1E1E;
   --v2-bg-card: #181818;
   --v2-accent: #2EE66A;
+  --v2-accent-text: #0A0A0A;
   --v2-accent-dim: #1B8A3F;
   --v2-accent-glow: rgba(46, 230, 106, 0.15);
   --v2-accent-glow-strong: rgba(46, 230, 106, 0.3);
@@ -33,6 +34,7 @@ html.dark {
   --v2-shadow-card: 0 8px 32px rgba(0, 0, 0, 0.4);
   --v2-radius-card: 24px;
   --v2-radius-pill: 99px;
+  --v2-backdrop-bg: rgba(0, 0, 0, 0.75);
   --v2-transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
 
   /* Semantic Color Bindings */
@@ -55,6 +57,7 @@ html.light {
   --v2-bg-elevated: #F0F5EC;
   --v2-bg-card: #FFFFFF;
   --v2-accent: #2E9E5B;
+  --v2-accent-text: #FFFFFF;
   --v2-accent-dim: #1E6E3F;
   --v2-accent-glow: rgba(46, 158, 91, 0.15);
   --v2-accent-glow-strong: rgba(46, 158, 91, 0.3);
@@ -69,6 +72,7 @@ html.light {
   --v2-gradient-accent: linear-gradient(135deg, #2E9E5B 0%, #1E6E3F 100%);
   --v2-shadow-glow: 0 0 40px rgba(46, 158, 91, 0.15);
   --v2-shadow-card: 0 8px 32px rgba(0, 0, 0, 0.08);
+  --v2-backdrop-bg: rgba(0, 0, 0, 0.45);
 
   /* Semantic Color Bindings */
   --color-surface: #FFFFFF;
@@ -226,7 +230,7 @@ h5.ant-typography {
   padding: 14px 32px;
   border-radius: var(--v2-radius-pill);
   background: var(--v2-accent);
-  color: #0A0A0A;
+  color: var(--v2-accent-text);
   font-weight: 800;
   font-size: 13px;
   letter-spacing: 0.05em;
@@ -237,7 +241,8 @@ h5.ant-typography {
   text-decoration: none;
 }
 .v2-btn-accent:hover {
-  background: #3AF07A;
+  background: var(--v2-accent-dim);
+  color: var(--v2-accent-text);
   transform: translateY(-2px);
   box-shadow: 0 8px 24px var(--v2-accent-glow-strong);
 }
@@ -342,6 +347,28 @@ h5.ant-typography {
 ::-webkit-scrollbar-thumb:hover {
   background-color: var(--v2-accent);
 }
+.v2-dialog-backdrop {
+  background-color: var(--v2-backdrop-bg) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+}
+
+/* Breadcrumbs High Contrast Utilities */
+.v2-breadcrumb-link {
+  color: var(--v2-text-secondary) !important;
+  transition: color 0.2s ease;
+}
+.v2-breadcrumb-link:hover {
+  color: var(--v2-accent) !important;
+}
+.v2-breadcrumb-current {
+  color: var(--v2-text-primary) !important;
+  font-weight: 900 !important;
+}
+.v2-breadcrumb-icon {
+  color: var(--v2-text-secondary) !important;
+}
+
 * {
   scrollbar-color: var(--v2-glass-border) transparent;
 }
@@ -378,6 +405,28 @@ h5.ant-typography {
   -webkit-text-fill-color: transparent;
   background-clip: text;
   animation: v2-text-shimmer 4s linear infinite;
+}
+
+/* Ant Design Modal Theme Variable Overrides */
+.ant-modal-content {
+  background-color: var(--v2-bg-surface, #141414) !important;
+  color: var(--v2-text-primary, #F5F5F5) !important;
+  border: 1px solid var(--v2-glass-border, rgba(255, 255, 255, 0.08)) !important;
+  border-radius: 28px !important;
+}
+
+.ant-modal-header {
+  background: transparent !important;
+  color: var(--v2-text-primary, #F5F5F5) !important;
+}
+
+.ant-modal-title {
+  color: var(--v2-text-primary, #F5F5F5) !important;
+}
+
+.ant-upload-select {
+  background-color: var(--v2-glass-bg, rgba(255, 255, 255, 0.04)) !important;
+  border-color: var(--v2-glass-border, rgba(255, 255, 255, 0.1)) !important;
 }
 
 /* Lenis Smooth Scroll */

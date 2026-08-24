@@ -83,9 +83,9 @@ const Footer = ({ footerNav = [], socialLinks = [] }: FooterProps) => {
                 />
                 <button
                   type="submit"
-                  className="w-full sm:w-auto shrink-0 flex items-center justify-center gap-2 px-6 sm:px-8 py-3 sm:py-3.5 bg-[var(--v2-accent,#2EE66A)] text-[#0A0A0A] font-extrabold text-[11px] sm:text-[12px] uppercase tracking-wider rounded-xl sm:rounded-full hover:bg-[#3AF07A] transition-all hover:scale-105 active:scale-95 shadow-lg shadow-[var(--v2-accent,#2EE66A)]/20 cursor-pointer"
+                  className="w-full sm:w-auto shrink-0 flex items-center justify-center gap-2 px-6 sm:px-8 py-3 sm:py-3.5 bg-[var(--v2-accent,#2EE66A)] text-[var(--v2-accent-text,#0A0A0A)] font-extrabold text-[11px] sm:text-[12px] uppercase tracking-wider rounded-xl sm:rounded-full hover:bg-[#3AF07A] transition-all hover:scale-105 active:scale-95 shadow-lg shadow-[var(--v2-accent,#2EE66A)]/20 cursor-pointer"
                 >
-                  <span>Subscribe</span>
+                  <span className="text-[var(--v2-accent-text,#0A0A0A)] font-extrabold">Subscribe</span>
                   <SendOutlined />
                 </button>
               </form>
@@ -222,7 +222,7 @@ const Footer = ({ footerNav = [], socialLinks = [] }: FooterProps) => {
         {/* 4. BOTTOM BAR & PAYMENTS */}
         <div className="pt-8 border-t border-[var(--v2-glass-border,rgba(255,255,255,0.08))] flex flex-col md:flex-row items-center justify-between gap-6">
           <p className="text-[12px] text-[var(--v2-text-muted,#666666)] m-0 text-center md:text-left">
-            &copy; {new Date().getFullYear()} Neverbe Sri Lanka. All rights reserved. Built for 2026.
+            &copy; {new Date().getFullYear()} Neverbe Sri Lanka. All rights reserved.
           </p>
 
           <div className="flex flex-wrap items-center justify-center md:justify-end gap-3">

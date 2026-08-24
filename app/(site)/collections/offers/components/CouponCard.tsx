@@ -62,16 +62,16 @@ const CouponCard: React.FC<Props> = ({ coupon }) => {
       className="relative flex flex-col sm:flex-row bg-[var(--v2-bg-surface,#141414)] border border-[var(--v2-glass-border,rgba(255,255,255,0.08))] hover:border-[var(--v2-accent,#2EE66A)] transition-all duration-300 group rounded-3xl overflow-hidden shadow-xl"
     >
       {/* Left / Top Badge: Discount Value */}
-      <div className="bg-gradient-to-br from-[var(--v2-accent,#2EE66A)] to-[#1ba348] text-[#0A0A0A] p-5 flex flex-col items-center justify-center min-w-[130px] shrink-0 font-display">
-        <IoTicketOutline size={24} className="mb-1 opacity-80" />
-        <span className="text-3xl font-black tracking-tighter leading-none">
+      <div className="bg-gradient-to-br from-[var(--v2-accent,#2EE66A)] to-[var(--v2-accent-dim,#1B8A3F)] text-[var(--v2-accent-text,#0A0A0A)] p-5 flex flex-col items-center justify-center min-w-[130px] shrink-0 font-display">
+        <IoTicketOutline size={24} className="mb-1 text-[var(--v2-accent-text,#0A0A0A)] opacity-90" />
+        <span className="text-3xl font-black tracking-tighter leading-none text-[var(--v2-accent-text,#0A0A0A)]">
           {coupon.discountType === "PERCENTAGE"
             ? `${coupon.discountValue}%`
             : coupon.discountType === "FIXED"
             ? `LKR ${coupon.discountValue}`
             : "FREE"}
         </span>
-        <span className="text-[10px] font-black uppercase tracking-widest mt-1 opacity-90">
+        <span className="text-[10px] font-black uppercase tracking-widest mt-1 opacity-90 text-[var(--v2-accent-text,#0A0A0A)]">
           {coupon.discountType === "FREE_SHIPPING" ? "Shipping" : "OFF"}
         </span>
       </div>
@@ -120,14 +120,14 @@ const CouponCard: React.FC<Props> = ({ coupon }) => {
           onClick={handleCopy}
           className={`w-full py-2.5 px-4 rounded-full text-xs font-black uppercase tracking-widest transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer ${
             copied
-              ? "bg-[var(--v2-accent,#2EE66A)] text-[#0A0A0A] shadow-md scale-98"
+              ? "bg-[var(--v2-accent,#2EE66A)] text-[var(--v2-accent-text,#0A0A0A)] shadow-md scale-98"
               : "bg-[var(--v2-glass-bg,rgba(255,255,255,0.05))] text-[var(--v2-text-primary,#F5F5F5)] border border-[var(--v2-glass-border,rgba(255,255,255,0.1))] hover:border-[var(--v2-accent,#2EE66A)] hover:text-[var(--v2-accent,#2EE66A)]"
           }`}
         >
           {copied ? (
             <>
-              <IoCheckmarkDoneOutline size={16} />
-              <span>COPIED CODE!</span>
+              <IoCheckmarkDoneOutline size={16} className="text-[var(--v2-accent-text,#0A0A0A)]" />
+              <span className="text-[var(--v2-accent-text,#0A0A0A)] font-black">COPIED CODE!</span>
             </>
           ) : (
             <>

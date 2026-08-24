@@ -180,7 +180,7 @@ const Header = ({ season, mainNav = [] }: HeaderProps) => {
                 color="var(--v2-accent,#2EE66A)"
                 size="small"
                 style={{
-                  color: "#0A0A0A",
+                  color: "var(--v2-accent-text)",
                   fontWeight: 900,
                 }}
               >
