@@ -248,7 +248,7 @@ const Page = async (context: { params: Promise<{ itemId: string }> }) => {
       <Flex
         vertical
         gap={16}
-        className="w-full max-w-[1600px] mx-auto pt-4 pb-2 text-primary-dark px-4 md:px-10 lg:px-16"
+        className="w-full max-w-[1600px] mx-auto pt-4 pb-2 text-primary-dark px-4 md:px-10 lg:px-16 bg-[var(--v2-bg-surface,#141414)] border-b border-[var(--v2-glass-border,rgba(255,255,255,0.08))]"
       >
         <Breadcrumbs items={breadcrumbItems} />
       </Flex>

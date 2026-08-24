@@ -1,7 +1,7 @@
-export const revalidate = 3600;
-
+import React, { Suspense } from "react";
 import Products from "@/app/(site)/collections/products/components/Products";
 import { getNewArrivals } from "@/actions/productAction";
+import ComponentLoader from "@/components/ComponentLoader";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -192,7 +192,9 @@ const NewArrivalsPage = async () => {
 
       {/* Product Grid */}
       <div className="w-full py-4 md:py-8">
-        <Products items={dataList} apiEndpoint="/web/products/new" />
+        <Suspense fallback={<ComponentLoader />}>
+          <Products items={dataList} apiEndpoint="/web/products/new" />
+        </Suspense>
       </div>
 
       {/* SEO Footer */}

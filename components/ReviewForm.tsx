@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { Form, Input, Button, Rate, Modal, Upload, UploadFile } from "antd";
+import { Form, Rate, Modal, Upload, UploadFile } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import axiosInstance from "@/actions/axiosInstance";
 import { auth } from "@/firebase/firebaseClient";
 import toast from "react-hot-toast";
+import { FiX } from "react-icons/fi";
 
 interface ReviewFormProps {
   productId?: string;
@@ -69,7 +70,7 @@ const ReviewForm = ({ productId, initialValues, onSuccess, onCancel, open }: Rev
     } catch (error: any) {
       console.error("Failed to submit review", error);
       toast.error(error.response?.data?.error || "Failed to submit review");
-    } flex: {
+    } finally {
       setLoading(false);
     }
   };
@@ -77,25 +78,41 @@ const ReviewForm = ({ productId, initialValues, onSuccess, onCancel, open }: Rev
   return (
     <Modal
       title={
-        <span className="text-lg font-black uppercase tracking-tight text-[var(--v2-text-primary,#F5F5F5)]">
-          {initialValues ? "Edit Review" : "Write a Review"}
-        </span>
+        <div className="flex flex-col gap-0.5 pt-1">
+          <span className="v2-section-label text-[9px] mb-0.5">SHARE YOUR EXPERIENCE</span>
+          <span className="text-xl font-black uppercase tracking-tight text-[var(--v2-text-primary)]">
+            {initialValues ? "Edit Review" : "Write a Review"}
+          </span>
+        </div>
       }
       open={open}
       onCancel={onCancel}
       footer={null}
       destroyOnClose
       centered
+      closeIcon={<FiX size={20} className="text-[var(--v2-text-secondary)] hover:text-[var(--v2-text-primary)] transition-colors" />}
       styles={{
+        content: {
+          background: "var(--v2-bg-surface)",
+          border: "1px solid var(--v2-glass-border)",
+          borderRadius: "28px",
+          padding: "28px",
+          color: "var(--v2-text-primary)",
+          boxShadow: "0 24px 48px rgba(0, 0, 0, 0.4)",
+        },
+        header: {
+          background: "transparent",
+          borderBottom: "none",
+          marginBottom: "16px",
+          padding: 0,
+        },
         body: {
-          padding: "24px",
-          borderRadius: "24px",
-          background: "var(--v2-bg-surface,#141414)",
-          color: "var(--v2-text-primary,#F5F5F5)",
+          background: "transparent",
+          padding: 0,
         },
         mask: {
           backdropFilter: "blur(16px)",
-          background: "rgba(10, 10, 10, 0.8)",
+          background: "rgba(0, 0, 0, 0.7)",
         },
       }}
     >
@@ -104,39 +121,41 @@ const ReviewForm = ({ productId, initialValues, onSuccess, onCancel, open }: Rev
         layout="vertical"
         onFinish={handleSubmit}
         initialValues={initialValues || { rating: 5, review: "" }}
-        className="mt-4"
+        className="mt-2"
       >
         <Form.Item
           name="rating"
           label={
-            <span className="text-xs font-black uppercase tracking-widest text-[var(--v2-text-secondary,#A0A0A0)]">
+            <span className="text-xs font-black uppercase tracking-widest text-[var(--v2-text-secondary)]">
               Your Rating *
             </span>
           }
           rules={[{ required: true, message: "Please provide a rating" }]}
         >
-          <Rate style={{ color: "var(--v2-accent,#2EE66A)" }} />
+          <Rate style={{ color: "var(--v2-accent)", fontSize: "20px" }} />
         </Form.Item>
 
         <Form.Item
           name="review"
           label={
-            <span className="text-xs font-black uppercase tracking-widest text-[var(--v2-text-secondary,#A0A0A0)]">
+            <span className="text-xs font-black uppercase tracking-widest text-[var(--v2-text-secondary)]">
               Your Review *
             </span>
           }
           rules={[{ required: true, message: "Please write your review" }]}
         >
-          <Input.TextArea 
-            rows={4} 
-            placeholder="Describe your experience with this product..." 
-            className="rounded-2xl bg-[var(--v2-glass-bg,rgba(255,255,255,0.04))]! border-[var(--v2-glass-border,rgba(255,255,255,0.1))]! text-[var(--v2-text-primary,#F5F5F5)]! p-4 text-xs font-medium"
+          <textarea
+            rows={4}
+            placeholder="Describe your experience with this product..."
+            onChange={(e) => form.setFieldValue("review", e.target.value)}
+            defaultValue={initialValues?.review || ""}
+            className="w-full rounded-2xl bg-[var(--v2-glass-bg)] border border-[var(--v2-glass-border)] text-[var(--v2-text-primary)] p-4 text-xs font-medium placeholder:text-[var(--v2-text-muted)] outline-none focus:border-[var(--v2-accent)] transition-colors resize-none"
           />
         </Form.Item>
 
         <Form.Item 
           label={
-            <span className="text-xs font-black uppercase tracking-widest text-[var(--v2-text-secondary,#A0A0A0)]">
+            <span className="text-xs font-black uppercase tracking-widest text-[var(--v2-text-secondary)]">
               Upload Photos (Optional, Max 5MB)
             </span>
           }
@@ -157,7 +176,7 @@ const ReviewForm = ({ productId, initialValues, onSuccess, onCancel, open }: Rev
             maxCount={5}
           >
             {fileList.length < 5 && (
-              <div className="text-[var(--v2-text-secondary,#A0A0A0)]">
+              <div className="text-[var(--v2-text-secondary)] flex flex-col items-center justify-center">
                 <PlusOutlined />
                 <div className="text-[10px] font-bold uppercase mt-1">Add Photo</div>
               </div>
@@ -169,14 +188,14 @@ const ReviewForm = ({ productId, initialValues, onSuccess, onCancel, open }: Rev
           <button 
             type="button"
             onClick={onCancel} 
-            className="px-6 py-3 rounded-full bg-[var(--v2-glass-bg,rgba(255,255,255,0.04))] border border-[var(--v2-glass-border,rgba(255,255,255,0.1))] text-[var(--v2-text-primary,#F5F5F5)] font-black text-xs uppercase tracking-wider cursor-pointer hover:border-[var(--v2-accent,#2EE66A)] transition-all"
+            className="px-6 py-3.5 rounded-full bg-[var(--v2-glass-bg)] border border-[var(--v2-glass-border)] text-[var(--v2-text-primary)] font-black text-xs uppercase tracking-wider cursor-pointer hover:border-[var(--v2-accent)] transition-all"
           >
             Cancel
           </button>
           <button 
             type="submit" 
             disabled={loading}
-            className="px-6 py-3 rounded-full bg-[var(--v2-accent,#2EE66A)] text-[#0A0A0A] font-black text-xs uppercase tracking-wider border-none cursor-pointer hover:opacity-90 active:scale-95 transition-all shadow-md"
+            className="px-6 py-3.5 rounded-full bg-[var(--v2-accent)] text-[var(--v2-bg-void,#0A0A0A)] font-black text-xs uppercase tracking-wider border-none cursor-pointer hover:opacity-90 active:scale-95 transition-all shadow-lg"
           >
             {loading ? "Submitting..." : initialValues ? "Update Review" : "Submit Review"}
           </button>

@@ -423,7 +423,7 @@ const Bag = () => {
               }}
               className="w-full py-4 rounded-full bg-[var(--v2-accent,#2EE66A)] text-[#0A0A0A] font-black uppercase tracking-widest text-xs flex items-center justify-between px-6 hover:opacity-90 transition-all shadow-lg cursor-pointer"
             >
-              <span>Checkout Now</span>
+              <span className="text-[#0A0A0A] font-black">Checkout Now</span>
               <div className="w-8 h-8 rounded-full bg-[#0A0A0A] text-[var(--v2-accent,#2EE66A)] flex items-center justify-center">
                 <IoArrowForward size={16} />
               </div>

@@ -1,4 +1,5 @@
 "use client";
+
 import React from "react";
 import { IoFlameOutline } from "react-icons/io5";
 
@@ -9,15 +10,14 @@ interface StockBadgeProps {
 }
 
 /**
- * StockBadge - NEVERBE Performance Alert
- * High-urgency indicator using brand-aligned "Technical" aesthetics.
+ * StockBadge - NEVERBE High-Contrast Stock Alert
+ * Works perfectly in both dark and light modes.
  */
 const StockBadge: React.FC<StockBadgeProps> = ({
   stockCount,
   lowStockThreshold = 5,
   className = "",
 }) => {
-  // Logic: Hide if out of stock (handled by overlays) or if stock is healthy
   if (stockCount <= 0 || stockCount > lowStockThreshold) {
     return null;
   }
@@ -25,18 +25,16 @@ const StockBadge: React.FC<StockBadgeProps> = ({
   return (
     <div
       className={`
-        inline-flex items-center gap-2 px-3 py-1.5 
-        bg-accent text-white border border-accent
-        rounded-md shadow-[0_4px_12px_rgba(46,158,91,0.2)] animate-fade ${className}
+        inline-flex items-center gap-2 px-3.5 py-1.5 
+        bg-[var(--v2-accent,#2EE66A)]/15 text-[var(--v2-accent,#2EE66A)] border border-[var(--v2-accent,#2EE66A)]/35
+        rounded-full transition-all animate-fade ${className}
       `}
     >
-      {/* High-Energy Pulse Icon */}
-      <div className="relative flex items-center justify-center">
-        <IoFlameOutline size={16} className="relative z-10 animate-pulse" />
-        <div className="absolute inset-0 bg-accent/40 rounded-full blur-md animate-ping" />
+      <div className="relative flex items-center justify-center shrink-0">
+        <IoFlameOutline size={14} className="relative z-10 animate-pulse text-[var(--v2-accent,#2EE66A)]" />
       </div>
 
-      <span className="text-xs font-display font-black uppercase tracking-tighter">
+      <span className="text-[10px] font-black uppercase tracking-wider">
         Critical: Only {stockCount} {stockCount === 1 ? "Unit" : "Units"} Left
       </span>
     </div>

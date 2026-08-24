@@ -1,6 +1,4 @@
 import "./globals.css";
-import type { Metadata } from "next";
-import { Roboto_Mono, Inter, Plus_Jakarta_Sans } from "next/font/google";
 import { WebVitals } from "@/components/WebVitals";
 import { Suspense } from "react";
 import AnalyticsTracker from "@/app/(site)/components/AnalyticsTracker";
@@ -89,23 +87,9 @@ export const metadata: Metadata = {
   category: "retail",
 };
 
-const mono = Roboto_Mono({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-mono",
-});
-
-const inter = Inter({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-inter",
-});
-
-const plusJakartaSans = Plus_Jakarta_Sans({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-plus-jakarta-sans",
-});
+const monoClass = "font-mono";
+const interClass = "font-sans";
+const plusJakartaClass = "font-display";
 
 import StoreProvider from "@/app/(site)/components/StoreProvider";
 import AuthProvider from "@/components/AuthProvider";
@@ -214,7 +198,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${mono.variable} ${inter.variable} ${plusJakartaSans.variable} antialiased min-h-screen flex flex-col font-sans`}
+        className="antialiased min-h-screen flex flex-col font-sans"
       >
         <script
           type="application/ld+json"

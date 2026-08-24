@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui;
-  --font-display: var(--font-plus-jakarta-sans), ui-sans-serif, system-ui;
+  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-display: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   --max-width-content: 1400px;
 }
@@ -97,13 +97,30 @@ body {
 
 /* ═══════════════ GLOBAL COMPONENT UTILITIES ═══════════════ */
 
-/* Ant Design Card Override */
-.ant-card {
-  background: var(--v2-bg-card) !important;
+/* Ant Design Card & Modal Overrides */
+.ant-card,
+.ant-modal-content,
+.ant-modal-header {
+  background: var(--v2-bg-surface) !important;
   border-color: var(--v2-glass-border) !important;
-  border-radius: var(--v2-radius-card) !important;
   color: var(--v2-text-primary) !important;
-  transition: all 0.3s var(--v2-transition-smooth) !important;
+}
+
+.ant-modal-content {
+  border-radius: 28px !important;
+  border: 1px solid var(--v2-glass-border) !important;
+}
+
+.ant-modal-title {
+  color: var(--v2-text-primary) !important;
+  background: transparent !important;
+}
+
+.ant-upload-wrapper .ant-upload-select,
+.ant-upload-select-picture-card {
+  background: var(--v2-glass-bg) !important;
+  border-color: var(--v2-glass-border) !important;
+  color: var(--v2-text-secondary) !important;
 }
 
 .ant-card:hover {

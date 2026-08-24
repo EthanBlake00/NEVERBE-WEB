@@ -215,7 +215,7 @@ const ProductHero = ({ item }: { item: Product }) => {
     <section className="w-full max-w-[1400px] mx-auto px-4 md:px-8 py-6 md:py-12 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14">
       {/* --- LEFT COLUMN: IMAGES --- */}
       <div className="lg:col-span-7 flex flex-col gap-4">
-        <div className="relative aspect-square bg-[#0A0A0A] rounded-3xl overflow-hidden border border-[var(--v2-glass-border,rgba(255,255,255,0.08))] p-2">
+        <div className="relative aspect-square bg-[var(--v2-bg-elevated)] rounded-3xl overflow-hidden border border-[var(--v2-glass-border,rgba(255,255,255,0.08))] p-2">
           <AnimatePresence mode="wait">
             <motion.div
               key={selectedImage.url}
@@ -249,7 +249,7 @@ const ProductHero = ({ item }: { item: Product }) => {
               type="button"
               key={idx}
               onClick={() => setSelectedImage(img)}
-              className={`relative aspect-square bg-[#0A0A0A] rounded-2xl overflow-hidden border transition-all p-0.5 h-auto w-full cursor-pointer ${
+              className={`relative aspect-square bg-[var(--v2-bg-elevated)] rounded-2xl overflow-hidden border transition-all p-0.5 h-auto w-full cursor-pointer ${
                 selectedImage.url === img.url
                   ? "border-[var(--v2-accent,#2EE66A)] ring-2 ring-[var(--v2-accent,#2EE66A)]/30"
                   : "border-[var(--v2-glass-border,rgba(255,255,255,0.1))] opacity-60 hover:opacity-100"
@@ -343,7 +343,7 @@ const ProductHero = ({ item }: { item: Product }) => {
                       setSelectedVariant(v);
                       setSelectedSize("");
                     }}
-                    className={`relative w-14 h-14 bg-[#0A0A0A] rounded-2xl overflow-hidden border p-0.5 transition-all cursor-pointer ${
+                    className={`relative w-14 h-14 bg-[var(--v2-bg-elevated)] rounded-2xl overflow-hidden border p-0.5 transition-all cursor-pointer ${
                       selectedVariant.variantId === v.variantId
                         ? "border-[var(--v2-accent,#2EE66A)] ring-2 ring-[var(--v2-accent,#2EE66A)]/30"
                         : "border-[var(--v2-glass-border,rgba(255,255,255,0.1))] opacity-60 hover:opacity-100"
@@ -475,9 +475,9 @@ const ProductHero = ({ item }: { item: Product }) => {
               href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER}`}
               target="_blank"
               rel="noreferrer"
-              className="flex items-center gap-2 text-[var(--v2-text-secondary,#A0A0A0)] hover:text-[var(--v2-accent,#2EE66A)] transition-colors"
+              className="flex items-center gap-2 text-[var(--v2-text-primary,#F5F5F5)] hover:text-[var(--v2-accent,#2EE66A)] font-black text-xs uppercase tracking-wider transition-colors"
             >
-              <FaWhatsapp size={16} className="text-[var(--v2-accent,#2EE66A)]" />
+              <FaWhatsapp size={18} className="text-[#25D366]" />
               <span>Chat with Specialist</span>
             </a>
           </div>

@@ -14,24 +14,16 @@ const DropShadow = ({
   containerStyle,
   children,
   onClick,
-  variant = "light",
 }: DropShadowProps) => {
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.4, ease: "circOut" }}
+      transition={{ duration: 0.3, ease: "easeOut" }}
       onClick={onClick}
-      className={`fixed inset-0 z-100 flex transition-all ${
-        variant === "light"
-          ? "bg-white/80 backdrop-blur-md"
-          : "bg-primary/30 backdrop-blur-sm"
-      } ${containerStyle || ""}`}
+      className={`fixed inset-0 z-[100] flex bg-black/60 backdrop-blur-md transition-all ${containerStyle || ""}`}
     >
-      {/* The variant="light" is the signature Nike Look. 
-          It allows the product context to stay visible but softly diffused.
-      */}
       {children}
     </motion.div>
   );

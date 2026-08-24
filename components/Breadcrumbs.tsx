@@ -1,4 +1,5 @@
 "use client";
+
 import React from "react";
 import Link from "next/link";
 import { IoChevronForward, IoHomeOutline } from "react-icons/io5";
@@ -14,8 +15,7 @@ interface BreadcrumbsProps {
 }
 
 /**
- * Breadcrumb navigation component - NEVERBE Theme
- * Uses brand tokens for typography and colors.
+ * Breadcrumbs - NEVERBE Theme (Supports Light & Dark Modes)
  */
 const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items, className = "" }) => {
   if (items.length === 0) return null;
@@ -23,32 +23,30 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items, className = "" }) => {
   return (
     <nav
       aria-label="Breadcrumb"
-      // Added your custom 'hide-scrollbar' utility and brand spacing
-      className={`flex items-center gap-1 md:gap-2 text-base text-primary-dark overflow-x-auto hide-scrollbar max-w-full ${className}`}
+      className={`flex items-center gap-2 text-xs font-extrabold uppercase tracking-wider overflow-x-auto hide-scrollbar max-w-full py-2 ${className}`}
     >
-      {/* Home icon */}
+      {/* Home Icon */}
       <Link
         href="/"
-        className="hover:text-accent transition-colors flex items-center min-h-[44px] min-w-[32px] justify-center touch-manipulation shrink-0"
+        className="text-[var(--v2-text-secondary)] hover:text-[var(--v2-accent)] transition-colors flex items-center shrink-0"
         aria-label="Home"
       >
-        <IoHomeOutline size={16} />
+        <IoHomeOutline size={16} className="shrink-0 text-[var(--v2-text-secondary)]" />
       </Link>
 
       {items.map((item, index) => (
         <React.Fragment key={index}>
-          <IoChevronForward size={12} className="text-muted shrink-0" />
+          <IoChevronForward size={12} className="text-[var(--v2-text-muted)] shrink-0 opacity-70" />
 
           {item.href && index < items.length - 1 ? (
             <Link
               href={item.href}
-              className="hover:text-accent-hover hover:underline transition-all capitalize min-h-[44px] flex items-center px-1 touch-manipulation shrink-0 truncate max-w-[120px] md:max-w-none"
+              className="text-[var(--v2-text-secondary)] hover:text-[var(--v2-accent)] transition-colors shrink-0 truncate max-w-[160px] md:max-w-none"
             >
               {item.label}
             </Link>
           ) : (
-            /* Active Page: Highlighted with primary color/weight */
-            <span className="text-primary-dark font-bold capitalize truncate max-w-[120px] sm:max-w-[180px] md:max-w-[250px] min-h-[44px] flex items-center">
+            <span className="text-[var(--v2-text-primary)] font-black shrink-0 truncate max-w-[200px] md:max-w-none">
               {item.label}
             </span>
           )}
