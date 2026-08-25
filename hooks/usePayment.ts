@@ -162,10 +162,12 @@ export const usePayment = (options: UsePaymentOptions): UsePaymentReturn => {
         shippingFeeOverride !== undefined
           ? shippingFeeOverride
           : calculateShippingCost(bagItems);
-      const paymentFee = calculateFee(options.paymentFee || 0, bagItems);
       const rawSubtotal = calculateTotal(bagItems);
-      const subtotal = rawSubtotal - itemDiscount + shippingFee + paymentFee;
-      const total = subtotal - couponDisc - promotionDisc;
+      const netItemTotal = Math.max(0, rawSubtotal - itemDiscount - couponDisc - promotionDisc);
+      const taxableBase = netItemTotal + shippingFee;
+      const paymentFee = parseFloat((taxableBase * ((options.paymentFee || 0) / 100)).toFixed(2));
+      const subtotal = rawSubtotal - itemDiscount + shippingFee;
+      const total = taxableBase + paymentFee;
 
       return {
         subtotal,

@@ -23,7 +23,7 @@ export default function Hero({ slides = [] }: HeroProps) {
             src={heroImage}
             alt="Neverbe 2026 Collection"
             fill
-            className="object-cover"
+            className="object-contain p-2"
             priority
           />
         ) : (
@@ -146,7 +146,7 @@ export default function Hero({ slides = [] }: HeroProps) {
                   src={heroImage}
                   alt="Neverbe 2026 Collection"
                   fill
-                  className="object-cover"
+                  className="object-contain p-2 md:p-4"
                   priority
                 />
               </motion.div>

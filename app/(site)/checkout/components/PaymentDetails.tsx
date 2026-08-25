@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { Form, Button } from "antd";
 import { RootState } from "@/redux/store";
 import { IoArrowForward, IoLockClosedOutline } from "react-icons/io5";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import BagItemCard from "@/components/BagItemCard";
 import CouponInput from "@/components/CouponInput";
 import PromotionBanner from "@/components/PromotionBanner";
@@ -100,25 +101,37 @@ const BundleCard = ({ bundle }: { bundle: BundleGroup }) => {
 
 const FALLBACK_PAYMENT_METHODS: PaymentMethod[] = [
   {
-    paymentId: "cod_default",
-    name: "Cash on Delivery",
+    paymentId: "pm-001",
+    name: "CASH ON DELIVERY",
     fee: 0,
     customerFee: 0,
-    isActive: true,
+    description: "Cash on Delivery allows customers to pay in cash upon receiving their order.",
+    status: "Active",
+    available: ["Website", "Store"],
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
   },
   {
-    paymentId: "koko_default",
-    name: "Koko Pay (3 Easy Installments)",
-    fee: 0,
-    customerFee: 0,
-    isActive: true,
+    paymentId: "pm-006",
+    name: "KOKO",
+    fee: 12,
+    customerFee: 13.5,
+    description: "Pay in 3 interest-free instalments with Koko for a flexible and affordable shopping experience.",
+    status: "Active",
+    available: ["Store", "Website"],
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
   },
   {
-    paymentId: "card_default",
-    name: "Credit / Debit Card",
-    fee: 0,
-    customerFee: 0,
-    isActive: true,
+    paymentId: "pm-003",
+    name: "PAYHERE",
+    fee: 3.3,
+    customerFee: 3.5,
+    description: "Securely pay for your orders using a credit or debit card.",
+    status: "Active",
+    available: ["Website"],
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
   },
 ];
 
@@ -187,16 +200,29 @@ const PaymentDetails: React.FC<PaymentDetailsProps> = ({
           ? data.data
           : [];
 
-        const mappedList: PaymentMethod[] = rawList.map((p: any) => ({
-          paymentId: p.paymentId || p.id || p.name || "",
-          name: p.name || p.title || "Payment Method",
-          fee: typeof p.fee === "number" ? p.fee : 0,
-          customerFee: typeof p.customerFee === "number" ? p.customerFee : (typeof p.fee === "number" ? p.fee : 0),
-          imageUrl: p.imageUrl || p.icon || p.logo || "",
-          isActive: p.isActive !== false,
-        }));
+        const mappedList: (PaymentMethod & { isActive?: boolean })[] = rawList.map((p: any) => {
+          const isItemActive =
+            p.status === true ||
+            p.status === "Active" ||
+            p.isActive === true ||
+            (p.status !== false && p.isDeleted !== true);
 
-        const activeList = mappedList.filter((p) => p.isActive);
+          return {
+            paymentId: p.paymentId || p.id || p.name || "",
+            name: p.name || p.title || "Payment Method",
+            fee: typeof p.fee === "number" ? p.fee : 0,
+            customerFee: typeof p.customerFee === "number" ? p.customerFee : (typeof p.fee === "number" ? p.fee : 0),
+            description: p.description || p.details || p.subtitle || p.instructions || "",
+            imageUrl: p.imageUrl || p.icon || p.logo || p.bannerUrl || "",
+            status: isItemActive ? "Active" : "Inactive",
+            isActive: isItemActive,
+            available: p.available || ["LK"],
+            createdAt: p.createdAt || new Date().toISOString(),
+            updatedAt: p.updatedAt || new Date().toISOString(),
+          };
+        });
+
+        const activeList = mappedList.filter((p) => p.isActive !== false);
         const finalList = activeList.length > 0 ? activeList : FALLBACK_PAYMENT_METHODS;
 
         setPaymentOptions(finalList);
@@ -224,14 +250,13 @@ const PaymentDetails: React.FC<PaymentDetailsProps> = ({
   const itemDiscount = calculateTotalDiscount(bagItems);
   const shipping = shippingCost;
 
-  const fee = selectedPaymentFee;
+  // Fee calculation: customerFee percentage applied to (Total item cost after discounts/promotions + shipping)
+  const netItemTotal = Math.max(0, rawSubTotal - itemDiscount - couponDiscount - promotionDiscount);
+  const taxableBase = netItemTotal + shipping;
+  const feePercent = selectedPaymentFee || 0;
+  const fee = parseFloat((taxableBase * (feePercent / 100)).toFixed(2));
 
-  const subTotalAfterDiscount =
-    calculateSubTotal(bagItems, 0, shipping) -
-    couponDiscount -
-    promotionDiscount;
-
-  const finalTotal = subTotalAfterDiscount + fee;
+  const finalTotal = taxableBase + fee;
 
   return (
     <div className="w-full">
@@ -267,7 +292,12 @@ const PaymentDetails: React.FC<PaymentDetailsProps> = ({
             Select Payment Method
           </span>
           {isPaymentLoading ? (
-            <div className="h-12 bg-[var(--v2-glass-bg,rgba(255,255,255,0.04))] animate-pulse w-full rounded-2xl"></div>
+            <div className="p-6 rounded-2xl bg-[var(--v2-glass-bg,rgba(255,255,255,0.04))] border border-[var(--v2-glass-border,rgba(255,255,255,0.08))] flex items-center justify-center gap-3">
+              <AiOutlineLoading3Quarters size={18} className="text-[var(--v2-accent,#2EE66A)] animate-spin shrink-0" />
+              <span className="text-xs font-black uppercase tracking-wider text-[var(--v2-text-secondary,#A0A0A0)]">
+                Loading Payment Methods...
+              </span>
+            </div>
           ) : (
             <PaymentOptions
               paymentOptions={paymentOptions}
@@ -277,6 +307,7 @@ const PaymentDetails: React.FC<PaymentDetailsProps> = ({
               setPaymentFee={setPaymentFee}
               setMerchantFee={setMerchantFee}
               bagItems={bagItems}
+              taxableBase={taxableBase}
               isHighRisk={isHighRisk}
             />
           )}

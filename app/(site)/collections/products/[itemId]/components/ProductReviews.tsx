@@ -7,9 +7,9 @@ import { RootState } from "@/redux/store";
 import toast from "react-hot-toast";
 import { formatDistanceToNow } from "date-fns";
 import { FcGoogle } from "react-icons/fc";
+import { IoCreateOutline, IoChevronDown, IoChevronUp } from "react-icons/io5";
 import ReviewForm from "@/components/ReviewForm";
 import { Product } from "@/interfaces/Product";
-import { IoCreateOutline } from "react-icons/io5";
 
 interface Review {
   reviewId: string;
@@ -24,6 +24,60 @@ interface ProductReviewsProps {
   product: Product;
 }
 
+function ProductReviewCard({ review }: { review: Review }) {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const isLong = (review.review || "").length > 120;
+
+  return (
+    <div className="p-6 v2-glass rounded-3xl border border-[var(--v2-glass-border,rgba(255,255,255,0.08))] hover:border-[var(--v2-accent,#2EE66A)]/30 transition-all group flex flex-col justify-between min-h-[220px] h-full">
+      <div>
+        <div className="flex items-center gap-3 mb-4">
+          <div className="w-10 h-10 rounded-full bg-[var(--v2-accent,#2EE66A)] text-white dark:text-[#0A0A0A] font-black uppercase flex items-center justify-center text-xs shrink-0">
+            {review.userName?.[0] || "U"}
+          </div>
+          <div>
+            <span className="block text-sm font-black text-[var(--v2-text-primary,#F5F5F5)] m-0 leading-tight flex items-center gap-2">
+              {review.userName}
+              {review.source === "GOOGLE" && <FcGoogle size={14} />}
+            </span>
+            <span className="text-[10px] text-[var(--v2-text-muted,#666666)] uppercase tracking-wider font-extrabold block mt-0.5">
+              {review.source === "GOOGLE"
+                ? "Verified Google Review"
+                : formatDistanceToNow(new Date(review.createdAt), { addSuffix: true })}
+            </span>
+          </div>
+        </div>
+
+        <Rate
+          disabled
+          defaultValue={review.rating}
+          style={{ color: "var(--v2-accent,#2EE66A)", fontSize: 12 }}
+          className="mb-3 block"
+        />
+
+        <p
+          className={`text-xs text-[var(--v2-text-secondary,#A0A0A0)] leading-relaxed font-medium italic m-0 transition-all ${
+            !isExpanded && isLong ? "line-clamp-3" : ""
+          }`}
+        >
+          &ldquo;{review.review}&rdquo;
+        </p>
+
+        {isLong && (
+          <button
+            type="button"
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="mt-2 inline-flex items-center gap-1 text-[11px] font-extrabold text-[var(--v2-accent,#2EE66A)] hover:underline border-none bg-transparent cursor-pointer p-0 uppercase tracking-wider"
+          >
+            <span>{isExpanded ? "Show Less" : "Read More"}</span>
+            {isExpanded ? <IoChevronUp size={12} /> : <IoChevronDown size={12} />}
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
 const ProductReviews = ({ product }: ProductReviewsProps) => {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
@@ -34,7 +88,24 @@ const ProductReviews = ({ product }: ProductReviewsProps) => {
     setLoading(true);
     try {
       const res = await axiosInstance.get(`/web/reviews?itemId=${product.id}&limit=20`);
-      setReviews(res.data);
+      const rawData = Array.isArray(res.data)
+        ? res.data
+        : Array.isArray(res.data?.reviews)
+        ? res.data.reviews
+        : Array.isArray(res.data?.data)
+        ? res.data.data
+        : [];
+
+      const mappedReviews: Review[] = rawData.map((r: any, idx: number) => ({
+        reviewId: r.reviewId || r.id || r._id || `review-${idx}`,
+        userName: r.userName || r.author_name || r.name || "Verified Customer",
+        rating: typeof r.rating === "number" ? r.rating : 5,
+        review: r.review || r.text || r.comment || r.reviewText || r.content || "Great product and excellent quality!",
+        source: r.source || "WEB",
+        createdAt: r.createdAt || r.date || new Date().toISOString(),
+      }));
+
+      setReviews(mappedReviews);
     } catch (error) {
       console.error("Failed to fetch reviews", error);
     } finally {
@@ -85,7 +156,7 @@ const ProductReviews = ({ product }: ProductReviewsProps) => {
         </button>
       </div>
 
-      {/* Floating reviews container (no dashed box wrapper) */}
+      {/* Floating reviews container */}
       <div className="w-full">
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -98,31 +169,7 @@ const ProductReviews = ({ product }: ProductReviewsProps) => {
         ) : reviews.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {reviews.map((review) => (
-              <div
-                key={review.reviewId}
-                className="p-6 v2-glass rounded-3xl border border-[var(--v2-glass-border,rgba(255,255,255,0.08))] hover:border-[var(--v2-accent,#2EE66A)]/30 transition-all group"
-              >
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-full bg-[var(--v2-accent,#2EE66A)] text-white dark:text-[#0A0A0A] font-black uppercase flex items-center justify-center text-xs shrink-0">
-                    {review.userName?.[0] || "U"}
-                  </div>
-                  <div>
-                    <span className="block text-sm font-black text-[var(--v2-text-primary,#F5F5F5)] m-0 leading-tight flex items-center gap-2">
-                      {review.userName}
-                      {review.source === "GOOGLE" && (
-                        <FcGoogle size={14} />
-                      )}
-                    </span>
-                    <span className="text-[10px] text-[var(--v2-text-muted,#666666)] uppercase tracking-wider font-extrabold block mt-0.5">
-                      {review.source === "GOOGLE" ? "Verified Google Review" : formatDistanceToNow(new Date(review.createdAt), { addSuffix: true })}
-                    </span>
-                  </div>
-                </div>
-                <Rate disabled defaultValue={review.rating} style={{ color: "var(--v2-accent,#2EE66A)", fontSize: 12 }} className="mb-3 block" />
-                <p className="text-xs text-[var(--v2-text-secondary,#A0A0A0)] leading-relaxed font-medium italic m-0">
-                  "{review.review}"
-                </p>
-              </div>
+              <ProductReviewCard key={review.reviewId} review={review} />
             ))}
           </div>
         ) : (
