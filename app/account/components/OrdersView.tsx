@@ -76,9 +76,21 @@ const OrdersView: React.FC<OrdersViewProps> = ({ orders }) => {
                         {order.status || "PROCESSING"}
                       </h3>
                     </div>
-                    <span className="text-[10px] font-extrabold uppercase tracking-widest text-[var(--v2-text-muted,#666666)]">
-                      {order.id?.toUpperCase()}
-                    </span>
+                    <div className="flex items-center gap-2">
+                      {order.riskStatus === 'HIGH_RISK' && !order.deliveryFeePrepaid && (
+                        <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-500 border border-amber-500/30 text-[9px] font-bold uppercase tracking-wider">
+                          ⚠️ PREPAID FEE PENDING
+                        </span>
+                      )}
+                      {order.riskStatus === 'HIGH_RISK' && order.deliveryFeePrepaid && (
+                        <span className="px-2 py-0.5 rounded-full bg-[var(--v2-accent,#2EE66A)]/20 text-[var(--v2-accent,#2EE66A)] border border-[var(--v2-accent,#2EE66A)]/30 text-[9px] font-bold uppercase tracking-wider">
+                          ✓ FEE PAID
+                        </span>
+                      )}
+                      <span className="text-[10px] font-extrabold uppercase tracking-widest text-[var(--v2-text-muted,#666666)]">
+                        {order.id?.toUpperCase()}
+                      </span>
+                    </div>
                   </div>
 
                   <p className="text-xs text-[var(--v2-text-secondary,#A0A0A0)] m-0 mb-3 line-clamp-1">

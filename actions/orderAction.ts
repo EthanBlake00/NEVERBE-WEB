@@ -198,3 +198,40 @@ export const getOrderById = async (orderId: string) => {
     throw e;
   }
 };
+
+/**
+ * Process a delivery fee prepayment for high-risk COD orders
+ */
+export const processDeliveryFeePrepayment = async (order: Order, customer: any) => {
+  try {
+    const token = await getIdToken();
+    const payload = {
+      orderId: `${order.orderId}-FEE`,
+      amount: "450",
+      firstName: customer.firstName || customer.first_name || "",
+      lastName: customer.lastName || customer.last_name || "",
+      email: customer.email || "",
+      phone: customer.phone || "",
+      address: customer.address || "",
+      city: customer.city || "",
+      items: `Delivery Prepayment Fee for Order #${order.orderId}`,
+    };
+    
+    const formData = new FormData();
+    formData.append("data", JSON.stringify(payload));
+    
+    const response = await axiosInstance.post(
+      "/web/ipg/payhere/initiate",
+      formData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+
+    return response.data;
+  } catch (e) {
+    throw e;
+  }
+};

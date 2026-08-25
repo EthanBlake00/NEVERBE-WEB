@@ -9,6 +9,7 @@ import {
   IoLocationOutline,
   IoCardOutline,
   IoCheckmarkCircle,
+  IoWarningOutline,
 } from "react-icons/io5";
 import { toSafeLocaleString } from "@/actions/utilAction";
 import Image from "next/image";
@@ -17,6 +18,8 @@ import { Button } from "antd";
 import { Order } from "@/interfaces/Order";
 import { BusinessInfo } from "@/config/BusinessInfo";
 import { axiosInstance } from "@/actions/axiosInstance";
+import { initiatePayHerePayment, submitExternalForm } from "@/actions/orderAction";
+import toast from "react-hot-toast";
 
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
@@ -43,6 +46,7 @@ const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
   onClose,
 }) => {
   const [downloading, setDownloading] = React.useState(false);
+  const [processingFee, setProcessingFee] = React.useState(false);
 
   if (!isOpen || !order) return null;
 
@@ -95,6 +99,33 @@ const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
   const couponDiscountSum = (order as any).couponDiscount || discount || 0;
   const promotionDiscountSum = (order as any).promotionDiscount || 0;
   const total = subtotal - (couponDiscountSum + promotionDiscountSum) + (shippingFee || 0) + (fee || 0);
+
+  const handlePayDeliveryFee = async () => {
+    if (!order) return;
+    setProcessingFee(true);
+    try {
+      const [firstName, ...lastNameParts] = (order.customer?.name || "Customer").split(" ");
+      const payload = {
+        orderId: `${order.orderId}-FEE`,
+        amount: "450.00",
+        firstName,
+        lastName: lastNameParts.join(" ") || firstName,
+        email: order.customer?.email || "",
+        phone: order.customer?.phone || "",
+        address: order.customer?.address || "",
+        city: order.customer?.city || "",
+        items: `Prepaid Delivery Fee for Order #${order.orderId}`,
+      };
+
+      const payherePayload = await initiatePayHerePayment(payload);
+      submitExternalForm(process.env.NEXT_PUBLIC_PAYHERE_URL || "", payherePayload);
+    } catch (err: any) {
+      console.error("Delivery fee prepayment launch error:", err);
+      toast.error("Failed to launch delivery fee prepayment.");
+    } finally {
+      setProcessingFee(false);
+    }
+  };
 
   const handleDownloadInvoice = async () => {
     setDownloading(true);
@@ -499,6 +530,51 @@ const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
                 ))}
               </div>
             </div>
+
+            {/* DELIVERY FEE PREPAYMENT */}
+            {order.riskStatus === 'HIGH_RISK' && (
+              <div className="mt-6 mb-10">
+                {order.deliveryFeePrepaid ? (
+                  <div className="bg-accent/10 border border-accent rounded-[2.5rem] p-6 md:p-8 flex items-center gap-5">
+                    <div className="w-12 h-12 bg-accent/20 rounded-full flex items-center justify-center shrink-0">
+                      <IoCheckmarkCircle className="text-accent text-2xl" />
+                    </div>
+                    <div>
+                      <h3 className="text-primary-dark font-display font-black uppercase text-lg">
+                        Delivery Fee Paid
+                      </h3>
+                      <p className="text-muted text-sm mt-1">
+                        LKR 450 Delivery Fee has been confirmed. {(order as any).deliveryFeeTxnId ? `Transaction: ${(order as any).deliveryFeeTxnId}` : ""}
+                      </p>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="bg-amber-500/10 border border-amber-500 rounded-[2.5rem] p-6 md:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
+                    <div className="flex items-start gap-5">
+                      <div className="w-12 h-12 bg-amber-500/20 rounded-full flex items-center justify-center shrink-0">
+                        <IoWarningOutline className="text-amber-500 text-2xl" />
+                      </div>
+                      <div>
+                        <h3 className="text-primary-dark font-display font-black uppercase text-lg">
+                          Delivery Fee Required (LKR 450)
+                        </h3>
+                        <p className="text-primary-dark/70 text-sm mt-1 max-w-lg">
+                          To process this order and dispatch it immediately, please pay the prepaid delivery fee.
+                        </p>
+                      </div>
+                    </div>
+                    <Button
+                      onClick={handlePayDeliveryFee}
+                      loading={processingFee}
+                      disabled={processingFee}
+                      className="bg-amber-500 hover:bg-amber-400 text-black border-none text-xs font-black uppercase tracking-widest rounded-full px-8 h-12 shadow-md shrink-0 transition-all"
+                    >
+                      Pay LKR 450 Delivery Fee
+                    </Button>
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* DELIVERY & PAYMENT GRID */}
             <div className="grid md:grid-cols-2 gap-10 pt-10 border-t border-default">

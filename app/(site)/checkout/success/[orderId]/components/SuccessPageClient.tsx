@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { Order } from "@/interfaces";
 import SuccessAnimationComponents from "./SuccessAnimationComponents";
@@ -9,11 +9,41 @@ import PrepaidFeeBanner from "@/app/(site)/checkout/components/PrepaidFeeBanner"
 import PrepaidFeeDecisionModal from "@/app/(site)/checkout/components/PrepaidFeeDecisionModal";
 import { initiatePayHerePayment, submitExternalForm } from "@/actions/orderAction";
 import toast from "react-hot-toast";
+import axiosInstance from "@/actions/axiosInstance";
 
 export default function SuccessPageClient({ order }: { order: Order }) {
-  const isHighRiskPending = order?.riskStatus === "HIGH_RISK" && !order?.deliveryFeePrepaid;
+  const [feePaid, setFeePaid] = useState(order?.deliveryFeePrepaid || false);
+  const isHighRiskPending = order?.riskStatus === "HIGH_RISK" && !feePaid;
   const [showModal, setShowModal] = useState<boolean>(isHighRiskPending);
   const [isDismissed, setIsDismissed] = useState<boolean>(false);
+  const pollCountRef = useRef(0);
+
+  useEffect(() => {
+    if (isHighRiskPending) {
+      const intervalId = setInterval(async () => {
+        pollCountRef.current += 1;
+        if (pollCountRef.current > 20) {
+          clearInterval(intervalId);
+          return;
+        }
+        
+        try {
+          const response = await axiosInstance.get(`/web/orders/${order.orderId}/prepaid-status`);
+          const statusData = response.data?.data || response.data;
+          if (statusData?.deliveryFeePrepaid === true) {
+            setFeePaid(true);
+            setShowModal(false);
+            clearInterval(intervalId);
+            toast.success('Delivery fee confirmed! Your order will be dispatched shortly.');
+          }
+        } catch (error) {
+          console.error("Failed to poll prepaid status:", error);
+        }
+      }, 3000);
+      
+      return () => clearInterval(intervalId);
+    }
+  }, [isHighRiskPending, order.orderId]);
 
   const handlePayFeeNow = async () => {
     if (!order) return;
@@ -81,6 +111,17 @@ export default function SuccessPageClient({ order }: { order: Order }) {
               >
                 Pay LKR 450 Delivery Fee Online
               </button>
+            </div>
+          )}
+
+          {order?.riskStatus === 'HIGH_RISK' && feePaid && (
+            <div className="w-full bg-[var(--v2-accent,#2EE66A)]/10 border border-[var(--v2-accent,#2EE66A)]/30 rounded-2xl p-4 mb-8 text-left">
+              <p className="text-xs font-bold text-[var(--v2-accent,#2EE66A)] mb-1">
+                ✓ Delivery Fee Paid
+              </p>
+              <p className="text-[11px] text-[var(--v2-text-secondary,#A0A0A0)] leading-relaxed m-0">
+                LKR 450 delivery fee has been confirmed. Your order will be dispatched shortly!
+              </p>
             </div>
           )}
 

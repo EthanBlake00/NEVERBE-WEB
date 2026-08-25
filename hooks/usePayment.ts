@@ -473,7 +473,10 @@ export const usePayment = (options: UsePaymentOptions): UsePaymentReturn => {
         dispatch(clearBag());
 
         if (isHighRisk) {
-          toast.info("Order registered! Rs. 450 Delivery Fee Prepayment is required for dispatch.", { duration: 6000 });
+          toast("Order registered! Rs. 450 Delivery Fee Prepayment is required for dispatch.", {
+            duration: 6000,
+            icon: 'ℹ️',
+          });
           setPrepaidFeeState({
             showModal: true,
             order: pendingOrderWithRisk,

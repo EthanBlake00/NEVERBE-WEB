@@ -254,8 +254,10 @@ const CheckoutForm = () => {
     }
   };
 
-  const handlePaymentSubmit = async (values: any) => {
+  const handlePaymentSubmit = async () => {
     try {
+      const values = form.getFieldsValue(true);
+      
       if (otpState.pendingOrder) {
         openOTPModal();
         return;
@@ -332,6 +334,7 @@ const CheckoutForm = () => {
       <Form
         form={form}
         layout="vertical"
+        preserve={true}
         onFinish={handlePaymentSubmit}
         onFinishFailed={() => {
           if (otpState.pendingOrder) {
