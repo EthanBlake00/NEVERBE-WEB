@@ -294,6 +294,27 @@ export const usePayment = (options: UsePaymentOptions): UsePaymentReturn => {
   };
 
   /**
+   * Process Prepaid Delivery Fee Payment (LKR 450) via PayHere for High-Risk COD Orders
+   */
+  const processDeliveryFeePrepayment = async (order: Order, customer: Customer) => {
+    const [firstName, ...lastNameParts] = customer.name.split(" ");
+    const payload = {
+      orderId: `${order.orderId}-FEE`,
+      amount: "450.00",
+      firstName,
+      lastName: lastNameParts.join(" ") || firstName,
+      email: customer.email,
+      phone: customer.phone,
+      address: customer.address,
+      city: customer.city,
+      items: `Prepaid Delivery Fee for Order #${order.orderId}`,
+    };
+
+    const payherePayload = await initiatePayHerePayment(payload);
+    return payherePayload;
+  };
+
+  /**
    * Process KOKO Payment
    */
   const processKOKO = async (order: Order, customer: Customer) => {
@@ -431,11 +452,27 @@ export const usePayment = (options: UsePaymentOptions): UsePaymentReturn => {
         await verifyOTP(otpState.pendingOrder.customer.phone, otp);
 
         const token = await executeRecaptcha("finalize_cod");
-        await addNewOrder(otpState.pendingOrder, token);
-        await sendCODOrderNotifications(otpState.pendingOrder.orderId!, token);
+        const isHighRisk = otpState.pendingOrder.riskStatus === "HIGH_RISK";
+        const pendingOrderWithRisk: Order = {
+          ...otpState.pendingOrder,
+          deliveryFeePrepaid: false,
+        };
+
+        await addNewOrder(pendingOrderWithRisk, token);
+        await sendCODOrderNotifications(pendingOrderWithRisk.orderId!, token);
 
         dispatch(clearBag());
-        router.replace(`/checkout/success/${otpState.pendingOrder.orderId}`);
+
+        if (isHighRisk) {
+          toast.info("High risk flagged: Opening LKR 450 Delivery Fee Prepayment gateway...", { duration: 6000 });
+          const payherePayload = await processDeliveryFeePrepayment(pendingOrderWithRisk, pendingOrderWithRisk.customer);
+          submitExternalForm(
+            process.env.NEXT_PUBLIC_PAYHERE_URL || "",
+            payherePayload
+          );
+        } else {
+          router.replace(`/checkout/success/${pendingOrderWithRisk.orderId}`);
+        }
       } catch (err: any) {
         console.error("OTP Verification Error:", err);
         const serverMessage = err.response?.data?.message;
