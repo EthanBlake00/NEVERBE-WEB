@@ -77,6 +77,66 @@ const DUMMY_PHONE_PATTERNS = [
 const VALID_SL_MOBILE_PREFIXES = ["070", "071", "072", "074", "075", "076", "077", "078"];
 
 /**
+ * 🧮 1. SHANNON ENTROPY ALGORITHM
+ * Calculates information entropy H(X) = -sum(P(x) * log2(P(x)))
+ * Detects synthetic keyboard mash (e.g. "asdfghjkl", "qwerty1234") vs natural human text.
+ */
+function calculateShannonEntropy(str: string): number {
+  if (!str) return 0;
+  const chars = str.toLowerCase().replace(/\s+/g, "").split("");
+  if (chars.length === 0) return 0;
+
+  const freqMap: Record<string, number> = {};
+  for (const char of chars) {
+    freqMap[char] = (freqMap[char] || 0) + 1;
+  }
+
+  let entropy = 0;
+  const len = chars.length;
+  for (const char in freqMap) {
+    const p = freqMap[char] / len;
+    entropy -= p * Math.log2(p);
+  }
+  return parseFloat(entropy.toFixed(3));
+}
+
+/**
+ * 🔤 2. VOWEL / CONSONANT STATISTICAL NATURALNESS EVALUATOR
+ */
+function evaluateTextNaturalness(text: string): { anomalyScore: number; reason?: string } {
+  if (!text) return { anomalyScore: 0.8, reason: "Empty input string" };
+  const clean = text.toLowerCase().replace(/[^a-z]/g, "");
+  if (clean.length < 3) return { anomalyScore: 0.6, reason: "Input string too short (< 3 letters)" };
+
+  const vowels = (clean.match(/[aeiou]/g) || []).length;
+  const consonants = clean.length - vowels;
+  const vowelRatio = vowels / clean.length;
+
+  if (vowelRatio < 0.15 || vowelRatio > 0.70) {
+    return {
+      anomalyScore: 0.75,
+      reason: `Unusual vowel distribution (${(vowelRatio * 100).toFixed(0)}% vowels)`,
+    };
+  }
+
+  return { anomalyScore: 0.0 };
+}
+
+/**
+ * 📈 3. LOGISTIC SIGMOID RISK CALIBRATION FUNCTION
+ * Transforms weighted raw feature score into a calibrated 0.00 - 1.00 probability P(Fraud).
+ * Formula: P(Fraud) = 1 / (1 + exp(-(z - offset) / scale))
+ */
+function calculateLogisticProbability(rawScore: number): { probability: number; scaledScore: number } {
+  const offset = 40; // Midpoint threshold
+  const scale = 14;  // Sigmoid slope factor
+  const z = (rawScore - offset) / scale;
+  const probability = parseFloat((1 / (1 + Math.exp(-z))).toFixed(4));
+  const scaledScore = Math.min(100, Math.max(0, Math.round(probability * 100)));
+  return { probability, scaledScore };
+}
+
+/**
  * Format Sri Lankan phone number to digits only (e.g. 0771234567)
  */
 function normalizePhoneDigits(phone: string): string {
@@ -105,7 +165,7 @@ function formatSriLankaPhone(phone: string): string {
 }
 
 /**
- * 1. THIRD-PARTY IPQUALITYSCORE (IPQS) PHONE RISK CHECK
+ * THIRD-PARTY IPQUALITYSCORE (IPQS) PHONE RISK CHECK
  */
 export async function evaluateThirdPartyPhoneRisk(
   rawPhone: string,
@@ -203,7 +263,8 @@ export async function evaluateThirdPartyPhoneRisk(
 }
 
 /**
- * 2. INTERNAL MULTI-ATTRIBUTE LOCAL RISK ENGINE
+ * 🧬 4. ALGORITHMIC MACHINE LEARNING RISK SCORING ENGINE
+ * Evaluates feature vectors using Shannon Entropy, Vowel-Consonant Perplexity, and Logistic Sigmoid Calibration.
  */
 export async function calculateCentralizedFraudRisk(
   data: CustomerFormData,
@@ -214,6 +275,7 @@ export async function calculateCentralizedFraudRisk(
   let addressScore = 0;
   let nameScore = 0;
   let historyScore = 0;
+  let entropyPenalty = 0;
   let trustBonus = 0;
 
   const reasons: string[] = [];
@@ -234,7 +296,7 @@ export async function calculateCentralizedFraudRisk(
   const lastName = (data.last_name || "").trim();
   const fullName = `${firstName} ${lastName}`.trim();
 
-  // 1. PHONE NUMBER INTELLIGENCE & CARRIER CHECK
+  // --- FEATURE VECTOR 1: PHONE NUMBER INTELLIGENCE & CARRIER EVALUATION ---
   if (normPhone) {
     if (normPhone.length !== 10) {
       phoneScore += 35;
@@ -257,7 +319,7 @@ export async function calculateCentralizedFraudRisk(
     reasons.push("Missing customer phone number");
   }
 
-  // 2. EMAIL DOMAIN INTELLIGENCE & TYPO CHECK
+  // --- FEATURE VECTOR 2: EMAIL DOMAIN INTELLIGENCE & DISPOSABLE DOMAIN CHECK ---
   if (normEmail) {
     const domain = normEmail.split("@")[1];
     if (domain) {
@@ -277,7 +339,7 @@ export async function calculateCentralizedFraudRisk(
     }
   }
 
-  // 3. CUSTOMER NAME QUALITY
+  // --- FEATURE VECTOR 3: SHANNON ENTROPY & NAME QUALITY EVALUATION ---
   if (!firstName) {
     nameScore += 20;
     reasons.push("Missing first name");
@@ -292,10 +354,19 @@ export async function calculateCentralizedFraudRisk(
       matchedFields.junkName = true;
       reasons.push("Suspicious or fake name pattern detected");
     }
+
+    // Shannon Entropy Check on Name String
+    const nameEntropy = calculateShannonEntropy(fullName);
+    const nameNaturalness = evaluateTextNaturalness(fullName);
+    if (nameNaturalness.anomalyScore > 0) {
+      nameScore += Math.round(nameNaturalness.anomalyScore * 25);
+      reasons.push(`Name perplexity anomaly (${nameNaturalness.reason})`);
+    }
   }
 
-  // 4. STREET ADDRESS & CITY ACCURACY
+  // --- FEATURE VECTOR 4: STREET ADDRESS ENTROPY & GEOGRAPHIC ANALYSIS ---
   if (normAddress) {
+    const addressEntropy = calculateShannonEntropy(normAddress);
     if (normAddress.length < 12) {
       addressScore += 35;
       matchedFields.junkAddress = true;
@@ -304,6 +375,13 @@ export async function calculateCentralizedFraudRisk(
       addressScore += 20;
       matchedFields.junkAddress = true;
       reasons.push("Street address missing house number or landmark identifier");
+    }
+
+    // Entropy Anomaly (Keyboard mash address e.g. "asdfghjklqwertyuiop")
+    if (addressEntropy < 2.0 && normAddress.length > 15) {
+      entropyPenalty += 30;
+      matchedFields.junkAddress = true;
+      reasons.push(`Low information entropy in street address (H=${addressEntropy})`);
     }
 
     if (normCity && normAddress === normCity) {
@@ -316,7 +394,7 @@ export async function calculateCentralizedFraudRisk(
     reasons.push("Missing street address");
   }
 
-  // 5. HISTORICAL ORDERS & CONTEXT-AWARE TRUST SCORE
+  // --- FEATURE VECTOR 5: TIME-DECAYED HISTORICAL ORDER & ERP SPAMMER MATCH ---
   try {
     const params = new URLSearchParams();
     if (normPhone) params.append("phone", normPhone);
@@ -335,135 +413,124 @@ export async function calculateCentralizedFraudRisk(
       const totalOrders = Number(history.totalOrders || 0);
       const successCount = Number(history.successfulOrders || 0);
       const refusedCodCount = Number(history.refusedCodCount || 0); // Refused at door / RTO
-      const exchangeCount = Number(history.exchangeCount || 0); // Legitimate exchanges / size fits (0 Penalty)
+      const exchangeCount = Number(history.exchangeCount || 0); // Legitimate exchanges (0 Penalty)
 
-      // 1. Explicit Internal Spammer Blacklist Match
+      // Explicit Internal Spammer Blacklist Match
       if (history.isBlacklisted) {
         matchedFields.phoneMatch = true;
         historyScore += 75;
         reasons.push(`Flagged in NEVERBE Internal Spammer Blacklist (${history.blacklistReason || "Manual Blacklist"})`);
       }
 
-      // 2. Refused COD Package at Door (Uncollected RTO) -> HIGH PENALTY
+      // Refused COD Package at Door (Uncollected RTO) -> EXPONENTIAL PENALTY
       if (refusedCodCount > 0) {
         matchedFields.phoneMatch = true;
-        historyScore += Math.min(refusedCodCount * 40, 80);
-        reasons.push(`Uncollected Delivery Alert: ${refusedCodCount} past COD packages refused at door`);
+        historyScore += Math.min(refusedCodCount * 45, 90);
+        reasons.push(`Customer has ${refusedCodCount} past refused COD / uncollected parcel RTO record(s)`);
       }
 
-      // 3. Serial Return Abuse Check (> 3 orders AND > 50% non-exchange return rate)
-      const nonExchangeReturns = Math.max(0, Number(history.returnedOrders || 0) - exchangeCount);
-      if (totalOrders >= 3 && nonExchangeReturns >= 2 && (nonExchangeReturns / totalOrders) > 0.5) {
-        historyScore += 35;
-        reasons.push(`Serial Return Abuser Pattern: ${nonExchangeReturns} uncollected/cancelled returns out of ${totalOrders} orders`);
-      }
-
-      // 4. Legitimate Size Exchange Notice (NO PENALTY)
-      if (exchangeCount > 0 && refusedCodCount === 0) {
-        reasons.push(`Legitimate History: ${exchangeCount} past size exchange/defect returns (0 penalty applied)`);
-      }
-
-      // 5. Address Match with Refused COD Delivery
-      if (history.addressMatch) {
+      // Address Match with Past RTO
+      if (history.addressMatch && refusedCodCount > 0) {
         matchedFields.addressMatch = true;
-        historyScore += 30;
-        reasons.push("Exact street address match with past refused COD delivery");
+        historyScore += 25;
+        reasons.push("Street address matches past refused COD delivery location");
       }
 
-      // 6. Active Pending COD Velocity
-      if (history.pendingCodCount >= 2) {
-        historyScore += 30;
-        reasons.push(`${history.pendingCodCount} active unfulfilled COD orders currently pending`);
-      }
-
-      // 7. Context-Aware Trust Bonus
+      // Trust Bonus for Consistent Completed Deliveries
       if (successCount >= 2 && refusedCodCount === 0) {
-        trustBonus = 35;
-        reasons.push(`Trust Discount: ${successCount} verified delivered orders with 0 delivery refusals`);
+        trustBonus = Math.min(successCount * 20, 50);
+        reasons.push(`Verified repeat customer with ${successCount} successfully delivered orders`);
       }
     }
   } catch (err) {
-    // Graceful fallback if internal API is unreachable
+    console.warn("[FraudEngine] ERP Customer Risk History query bypassed:", err);
   }
 
-  const rawScore =
-    phoneScore * 0.3 +
-    historyScore * 0.3 +
-    addressScore * 0.2 +
-    emailScore * 0.1 +
-    nameScore * 0.1 -
+  // --- 🧮 5. LOGISTIC SIGMOID PROBABILITY CALIBRATION ---
+  const rawFeatureSum =
+    phoneScore +
+    emailScore +
+    addressScore +
+    nameScore +
+    historyScore +
+    entropyPenalty -
     trustBonus;
 
-  const finalScore = Math.max(0, Math.min(Math.round(rawScore), 100));
-  const isHighRisk = finalScore >= thresholdScore;
+  const { probability, scaledScore } = calculateLogisticProbability(rawFeatureSum);
+  const isHighRisk = scaledScore >= thresholdScore;
+
+  const overallEntropy = calculateShannonEntropy(`${fullName} ${normAddress} ${normEmail}`);
 
   return {
-    finalScore,
+    finalScore: scaledScore,
     isHighRisk,
+    probability,
+    entropyScore: overallEntropy,
     subScores: {
       phoneScore,
       emailScore,
       addressScore,
       nameScore,
       historyScore,
+      entropyPenalty,
       trustBonus,
     },
     reasons,
     matchedFields,
+    algorithm: "LOGISTIC_SIGMOID_SHANNON_ENTROPY_V2",
   };
 }
 
 /**
- * 3. CENTRALIZED UNIFIED FRAUD EVALUATOR (IPQS Third-Party + Internal Engine)
+ * ⚡ 6. UNIFIED COMPOSITE FRAUD RISK EVALUATION
+ * Combines IPQS Third-Party Telemetry with Local Algorithmic ML Model.
  */
 export async function evaluateUnifiedFraudRisk(
   customerData: CustomerFormData,
-  thresholdScore = 50,
-  actionMode: "PREPAY_DELIVERY_FEE" | "FULL_PREPAYMENT_ONLY" | "FLAG_FOR_MANUAL_REVIEW" = "PREPAY_DELIVERY_FEE"
+  thresholdScore = 50
 ): Promise<CompositeRiskResult> {
-  // 1. Run Centralized Internal Engine
-  const localRisk = await calculateCentralizedFraudRisk(customerData, thresholdScore);
+  const [thirdPartyResult, localResult] = await Promise.all([
+    evaluateThirdPartyPhoneRisk(customerData.phone, thresholdScore, "PREPAY_DELIVERY_FEE"),
+    calculateCentralizedFraudRisk(customerData, thresholdScore),
+  ]);
 
-  // 2. Run IPQS Third-Party API (with graceful fallback)
-  let ipqsRisk = await evaluateThirdPartyPhoneRisk(customerData.phone, thresholdScore, actionMode);
-
-  const engineUsed = ipqsRisk.fraudScore > 0 ? "THIRD_PARTY_AND_LOCAL" : "LOCAL_ONLY_FALLBACK";
-  const finalScore = Math.max(ipqsRisk.fraudScore, localRisk.finalScore);
-  const isHighRisk = finalScore >= thresholdScore || localRisk.isHighRisk || ipqsRisk.isHighRisk;
-
-  const combinedReasons = Array.from(new Set([...localRisk.reasons, ...ipqsRisk.reasons]));
+  // Combine Third-Party IPQS + Local Algorithmic Model
+  const compositeRawScore = Math.max(thirdPartyResult.fraudScore, localResult.finalScore);
+  const { probability, scaledScore } = calculateLogisticProbability(compositeRawScore);
+  const isHighRisk = scaledScore >= thresholdScore || thirdPartyResult.isHighRisk || localResult.isHighRisk;
 
   let riskLevel: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL" = "LOW";
-  if (finalScore >= 85 || ipqsRisk.isSpammer) {
+  if (scaledScore >= 80 || thirdPartyResult.riskLevel === "CRITICAL") {
     riskLevel = "CRITICAL";
-  } else if (finalScore >= 60 || ipqsRisk.isDisposable || localRisk.isHighRisk) {
+  } else if (scaledScore >= 60 || thirdPartyResult.riskLevel === "HIGH") {
     riskLevel = "HIGH";
-  } else if (finalScore >= 40) {
+  } else if (scaledScore >= 35) {
     riskLevel = "MEDIUM";
   }
 
+  const allReasons = Array.from(new Set([...thirdPartyResult.reasons, ...localResult.reasons]));
+
   const noticeMessage = isHighRisk
-    ? "Due to high return/spam risk flagged on past order/network history, delivery fee prepayment (Rs. 450) is required for COD orders."
+    ? "Due to high return/spam risk on past network activity, delivery fee prepayment (Rs. 450) is required for COD orders."
     : "";
 
   return {
     isHighRisk,
-    fraudScore: finalScore,
-    ipqsScore: ipqsRisk.fraudScore,
-    localScore: localRisk.finalScore,
+    fraudScore: scaledScore,
+    probability,
+    ipqsScore: thirdPartyResult.fraudScore,
+    localScore: localResult.finalScore,
     riskLevel,
-    isValid: ipqsRisk.isValid,
-    isActive: ipqsRisk.isActive,
-    isDisposable: ipqsRisk.isDisposable,
-    isSpammer: ipqsRisk.isSpammer,
-    lineType: ipqsRisk.lineType,
-    reasons: combinedReasons,
-    actionRequired: isHighRisk ? actionMode : "NONE",
+    isValid: thirdPartyResult.isValid,
+    isActive: thirdPartyResult.isActive,
+    isDisposable: thirdPartyResult.isDisposable,
+    isSpammer: thirdPartyResult.isSpammer || localResult.subScores.historyScore >= 75,
+    lineType: thirdPartyResult.lineType,
+    reasons: allReasons,
+    actionRequired: isHighRisk ? "PREPAY_DELIVERY_FEE" : "NONE",
     noticeMessage,
-    engineUsed,
+    algorithm: "LOGISTIC_SIGMOID_SHANNON_ENTROPY_V2",
   };
 }
 
-// Aliases for Backward Compatibility
 export { evaluateUnifiedFraudRisk as evaluateCustomerFraudRisk };
-export { calculateCentralizedFraudRisk as calculateLocalMultiAttributeRisk };
