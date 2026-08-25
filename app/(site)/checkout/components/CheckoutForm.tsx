@@ -86,7 +86,7 @@ const CheckoutForm = () => {
     if (!formValues.phone && !formValues.email && !formValues.address) return null;
     setIsEvaluatingRisk(true);
     try {
-      const res = await evaluateCustomerFraudRisk({
+      const payload = {
         phone: formValues.phone || "",
         email: formValues.email || "",
         first_name: formValues.first_name || "",
@@ -94,12 +94,27 @@ const CheckoutForm = () => {
         address: formValues.address || "",
         city: formValues.city || "",
         zip: formValues.zip || "",
-      });
-      setRiskResult(res);
-      if (res.isHighRisk) {
+      };
+
+      let resData: CompositeRiskResult | null = null;
+      try {
+        const apiRes = await axiosInstance.post("/web/fraud-check", payload);
+        if (apiRes.data?.success && apiRes.data?.data) {
+          resData = apiRes.data.data;
+        }
+      } catch (apiErr) {
+        console.warn("[CheckoutForm] Web API /web/fraud-check fallback to server action:", apiErr);
+      }
+
+      if (!resData) {
+        resData = await evaluateCustomerFraudRisk(payload);
+      }
+
+      setRiskResult(resData);
+      if (resData?.isHighRisk) {
         toast.error("High delivery risk flagged. Delivery fee prepayment (Rs. 450) is required for COD.", { duration: 6000 });
       }
-      return res;
+      return resData;
     } catch (e) {
       console.warn("Fraud evaluation error", e);
       return null;
