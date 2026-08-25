@@ -18,6 +18,8 @@ import { signInAnonymously } from "firebase/auth";
 import { usePayment } from "@/hooks/usePayment";
 import usePromotions from "@/hooks/usePromotions";
 import axiosInstance from "@/actions/axiosInstance";
+import PrepaidFeeDecisionModal from "./PrepaidFeeDecisionModal";
+import PrepaidFeeBanner from "./PrepaidFeeBanner";
 
 const formatSriLankanPhoneNumber = (phone: string) => {
   const cleaned = phone.replace(/\D/g, "");
@@ -190,6 +192,9 @@ const CheckoutForm = () => {
     handleResendOTP,
     closeOTPModal,
     openOTPModal,
+    prepaidFeeState,
+    payPrepaidFeeNow,
+    dismissPrepaidFeeModal,
   } = usePayment({
     paymentMethodId: paymentTypeId,
     paymentMethodName: paymentType,
@@ -608,6 +613,22 @@ const CheckoutForm = () => {
       </Modal>
 
       {isProcessing && <CheckoutLoader />}
+
+      {/* Persistent Banner if dismissed */}
+      {prepaidFeeState.isDismissed && prepaidFeeState.order && (
+        <PrepaidFeeBanner
+          order={prepaidFeeState.order}
+          onPayNow={() => payPrepaidFeeNow(prepaidFeeState.order!)}
+        />
+      )}
+
+      {/* Interactive High-Risk Delivery Fee Decision Modal */}
+      <PrepaidFeeDecisionModal
+        isOpen={prepaidFeeState.showModal}
+        order={prepaidFeeState.order}
+        onPayNow={() => payPrepaidFeeNow(prepaidFeeState.order!)}
+        onDismiss={dismissPrepaidFeeModal}
+      />
     </div>
   );
 };

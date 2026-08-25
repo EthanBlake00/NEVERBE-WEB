@@ -93,6 +93,31 @@ export const initiatePayHerePayment = async (payload: any) => {
 };
 
 /**
+ * Submit form to external payment gateway
+ */
+export const submitExternalForm = (
+  action: string,
+  payload: Record<string, string>,
+) => {
+  if (typeof window === "undefined") return;
+  const form = document.createElement("form");
+  form.method = "POST";
+  form.action = action;
+  form.style.display = "none";
+
+  Object.entries(payload).forEach(([key, value]) => {
+    const input = document.createElement("input");
+    input.type = "hidden";
+    input.name = key;
+    input.value = value;
+    form.appendChild(input);
+  });
+
+  document.body.appendChild(form);
+  form.submit();
+};
+
+/**
  * Request OTP for COD verification
  */
 export const requestOTP = async (phoneNumber: string, captchaToken: string) => {

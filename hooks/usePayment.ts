@@ -103,6 +103,15 @@ interface UsePaymentReturn {
   closeOTPModal: () => void;
   openOTPModal: () => void;
   resetOTPState: () => void;
+
+  // Prepaid Fee state & handlers
+  prepaidFeeState: {
+    showModal: boolean;
+    order: Order | null;
+    isDismissed: boolean;
+  };
+  payPrepaidFeeNow: (order: Order) => Promise<void>;
+  dismissPrepaidFeeModal: () => void;
 }
 
 /**
@@ -464,12 +473,12 @@ export const usePayment = (options: UsePaymentOptions): UsePaymentReturn => {
         dispatch(clearBag());
 
         if (isHighRisk) {
-          toast.info("High risk flagged: Opening LKR 450 Delivery Fee Prepayment gateway...", { duration: 6000 });
-          const payherePayload = await processDeliveryFeePrepayment(pendingOrderWithRisk, pendingOrderWithRisk.customer);
-          submitExternalForm(
-            process.env.NEXT_PUBLIC_PAYHERE_URL || "",
-            payherePayload
-          );
+          toast.info("Order registered! Rs. 450 Delivery Fee Prepayment is required for dispatch.", { duration: 6000 });
+          setPrepaidFeeState({
+            showModal: true,
+            order: pendingOrderWithRisk,
+            isDismissed: false,
+          });
         } else {
           router.replace(`/checkout/success/${pendingOrderWithRisk.orderId}`);
         }
@@ -524,6 +533,44 @@ export const usePayment = (options: UsePaymentOptions): UsePaymentReturn => {
     [executeRecaptcha],
   );
 
+  // Prepaid Fee state for High-Risk Decision Modal & Persistent Banner
+  const [prepaidFeeState, setPrepaidFeeState] = useState<{
+    showModal: boolean;
+    order: Order | null;
+    isDismissed: boolean;
+  }>({
+    showModal: false,
+    order: null,
+    isDismissed: false,
+  });
+
+  const payPrepaidFeeNow = useCallback(async (targetOrder: Order) => {
+    if (!targetOrder) return;
+    try {
+      const payherePayload = await processDeliveryFeePrepayment(targetOrder, targetOrder.customer);
+      submitExternalForm(
+        process.env.NEXT_PUBLIC_PAYHERE_URL || "",
+        payherePayload
+      );
+    } catch (err: any) {
+      console.error("Delivery fee prepayment launch error:", err);
+      toast.error("Failed to launch delivery fee prepayment. Please try again.");
+    }
+  }, []);
+
+  const dismissPrepaidFeeModal = useCallback(() => {
+    setPrepaidFeeState((prev) => {
+      if (prev.order?.orderId) {
+        router.replace(`/checkout/success/${prev.order.orderId}?prepaidPending=true`);
+      }
+      return {
+        ...prev,
+        showModal: false,
+        isDismissed: true,
+      };
+    });
+  }, [router]);
+
   const closeOTPModal = useCallback(() => {
     setOtpState((prev) => ({ ...prev, showModal: false }));
   }, []);
@@ -555,5 +602,8 @@ export const usePayment = (options: UsePaymentOptions): UsePaymentReturn => {
     closeOTPModal,
     openOTPModal,
     resetOTPState,
+    prepaidFeeState,
+    payPrepaidFeeNow,
+    dismissPrepaidFeeModal,
   };
 };
