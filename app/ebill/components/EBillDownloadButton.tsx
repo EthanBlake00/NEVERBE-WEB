@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { Button } from "antd";
 import { IoCloudDownloadOutline } from "react-icons/io5";
@@ -25,7 +27,7 @@ const EBillDownloadButton: React.FC<EBillDownloadButtonProps> = ({ order }) => {
 
   const handleDownloadInvoice = async () => {
     setDownloading(true);
-    const { orderId, createdAt, status, items, customer, paymentMethod, shippingFee, fee, discount } = order;
+    const { orderId, createdAt, status, items, customer, paymentMethod, paymentStatus, shippingFee, fee, discount, couponDiscount, promotionDiscount, total: backendTotal } = order;
 
     try {
       const doc = new jsPDF();
@@ -47,100 +49,178 @@ const EBillDownloadButton: React.FC<EBillDownloadButtonProps> = ({ order }) => {
         );
       }
 
-      // Header & Branding
-      const img = new (window as any).Image();
-      img.src = "/logo.png";
-      
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(24);
-      doc.text(BusinessInfo.name, 50, 22);
-
-      doc.setFontSize(9);
-      doc.setFont("helvetica", "normal");
-      doc.setTextColor(120);
-      doc.text(BusinessInfo.legalName, 50, 27);
-      doc.text(`${BusinessInfo.addressLine1}, ${BusinessInfo.city}`, 50, 31);
-      doc.text(`${BusinessInfo.email} | ${BusinessInfo.website}`, 50, 35);
-      doc.text(`Tel: ${BusinessInfo.phone}`, 50, 39);
-
+      // 1. HEADER BRANDING
       try {
-        doc.addImage(img, "PNG", 14, 12, 30, 30);
+        const img = new (window as any).Image();
+        img.src = "/logo.png";
+        await new Promise((res) => {
+          img.onload = res;
+          img.onerror = res; // Proceed even if error
+        });
+        doc.addImage(img, "PNG", 14, 12, 12, 12);
       } catch (e) {
         console.error("Logo not found", e);
       }
 
       doc.setFont("helvetica", "bold");
-      doc.setFontSize(28);
-      doc.setTextColor(46, 158, 91); // Neverbe green
-      doc.text("INVOICE", 196, 22, { align: "right" });
-
-      doc.setFontSize(10);
+      doc.setFontSize(24);
+      doc.setTextColor(15, 23, 42); // slate-900
+      doc.text("INVOICE", 30, 18);
+      
       doc.setFont("helvetica", "bold");
-      doc.setTextColor(0);
-      doc.text(`Order ID: #${orderId?.toUpperCase()}`, 196, 30, { align: "right" });
-      doc.setFont("helvetica", "normal");
-      doc.setTextColor(100);
-      doc.text(`Date: ${toSafeLocaleString(createdAt)}`, 196, 35, { align: "right" });
-
-      doc.setDrawColor(230);
-      doc.line(14, 48, 196, 48);
-
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(10);
-      doc.setTextColor(0);
-      doc.text("BILLED TO", 14, 58);
-
-      doc.setFont("helvetica", "normal");
-      doc.setTextColor(80);
       doc.setFontSize(9);
+      doc.setTextColor(148, 163, 184); // slate-400
+      doc.text("OFFICIAL RECEIPT", 30, 23);
+
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(14);
+      doc.setTextColor(15, 23, 42);
+      doc.text("NeverBe.", 196, 16, { align: "right" });
+      
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(9);
+      doc.setTextColor(100, 116, 139); // slate-500
+      doc.text(BusinessInfo.addressLine1, 196, 21, { align: "right" });
+      doc.text(`${BusinessInfo.city}, Sri Lanka`, 196, 26, { align: "right" });
+      doc.text(BusinessInfo.phone, 196, 31, { align: "right" });
+
+      doc.setDrawColor(241, 245, 249); // slate-100
+      doc.setLineWidth(0.5);
+      doc.line(14, 38, 196, 38);
+
+      // 2. CUSTOMER & ORDER METADATA
+      let y = 46;
+      doc.setFontSize(8);
+      doc.setFont("helvetica", "bold");
+      doc.setTextColor(148, 163, 184); // slate-400
+      doc.text("INVOICE TO", 14, y);
+      
+      y += 5;
+      doc.setFontSize(10);
+      doc.setTextColor(15, 23, 42); // slate-900
+      doc.text(customer?.name || "Walk-in Customer", 14, y);
       
       if (customer) {
-        doc.text(customer.name || "Customer", 14, 64);
-        const splitBilling = doc.splitTextToSize(customer.address || "", 80);
-        doc.text(splitBilling, 14, 69);
-        const billingCityY = 69 + (splitBilling.length * 4.5);
-        doc.text(customer.city || "", 14, billingCityY);
-        doc.text(`Phone: ${customer.phone || "-"}`, 14, billingCityY + 5);
-      } else {
-        doc.text("Walk-in Customer", 14, 64);
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(9);
+        doc.setTextColor(71, 85, 105); // slate-600
+        const addressText = `${customer.address || ""}${customer.city ? `, ${customer.city}` : ""}${customer.zip ? ` ${customer.zip}` : ""}`;
+        const splitBilling = doc.splitTextToSize(addressText, 60);
+        y += 5;
+        doc.text(splitBilling, 14, y);
+        y += splitBilling.length * 4.5;
+        if (customer.phone) {
+          doc.text(`Tel: ${customer.phone}`, 14, y);
+        }
       }
 
+      let yShip = 46;
+      if (customer?.shippingAddress) {
+        doc.setFontSize(8);
+        doc.setFont("helvetica", "bold");
+        doc.setTextColor(148, 163, 184);
+        doc.text("SHIP TO", 80, yShip);
+
+        yShip += 5;
+        doc.setFontSize(10);
+        doc.setTextColor(15, 23, 42);
+        doc.text(customer.shippingName || customer.name, 80, yShip);
+
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(9);
+        doc.setTextColor(71, 85, 105);
+        const shipAddressText = `${customer.shippingAddress || ""}${customer.shippingCity ? `, ${customer.shippingCity}` : ""}${customer.shippingZip ? ` ${customer.shippingZip}` : ""}`;
+        const splitShipping = doc.splitTextToSize(shipAddressText, 60);
+        yShip += 5;
+        doc.text(splitShipping, 80, yShip);
+      }
+
+      // Order info on right
+      let yOrder = 46;
+      doc.setFontSize(8);
+      doc.setFont("helvetica", "bold");
+      doc.setTextColor(148, 163, 184);
+      doc.text("ORDER NO.", 196, yOrder, { align: "right" });
+      yOrder += 4.5;
+      doc.setFontSize(10);
+      doc.setTextColor(15, 23, 42);
+      doc.text(`#${orderId}`, 196, yOrder, { align: "right" });
+
+      yOrder += 8;
+      doc.setFontSize(8);
+      doc.setTextColor(148, 163, 184);
+      doc.text("DATE ISSUED", 196, yOrder, { align: "right" });
+      yOrder += 4.5;
+      doc.setFontSize(9);
+      doc.setTextColor(51, 65, 85); // slate-700
+      doc.text(toSafeLocaleString(createdAt), 196, yOrder, { align: "right" });
+
+      yOrder += 8;
+      doc.setFontSize(8);
+      doc.setTextColor(148, 163, 184);
+      doc.text("PAYMENT STATUS", 196, yOrder, { align: "right" });
+      yOrder += 4.5;
+      doc.setFontSize(9);
+      doc.setTextColor(4, 120, 87); // emerald-700
+      doc.text(paymentStatus || "PENDING", 196, yOrder, { align: "right" });
+
+      const finalMetadataY = Math.max(y + 10, yShip + 10, yOrder + 10);
+      
+      doc.setDrawColor(241, 245, 249);
+      doc.line(14, finalMetadataY - 5, 196, finalMetadataY - 5);
+
+      // 3. TABLE
       const tableColumn = ["", "Item Description", "Size", "Qty", "Price", "Discount", "Amount"];
       const tableRows = items.map((item: any) => {
-        const netItemPrice = item.price - (item.discount || 0);
-        const hasDiscount = (item.discount || 0) > 0;
+        const originalTotal = (item.price || 0) * (item.quantity || 1);
+        const discountTotal = (item.discount || 0) * (item.quantity || 1);
+        const finalTotal = originalTotal - discountTotal;
         return [
-          "", // Thumbnail
-          item.name,
-          item.size || "-",
-          item.quantity.toString(),
-          `Rs. ${item.price.toLocaleString()}`,
-          hasDiscount ? `- Rs. ${(item.discount * item.quantity).toLocaleString()}` : "-",
-          `Rs. ${(netItemPrice * item.quantity).toLocaleString()}`,
+          "", 
+          item.variantName ? `${item.name}\n(${item.variantName})` : item.name,
+          item.size || "—",
+          (item.quantity || 1).toString(),
+          `Rs ${originalTotal.toLocaleString()}`,
+          discountTotal > 0 ? `-Rs ${discountTotal.toLocaleString()}` : "—",
+          `Rs ${finalTotal.toLocaleString()}`,
         ];
       });
 
-      const tableStartY = 85;
+      const tableStartY = finalMetadataY;
       autoTable(doc, {
         head: [tableColumn],
         body: tableRows,
         startY: tableStartY,
-        theme: "grid",
-        headStyles: { fillColor: [46, 158, 91], textColor: [255, 255, 255], fontStyle: "bold", halign: "center" },
+        theme: "plain",
+        headStyles: { 
+          fillColor: [248, 250, 252], // slate-50
+          textColor: [100, 116, 139], // slate-500
+          fontStyle: "bold", 
+          fontSize: 8,
+        },
+        bodyStyles: {
+          textColor: [15, 23, 42],
+          fontSize: 9,
+        },
+        alternateRowStyles: {
+          fillColor: [248, 250, 252],
+        },
         columnStyles: { 
           0: { cellWidth: 15, halign: "center" },
-          3: { halign: "center" }, 
-          4: { halign: "right" }, 
-          5: { halign: "right" }, 
-          6: { halign: "right" } 
+          1: { fontStyle: "bold" },
+          2: { halign: "center", textColor: [51, 65, 85] }, 
+          3: { halign: "center", textColor: [51, 65, 85] }, 
+          4: { halign: "right", textColor: [51, 65, 85] },
+          5: { halign: "right", textColor: [225, 29, 72] }, 
+          6: { halign: "right", fontStyle: "bold" }, 
         },
-        styles: { fontSize: 9, cellPadding: 4, minCellHeight: 12 },
+        styles: { cellPadding: 4, minCellHeight: 12 },
         didDrawCell: (data: any) => {
           if (data.column.index === 0 && data.cell.section === "body") {
             const item = items[data.row.index];
             const img = loadedImages[item.itemId];
             if (img) {
-              const size = 8; // image size in mm
+              const size = 8;
               const x = data.cell.x + (data.cell.width - size) / 2;
               const y = data.cell.y + (data.cell.height - size) / 2;
               try {
@@ -153,47 +233,73 @@ const EBillDownloadButton: React.FC<EBillDownloadButtonProps> = ({ order }) => {
         }
       });
 
-      const finalY = (doc as any).lastAutoTable.finalY + 15;
-      const summaryX = 140;
+      // 4. TOTALS
+      const finalY = (doc as any).lastAutoTable.finalY + 10;
+      const summaryX = 130;
       const valueX = 196;
 
-      const rawSubtotal = items.reduce((sum: number, item: any) => sum + item.price * item.quantity, 0);
-      const itemDiscountTotal = items.reduce((sum: number, item: any) => sum + (item.discount || 0) * item.quantity, 0);
-      const grandTotal = order.total || (rawSubtotal - itemDiscountTotal + (shippingFee || 0) + (fee || 0));
+      const rawSubtotal = items.reduce((sum: number, item: any) => sum + (item.price || 0) * (item.quantity || 1), 0);
+      const itemDiscountTotal = items.reduce((sum: number, item: any) => sum + (item.discount || 0) * (item.quantity || 1), 0);
+      const totalDiscount = discount || 0;
+      const grandTotal = backendTotal || (rawSubtotal - totalDiscount + (shippingFee || 0) + (fee || 0));
 
-      doc.setFontSize(10);
+      let currentY = finalY;
+
+      doc.setFontSize(9);
       doc.setFont("helvetica", "normal");
-      doc.setTextColor(100);
-      doc.text("Subtotal:", summaryX, finalY);
-      doc.text(`Rs. ${rawSubtotal.toLocaleString()}`, valueX, finalY, { align: "right" });
+      doc.setTextColor(71, 85, 105); 
+      doc.text("Subtotal", summaryX, currentY);
+      doc.setFont("helvetica", "bold");
+      doc.setTextColor(15, 23, 42); 
+      doc.text(`Rs ${rawSubtotal.toLocaleString()}`, valueX, currentY, { align: "right" });
 
-      let currentY = finalY + 7;
-      if (itemDiscountTotal > 0) {
-        doc.setTextColor(46, 158, 91);
-        doc.text("Item Discounts:", summaryX, currentY);
-        doc.text(`- Rs. ${itemDiscountTotal.toLocaleString()}`, valueX, currentY, { align: "right" });
-        currentY += 7;
+      if (totalDiscount > 0) {
+        currentY += 6;
+        doc.setFont("helvetica", "normal");
+        doc.setTextColor(225, 29, 72); 
+        doc.text("Total Discount", summaryX, currentY);
+        doc.setFont("helvetica", "bold");
+        doc.text(`-Rs ${totalDiscount.toLocaleString()}`, valueX, currentY, { align: "right" });
+      }
+      if (shippingFee && shippingFee > 0) {
+        currentY += 6;
+        doc.setFont("helvetica", "normal");
+        doc.setTextColor(71, 85, 105); // slate-600
+        doc.text("Shipping Fee", summaryX, currentY);
+        doc.setFont("helvetica", "bold");
+        doc.setTextColor(15, 23, 42); // slate-900
+        doc.text(`Rs ${shippingFee.toLocaleString()}`, valueX, currentY, { align: "right" });
       }
 
-      doc.setTextColor(100);
-      doc.text("Shipping:", summaryX, currentY);
-      doc.text(`Rs. ${(shippingFee || 0).toLocaleString()}`, valueX, currentY, { align: "right" });
-      
-      currentY += 10;
-      doc.setDrawColor(230);
-      doc.line(summaryX, currentY - 5, valueX, currentY - 5);
+      if (fee && fee > 0) {
+        currentY += 6;
+        doc.setFont("helvetica", "normal");
+        doc.setTextColor(71, 85, 105); // slate-600
+        doc.text("Processing Fee", summaryX, currentY);
+        doc.setFont("helvetica", "bold");
+        doc.setTextColor(15, 23, 42); // slate-900
+        doc.text(`Rs ${fee.toLocaleString()}`, valueX, currentY, { align: "right" });
+      }
 
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(14);
-      doc.setTextColor(0);
-      doc.text("Grand Total:", summaryX, currentY);
-      doc.text(`Rs. ${grandTotal.toLocaleString()}`, valueX, currentY, { align: "right" });
+      currentY += 8;
+      doc.setDrawColor(15, 23, 42); // slate-900
+      doc.line(summaryX, currentY - 4, valueX, currentY - 4);
 
-      doc.setFontSize(8);
-      doc.setTextColor(150);
-      doc.text("THANK YOU FOR SHOPPING WITH Neverbe!", 105, 285, { align: "center" });
+      doc.setFontSize(10);
+      doc.setTextColor(15, 23, 42);
+      doc.text("GRAND TOTAL", summaryX, currentY);
+      doc.setTextColor(4, 120, 87); // emerald-700
+      doc.text(`Rs ${grandTotal.toLocaleString()}`, valueX, currentY, { align: "right" });
 
-      doc.save(`Neverbe-eBill-${orderId}.pdf`);
+      // 5. FOOTER
+      doc.setFontSize(7);
+      doc.setFont("helvetica", "normal");
+      doc.setTextColor(148, 163, 184); // slate-400
+      doc.setDrawColor(241, 245, 249); // slate-100
+      doc.line(14, 280, 196, 280);
+      doc.text("Thank you for choosing NeverBe! For support queries, contact info@neverbe.lk", 105, 285, { align: "center" });
+
+      doc.save(`NeverBe-Invoice-${orderId}.pdf`);
     } catch (err) {
       console.error("Error generating ebill PDF:", err);
     } finally {
