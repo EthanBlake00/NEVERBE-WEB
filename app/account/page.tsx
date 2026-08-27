@@ -122,7 +122,7 @@ const Account = () => {
                 height={40}
                 alt="Neverbe"
                 priority
-                className="brightness-0 invert"
+                className="dark:brightness-0 dark:invert"
               />
             </Link>
             <div className="h-6 w-px bg-[var(--v2-glass-border,rgba(255,255,255,0.1))] hidden md:block"></div>
