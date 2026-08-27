@@ -116,13 +116,18 @@ const Account = () => {
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 md:mb-12 gap-6 pb-6 border-b border-[var(--v2-glass-border,rgba(255,255,255,0.08))]">
           <div className="flex items-center gap-4">
             <Link href="/" className="hover:opacity-80 transition-opacity">
-              <Image
-                src="/logo.png"
-                width={120}
-                height={40}
-                alt="Neverbe"
-                priority
-                className="dark:brightness-0 dark:invert"
+              <div 
+                className="w-[120px] h-[40px] bg-[var(--v2-accent,#2EE66A)]"
+                style={{
+                  maskImage: 'url(/logo.png)',
+                  maskSize: 'contain',
+                  maskRepeat: 'no-repeat',
+                  maskPosition: 'left center',
+                  WebkitMaskImage: 'url(/logo.png)',
+                  WebkitMaskSize: 'contain',
+                  WebkitMaskRepeat: 'no-repeat',
+                  WebkitMaskPosition: 'left center',
+                }}
               />
             </Link>
             <div className="h-6 w-px bg-[var(--v2-glass-border,rgba(255,255,255,0.1))] hidden md:block"></div>

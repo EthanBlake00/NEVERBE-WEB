@@ -99,7 +99,7 @@ export default function ProductShowcase({
         {/* Horizontal Scroll Rail */}
         <div
           ref={scrollContainerRef}
-          className="flex items-stretch gap-4 md:gap-6 overflow-x-auto pb-4 hide-scrollbar snap-x snap-mandatory"
+          className="flex items-stretch gap-4 md:gap-6 overflow-x-auto pt-4 pb-4 -mt-4 hide-scrollbar snap-x snap-mandatory"
           style={{
             maskImage:
               "linear-gradient(90deg, transparent 0%, black 2%, black 98%, transparent 100%)",

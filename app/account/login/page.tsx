@@ -72,46 +72,96 @@ const LoginForm = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--v2-bg-surface,#141414)] text-[var(--v2-text-primary,#F5F5F5)] flex flex-col items-center justify-center p-4 sm:p-6 relative overflow-hidden">
-      {/* Background Gradient Orbs */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-[var(--v2-accent,#2EE66A)]/5 rounded-full blur-3xl pointer-events-none" />
-
+    <div className="h-screen overflow-hidden bg-[var(--v2-bg-surface,#141414)] text-[var(--v2-text-primary,#F5F5F5)] flex">
       {loading && <ComponentLoader />}
 
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
-        className="w-full max-w-[420px] relative z-10"
-      >
-        {/* Back Link */}
-        <Link
-          href="/"
-          className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-wider text-[var(--v2-text-muted,#666666)] hover:text-[var(--v2-accent,#2EE66A)] transition-colors mb-8"
-        >
-          <IoChevronBackOutline size={16} /> <span>Back to Store</span>
-        </Link>
+      {/* LEFT COLUMN: VISUAL SPLASH */}
+      <div className="hidden lg:flex w-1/2 relative bg-[#050505] items-center justify-center overflow-hidden">
+        {/* Decorative Grid */}
+        <div 
+          className="absolute inset-0 opacity-[0.03] dark:opacity-[0.07]" 
+          style={{ 
+            backgroundImage: `radial-gradient(var(--v2-text-primary,#F5F5F5) 1px, transparent 1px)`, 
+            backgroundSize: '40px 40px' 
+          }} 
+        />
+        
+        {/* Animated Orbs */}
+        <motion.div
+          animate={{
+            scale: [1, 1.2, 1],
+            rotate: [0, 90, 0],
+          }}
+          transition={{
+            duration: 20,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+          className="absolute w-[800px] h-[800px] bg-[var(--v2-accent,#2EE66A)]/10 rounded-full blur-[120px]"
+        />
+        
+        <motion.div
+          animate={{
+            scale: [1, 1.5, 1],
+            rotate: [0, -90, 0],
+          }}
+          transition={{
+            duration: 25,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+          className="absolute w-[600px] h-[600px] bg-blue-500/5 rounded-full blur-[100px] translate-x-1/4 -translate-y-1/4"
+        />
 
-        {/* Card */}
-        <div className="v2-glass p-8 sm:p-10 rounded-3xl border border-[var(--v2-glass-border,rgba(255,255,255,0.08))] shadow-2xl">
+        {/* Floating Accent Card */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+          className="relative z-10 v2-glass p-12 rounded-[40px] border border-[var(--v2-glass-border,rgba(255,255,255,0.08))] shadow-2xl max-w-md text-center backdrop-blur-xl bg-white/5 dark:bg-black/20"
+        >
+          <div className="w-16 h-16 bg-[var(--v2-accent,#2EE66A)] rounded-3xl mx-auto mb-6 flex items-center justify-center rotate-12 shadow-[0_0_40px_rgba(46,230,106,0.3)]">
+            <IoLockClosedOutline size={28} className="text-[#0A0A0A] -rotate-12" />
+          </div>
+          <h2 className="text-3xl font-black uppercase tracking-tight text-[var(--v2-text-primary,#F5F5F5)] mb-3 leading-tight">
+            Seamless<br />Checkout.
+          </h2>
+          <p className="text-sm font-medium text-[var(--v2-text-secondary,#A0A0A0)] leading-relaxed m-0">
+            Join the community to unlock faster checkout, exclusive member rewards, and early access to the latest drops.
+          </p>
+        </motion.div>
+      </div>
+
+      {/* RIGHT COLUMN: FORM */}
+      <div className="w-full lg:w-1/2 h-full flex flex-col justify-center px-6 sm:px-12 md:px-20 lg:px-24 xl:px-32 relative z-10">
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+          className="w-full max-w-[440px] mx-auto my-auto"
+        >
           {/* Logo Branding */}
-          <div className="flex flex-col items-center text-center mb-8">
-            <Link href="/" className="mb-6 transition-opacity hover:opacity-80">
-              <Image
-                src="/logo.png"
-                width={130}
-                height={45}
-                alt="Neverbe"
-                priority
-                className="brightness-0 invert"
+          <div className="mb-6 sm:mb-8">
+            <Link href="/" className="inline-block transition-opacity hover:opacity-80 mb-4">
+              <div 
+                className="w-[110px] h-[38px] bg-[var(--v2-accent,#2EE66A)]"
+                style={{
+                  maskImage: 'url(/logo.png)',
+                  maskSize: 'contain',
+                  maskRepeat: 'no-repeat',
+                  maskPosition: 'left center',
+                  WebkitMaskImage: 'url(/logo.png)',
+                  WebkitMaskSize: 'contain',
+                  WebkitMaskRepeat: 'no-repeat',
+                  WebkitMaskPosition: 'left center',
+                }}
               />
             </Link>
-            <span className="v2-section-label mb-1">MEMBER ACCESS</span>
-            <h1 className="text-2xl font-black uppercase tracking-tight text-[var(--v2-text-primary,#F5F5F5)] m-0">
-              Welcome Back
+            <h1 className="text-2xl sm:text-3xl font-black uppercase tracking-tight text-[var(--v2-text-primary,#F5F5F5)] m-0 leading-none">
+              Welcome<br />Back.
             </h1>
-            <p className="text-xs text-[var(--v2-text-secondary,#A0A0A0)] mt-1 m-0">
-              Sign in to manage orders, addresses &amp; wishlist.
+            <p className="text-xs text-[var(--v2-text-secondary,#A0A0A0)] mt-3 m-0 max-w-sm">
+              Sign in to manage your orders, saved addresses, and secure your wishlist.
             </p>
           </div>
 
@@ -119,7 +169,7 @@ const LoginForm = () => {
           <Button
             onClick={handleGoogleLogin}
             block
-            className="h-12 rounded-2xl bg-[var(--v2-glass-bg,rgba(255,255,255,0.04))]! border-[var(--v2-glass-border,rgba(255,255,255,0.1))]! text-[var(--v2-text-primary,#F5F5F5)]! font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-3 hover:border-[var(--v2-accent,#2EE66A)]! transition-all mb-6 cursor-pointer"
+            className="h-12 rounded-2xl bg-[var(--v2-glass-bg,rgba(255,255,255,0.04))]! border border-[var(--v2-glass-border,rgba(255,255,255,0.1))]! text-[var(--v2-text-primary,#F5F5F5)]! font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-3 hover:border-[var(--v2-accent,#2EE66A)]! hover:bg-[var(--v2-accent,#2EE66A)]/5! transition-all mb-6 cursor-pointer shadow-sm"
           >
             <FcGoogle size={20} />
             <span>Continue with Google</span>
@@ -127,45 +177,45 @@ const LoginForm = () => {
 
           <div className="relative flex items-center justify-center mb-6">
             <div className="border-t border-[var(--v2-glass-border,rgba(255,255,255,0.08))] w-full" />
-            <span className="bg-[var(--v2-bg-surface,#141414)] px-3 text-[10px] font-black uppercase tracking-widest text-[var(--v2-text-muted,#666666)] absolute">
-              OR EMAIL
+            <span className="bg-[var(--v2-bg-surface,#141414)] px-4 text-[9px] font-black uppercase tracking-widest text-[var(--v2-text-muted,#666666)] absolute">
+              OR WITH EMAIL
             </span>
           </div>
 
           {/* Login Form */}
-          <Form layout="vertical" onFinish={handleAuth} requiredMark={false}>
+          <Form layout="vertical" onFinish={handleAuth} requiredMark={false} className="space-y-3">
             <Form.Item
               name="email"
               rules={[
                 { required: true, message: "Please enter your email" },
                 { type: "email", message: "Enter a valid email" },
               ]}
-              className="mb-4"
+              className="mb-0"
             >
               <Input
-                prefix={<IoMailOutline size={18} className="text-[var(--v2-text-muted,#666666)] mr-2" />}
+                prefix={<IoMailOutline size={18} className="text-[var(--v2-text-muted,#666666)] mr-3" />}
                 placeholder="EMAIL ADDRESS"
-                className="h-12 rounded-2xl bg-[var(--v2-glass-bg,rgba(255,255,255,0.04))] border-[var(--v2-glass-border,rgba(255,255,255,0.1))] text-[var(--v2-text-primary,#F5F5F5)] font-bold text-xs"
+                className="h-12 px-4 rounded-2xl bg-[var(--v2-glass-bg,rgba(255,255,255,0.02))] border-[var(--v2-glass-border,rgba(255,255,255,0.1))] text-[var(--v2-text-primary,#F5F5F5)] font-bold text-xs hover:border-[var(--v2-text-muted,#666666)] focus:border-[var(--v2-accent,#2EE66A)] transition-colors"
               />
             </Form.Item>
 
             <Form.Item
               name="password"
               rules={[{ required: true, message: "Please enter your password" }]}
-              className="mb-2"
+              className="mb-0"
             >
               <Input.Password
-                prefix={<IoLockClosedOutline size={18} className="text-[var(--v2-text-muted,#666666)] mr-2" />}
+                prefix={<IoLockClosedOutline size={18} className="text-[var(--v2-text-muted,#666666)] mr-3" />}
                 placeholder="PASSWORD"
-                className="h-12 rounded-2xl bg-[var(--v2-glass-bg,rgba(255,255,255,0.04))] border-[var(--v2-glass-border,rgba(255,255,255,0.1))] text-[var(--v2-text-primary,#F5F5F5)] font-bold text-xs"
+                className="h-12 px-4 rounded-2xl bg-[var(--v2-glass-bg,rgba(255,255,255,0.02))] border-[var(--v2-glass-border,rgba(255,255,255,0.1))] text-[var(--v2-text-primary,#F5F5F5)] font-bold text-xs hover:border-[var(--v2-text-muted,#666666)] focus:border-[var(--v2-accent,#2EE66A)] transition-colors"
               />
             </Form.Item>
 
-            <div className="flex justify-end mb-6">
+            <div className="flex justify-end pt-1 pb-3">
               <button
                 type="button"
                 onClick={() => setResetModalVisible(true)}
-                className="text-[11px] font-extrabold uppercase tracking-wider text-[var(--v2-text-muted,#666666)] hover:text-[var(--v2-accent,#2EE66A)] transition-colors bg-transparent border-none cursor-pointer p-0"
+                className="text-[10px] font-extrabold uppercase tracking-wider text-[var(--v2-text-muted,#666666)] hover:text-[var(--v2-accent,#2EE66A)] transition-colors bg-transparent border-none cursor-pointer p-0"
               >
                 Forgot Password?
               </button>
@@ -175,26 +225,26 @@ const LoginForm = () => {
               type="primary"
               htmlType="submit"
               block
-              className="h-13 rounded-full bg-[var(--v2-accent,#2EE66A)]! text-white dark:text-[#0A0A0A]! font-black uppercase tracking-widest text-xs border-none hover:opacity-90 transition-all shadow-lg cursor-pointer"
+              className="h-12 rounded-full bg-[var(--v2-text-primary,#F5F5F5)]! text-[var(--v2-bg-surface,#141414)]! font-black uppercase tracking-widest text-xs border-none hover:bg-[var(--v2-accent,#2EE66A)]! hover:text-[#0A0A0A]! transition-all shadow-lg cursor-pointer mt-1"
             >
               Sign In
             </Button>
           </Form>
 
           {/* Footer Link */}
-          <div className="text-center mt-8 pt-6 border-t border-[var(--v2-glass-border,rgba(255,255,255,0.08))]">
-            <span className="text-xs text-[var(--v2-text-secondary,#A0A0A0)]">
-              Don&apos;t have an account?{" "}
+          <div className="text-center mt-6">
+            <span className="text-[11px] font-bold text-[var(--v2-text-secondary,#A0A0A0)]">
+              New to Neverbe?{" "}
             </span>
             <Link
               href={`/account/register?redirect=${encodeURIComponent(redirectUrl)}`}
-              className="text-xs font-black uppercase tracking-wider text-[var(--v2-accent,#2EE66A)] hover:underline ml-1"
+              className="text-[11px] font-black uppercase tracking-wider text-[var(--v2-text-primary,#F5F5F5)] hover:text-[var(--v2-accent,#2EE66A)] transition-colors ml-1"
             >
-              Create One →
+              Create Account →
             </Link>
           </div>
-        </div>
-      </motion.div>
+        </motion.div>
+      </div>
 
       {/* Forgot Password Modal */}
       <Modal
@@ -210,21 +260,21 @@ const LoginForm = () => {
         className="v2-landing"
       >
         <div className="py-4 space-y-4">
-          <p className="text-xs text-[var(--v2-text-secondary,#A0A0A0)] m-0 leading-relaxed">
+          <p className="text-xs font-medium text-[var(--v2-text-secondary,#A0A0A0)] m-0 leading-relaxed">
             Enter your email address below and we will send you a password reset link.
           </p>
           <Input
             placeholder="ENTER YOUR EMAIL"
             value={resetEmail}
             onChange={(e) => setResetEmail(e.target.value)}
-            className="h-12 rounded-2xl bg-[var(--v2-glass-bg,rgba(255,255,255,0.04))] border-[var(--v2-glass-border,rgba(255,255,255,0.1))] text-[var(--v2-text-primary,#F5F5F5)] font-bold text-xs"
+            className="h-12 px-4 rounded-2xl bg-[var(--v2-glass-bg,rgba(255,255,255,0.04))] border-[var(--v2-glass-border,rgba(255,255,255,0.1))] text-[var(--v2-text-primary,#F5F5F5)] font-bold text-xs focus:border-[var(--v2-accent,#2EE66A)] transition-colors"
           />
           <Button
             type="primary"
             onClick={handleResetPassword}
             loading={resetLoading}
             block
-            className="h-12 rounded-full bg-[var(--v2-accent,#2EE66A)]! text-white dark:text-[#0A0A0A]! font-black uppercase tracking-widest text-xs border-none hover:opacity-90 cursor-pointer"
+            className="h-12 rounded-full bg-[var(--v2-accent,#2EE66A)]! text-[#0A0A0A]! font-black uppercase tracking-widest text-xs border-none hover:opacity-90 cursor-pointer shadow-lg mt-2"
           >
             Send Reset Link
           </Button>

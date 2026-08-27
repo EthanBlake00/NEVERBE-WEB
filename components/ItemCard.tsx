@@ -90,10 +90,10 @@ export default function ItemCard({ item, priority = false }: ItemCardProps) {
     <motion.div
       whileHover={{ y: -4 }}
       transition={{ duration: 0.3, ease: "easeOut" }}
-      className="group relative w-full h-full flex flex-col justify-between rounded-[16px] bg-[var(--v2-bg-card,#181818)] border border-[var(--v2-glass-border,rgba(255,255,255,0.08))] hover:border-[var(--v2-accent,#2EE66A)] transition-all duration-400 hover:shadow-2xl overflow-hidden"
+      className="group relative w-full h-full flex flex-col justify-between rounded-[16px] bg-[var(--v2-bg-card,#181818)] border border-[var(--v2-glass-border,rgba(255,255,255,0.08))] hover:border-[var(--v2-accent,#2EE66A)] transition-all duration-400 hover:shadow-2xl overflow-clip"
     >
       {/* IMAGE CONTAINER — Compact & Wide Aspect Ratio */}
-      <div className="relative aspect-[4/3.4] w-full shrink-0 overflow-hidden bg-[var(--v2-bg-elevated,#1E1E1E)]">
+      <div className="relative aspect-[4/3.4] w-full shrink-0 overflow-clip bg-[var(--v2-bg-elevated,#1E1E1E)] rounded-t-[15px]">
         <Link href={`/collections/products/${item?.id}`} className="block w-full h-full">
           <Image
             src={displayImage}
