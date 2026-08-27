@@ -30,7 +30,3 @@ env:
     value: "6LfEkOwrAAAAABOebRpa-aTV27NesIrQLczgAf39"
   - variable: NEXT_PUBLIC_WHATSAPP_NUMBER
     value: "94705208999"
-  - variable: NEXT_PUBLIC_PAYHERE_URL
-    value: "https://www.payhere.lk/pay/checkout"
-  - variable: NEXT_PUBLIC_KOKO_REDIRECT_URL
-    value: "https://prodapi.paykoko.com/api/merchants/orderCreate"

@@ -207,7 +207,7 @@ export const processDeliveryFeePrepayment = async (order: Order, customer: any) 
     const token = await getIdToken();
     const payload = {
       orderId: `${order.orderId}-FEE`,
-      amount: "450",
+      amount: Number(order.shippingFee || 0).toFixed(2),
       firstName: customer.firstName || customer.first_name || "",
       lastName: customer.lastName || customer.last_name || "",
       email: customer.email || "",
@@ -221,7 +221,7 @@ export const processDeliveryFeePrepayment = async (order: Order, customer: any) 
     formData.append("data", JSON.stringify(payload));
     
     const response = await axiosInstance.post(
-      "/web/ipg/payhere/initiate",
+      "/web/ipg/payhere/initiate-shipping-prepaid",
       formData,
       {
         headers: {

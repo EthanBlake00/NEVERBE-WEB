@@ -114,7 +114,7 @@ const CheckoutForm = () => {
 
       setRiskResult(resData);
       if (resData?.isHighRisk) {
-        toast.error("High delivery risk flagged. Delivery fee prepayment (Rs. 450) is required for COD.", { duration: 6000 });
+        // High risk flag is silently set for the UI
       }
       return resData;
     } catch (e) {
@@ -552,29 +552,29 @@ const CheckoutForm = () => {
         footer={null}
         centered
         width={420}
-        closeIcon={<FiX size={20} className="text-[var(--v2-text-primary,#F5F5F5)]" />}
+        closeIcon={<FiX size={20} className="text-[var(--v2-text-primary)]" />}
         maskClosable={false}
         className="v2-modal"
         styles={{
-          body: {
+          content: {
             padding: "32px",
             borderRadius: "24px",
-            background: "var(--v2-bg-surface,#141414)",
-            border: "1px solid var(--v2-glass-border,rgba(255,255,255,0.08))",
-            color: "var(--v2-text-primary,#F5F5F5)",
+            background: "var(--v2-bg-surface)",
+            border: "1px solid var(--v2-glass-border)",
+            color: "var(--v2-text-primary)",
           },
           mask: {
             backdropFilter: "blur(16px)",
-            background: "var(--v2-backdrop-bg, rgba(10, 10, 10, 0.8))",
+            background: "var(--v2-backdrop-bg)",
           },
         }}
       >
         <Flex vertical align="center" gap={8} className="text-center">
           <span className="v2-section-label text-[9px] mb-0.5">SECURITY VERIFICATION</span>
-          <h2 className="text-2xl font-black uppercase tracking-tight text-[var(--v2-text-primary,#F5F5F5)] m-0">
+          <h2 className="text-2xl font-black uppercase tracking-tight text-[var(--v2-text-primary)] m-0">
             Verify Number
           </h2>
-          <p className="text-xs text-[var(--v2-text-secondary,#A0A0A0)] font-medium m-0">
+          <p className="text-xs text-[var(--v2-text-secondary)] font-medium m-0">
             Enter the 6-digit code sent to {otpState.pendingOrder?.customer.phone}
           </p>
 
@@ -585,7 +585,7 @@ const CheckoutForm = () => {
               disabled={otpState.isVerifying}
               onChange={(e) => setOtp(e.target.value)}
               placeholder="000000"
-              className="w-full h-14 text-center text-2xl tracking-[0.5em] font-extrabold border border-[var(--v2-glass-border,rgba(255,255,255,0.1))] bg-[var(--v2-glass-bg,rgba(255,255,255,0.04))] rounded-2xl focus:border-[var(--v2-accent,#2EE66A)] outline-none transition-colors text-[var(--v2-text-primary,#F5F5F5)] placeholder:text-[var(--v2-text-muted,#666666)]"
+              className="w-full h-14 text-center text-2xl tracking-[0.5em] font-extrabold border border-[var(--v2-glass-border)] bg-[var(--v2-glass-bg)] rounded-2xl focus:border-[var(--v2-accent)] outline-none transition-colors text-[var(--v2-text-primary)] placeholder:text-[var(--v2-text-muted)]"
               maxLength={6}
             />
             <button
@@ -603,7 +603,7 @@ const CheckoutForm = () => {
                 handleResendOTP(otpState.pendingOrder!.customer.phone)
               }
               disabled={otpState.cooldown > 0 || otpState.isResending}
-              className="text-xs font-black uppercase tracking-widest text-[var(--v2-text-secondary,#A0A0A0)] hover:text-[var(--v2-accent,#2EE66A)] transition-all border-none bg-transparent cursor-pointer p-0"
+              className="text-xs font-black uppercase tracking-widest text-[var(--v2-text-secondary)] hover:text-[var(--v2-accent)] transition-all border-none bg-transparent cursor-pointer p-0"
             >
               {otpState.cooldown > 0
                 ? `Resend in ${otpState.cooldown}s`

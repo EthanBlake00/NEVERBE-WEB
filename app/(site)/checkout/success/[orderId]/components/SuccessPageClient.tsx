@@ -7,7 +7,7 @@ import SuccessAnimationComponents from "./SuccessAnimationComponents";
 import { IoArrowForward } from "react-icons/io5";
 import PrepaidFeeBanner from "@/app/(site)/checkout/components/PrepaidFeeBanner";
 import PrepaidFeeDecisionModal from "@/app/(site)/checkout/components/PrepaidFeeDecisionModal";
-import { initiatePayHerePayment, submitExternalForm } from "@/actions/orderAction";
+import { submitExternalForm, processDeliveryFeePrepayment } from "@/actions/orderAction";
 import toast from "react-hot-toast";
 import axiosInstance from "@/actions/axiosInstance";
 
@@ -17,6 +17,11 @@ export default function SuccessPageClient({ order }: { order: Order }) {
   const [showModal, setShowModal] = useState<boolean>(isHighRiskPending);
   const [isDismissed, setIsDismissed] = useState<boolean>(false);
   const pollCountRef = useRef(0);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   useEffect(() => {
     if (isHighRiskPending) {
@@ -48,21 +53,8 @@ export default function SuccessPageClient({ order }: { order: Order }) {
   const handlePayFeeNow = async () => {
     if (!order) return;
     try {
-      const [firstName, ...lastNameParts] = (order.customer?.name || "Customer").split(" ");
-      const payload = {
-        orderId: `${order.orderId}-FEE`,
-        amount: "450.00",
-        firstName,
-        lastName: lastNameParts.join(" ") || firstName,
-        email: order.customer?.email || "",
-        phone: order.customer?.phone || "",
-        address: order.customer?.address || "",
-        city: order.customer?.city || "",
-        items: `Prepaid Delivery Fee for Order #${order.orderId}`,
-      };
-
-      const payherePayload = await initiatePayHerePayment(payload);
-      submitExternalForm(process.env.NEXT_PUBLIC_PAYHERE_URL || "", payherePayload);
+      const payhereResponse = await processDeliveryFeePrepayment(order, order.customer);
+      submitExternalForm(payhereResponse.actionUrl, payhereResponse.payload);
     } catch (err: any) {
       console.error("Delivery fee prepayment launch error:", err);
       toast.error("Failed to launch delivery fee prepayment. Please try again.");
@@ -98,18 +90,18 @@ export default function SuccessPageClient({ order }: { order: Order }) {
           {/* High-Risk Delivery Fee Status Callout */}
           {isHighRiskPending && (
             <div className="w-full bg-amber-500/10 border border-amber-500/30 rounded-2xl p-4 mb-8 text-left">
-              <p className="text-xs font-bold text-amber-300 mb-1">
-                ⚠️ Delivery Fee Prepayment Pending (LKR 450)
+              <p className="text-xs font-bold text-amber-600 mb-1">
+                ⚠️ Delivery Fee Prepayment Pending (LKR {order.shippingFee})
               </p>
-              <p className="text-[11px] text-gray-300 leading-relaxed mb-3">
-                Your order is safely registered. Complete the LKR 450 online delivery fee payment so our dispatch team can send out your package immediately.
+              <p className="text-[11px] text-[var(--v2-text-secondary)] leading-relaxed mb-3">
+                Your order is safely registered. Complete the LKR {order.shippingFee} online delivery fee payment so our dispatch team can send out your package immediately.
               </p>
               <button
                 type="button"
                 onClick={handlePayFeeNow}
-                className="w-full py-2.5 px-4 bg-amber-500 hover:bg-amber-400 text-black font-black uppercase tracking-wider text-xs rounded-xl flex items-center justify-center gap-2 transition-all cursor-pointer shadow-md"
+                className="w-full py-2.5 px-4 bg-amber-500 hover:bg-amber-400 text-white font-black uppercase tracking-wider text-xs rounded-xl flex items-center justify-center gap-2 transition-all cursor-pointer shadow-md"
               >
-                Pay LKR 450 Delivery Fee Online
+                Pay LKR {order.shippingFee} Delivery Fee Online
               </button>
             </div>
           )}
@@ -120,7 +112,7 @@ export default function SuccessPageClient({ order }: { order: Order }) {
                 ✓ Delivery Fee Paid
               </p>
               <p className="text-[11px] text-[var(--v2-text-secondary,#A0A0A0)] leading-relaxed m-0">
-                LKR 450 delivery fee has been confirmed. Your order will be dispatched shortly!
+                LKR {order.shippingFee} delivery fee has been confirmed. Your order will be dispatched shortly!
               </p>
             </div>
           )}
@@ -129,7 +121,7 @@ export default function SuccessPageClient({ order }: { order: Order }) {
           <div className="flex flex-col sm:flex-row gap-3 justify-center w-full">
             <Link
               href="/collections/products"
-              className="flex-1 py-3.5 px-6 bg-[var(--v2-accent,#2EE66A)] text-[#0A0A0A] font-black uppercase tracking-widest text-xs rounded-full flex items-center justify-center gap-2 hover:opacity-90 transition-all shadow-lg"
+              className="flex-1 py-3.5 px-6 bg-[var(--v2-accent,#2EE66A)] text-white font-black uppercase tracking-widest text-xs rounded-full flex items-center justify-center gap-2 hover:opacity-90 transition-all shadow-lg"
             >
               <span>Continue Shopping</span>
               <IoArrowForward size={16} />
@@ -150,15 +142,17 @@ export default function SuccessPageClient({ order }: { order: Order }) {
       </main>
 
       {/* Interactive High-Risk Decision Modal */}
-      <PrepaidFeeDecisionModal
-        isOpen={showModal}
-        order={order}
-        onPayNow={handlePayFeeNow}
-        onDismiss={() => {
-          setShowModal(false);
-          setIsDismissed(true);
-        }}
-      />
+      {isMounted && (
+        <PrepaidFeeDecisionModal
+          isOpen={showModal}
+          order={order}
+          onPayNow={handlePayFeeNow}
+          onDismiss={() => {
+            setShowModal(false);
+            setIsDismissed(true);
+          }}
+        />
+      )}
     </div>
   );
 }

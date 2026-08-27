@@ -3,7 +3,7 @@ import React from "react";
 import dynamic from "next/dynamic";
 import { FailAnimation } from "@/assets/animation";
 
-const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
+const Lottie = dynamic(() => import("lottie-react").then((mod) => mod.default || (mod.Lottie as any)), { ssr: false });
 
 const FailAnimationComponent = () => {
   return (

@@ -154,7 +154,7 @@ const Account = () => {
           <aside className="lg:sticky lg:top-28 h-fit">
             {/* User Badge Card */}
             <div className="v2-glass p-5 rounded-3xl mb-6 border border-[var(--v2-glass-border,rgba(255,255,255,0.08))] flex items-center gap-4">
-              <div className="w-12 h-12 rounded-2xl bg-[var(--v2-accent,#2EE66A)] text-[#0A0A0A] flex items-center justify-center font-black text-xl shadow-md">
+              <div className="w-12 h-12 rounded-2xl bg-[var(--v2-accent,#2EE66A)] !text-[var(--v2-accent-text)] flex items-center justify-center font-black text-xl shadow-md">
                 {user?.displayName ? user.displayName.charAt(0).toUpperCase() : <IoPersonCircleOutline size={28} />}
               </div>
               <div className="overflow-hidden">
@@ -178,7 +178,7 @@ const Account = () => {
                     onClick={() => setActiveTab(item.id)}
                     className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl text-xs font-extrabold uppercase tracking-wider transition-all duration-300 cursor-pointer whitespace-nowrap ${
                       isActive
-                        ? "bg-[var(--v2-accent,#2EE66A)] text-[#0A0A0A] shadow-md"
+                        ? "bg-[var(--v2-accent,#2EE66A)] !text-[var(--v2-accent-text)] shadow-md"
                         : "bg-[var(--v2-glass-bg,rgba(255,255,255,0.03))] text-[var(--v2-text-secondary,#A0A0A0)] border border-[var(--v2-glass-border,rgba(255,255,255,0.06))] hover:border-[var(--v2-accent,#2EE66A)] hover:text-[var(--v2-text-primary,#F5F5F5)]"
                     }`}
                   >
@@ -205,7 +205,7 @@ const Account = () => {
                   </div>
                   <button
                     onClick={handleGoogleLink}
-                    className="px-5 py-2.5 rounded-full bg-amber-400 text-[#0A0A0A] text-xs font-black uppercase tracking-wider hover:opacity-90 transition-all cursor-pointer whitespace-nowrap"
+                    className="px-5 py-2.5 rounded-full bg-amber-400 !text-[var(--v2-accent-text)] text-xs font-black uppercase tracking-wider hover:opacity-90 transition-all cursor-pointer whitespace-nowrap"
                   >
                     Sync with Google
                   </button>
@@ -256,7 +256,7 @@ const Account = () => {
                       </p>
                       <button
                         onClick={handleGoogleLink}
-                        className="w-full py-4 rounded-full bg-[var(--v2-accent,#2EE66A)] text-[#0A0A0A] font-black uppercase tracking-widest text-xs hover:opacity-90 transition-all cursor-pointer shadow-lg flex items-center justify-center gap-3"
+                        className="w-full py-4 rounded-full bg-[var(--v2-accent,#2EE66A)] !text-[var(--v2-accent-text)] font-black uppercase tracking-widest text-xs hover:opacity-90 transition-all cursor-pointer shadow-lg flex items-center justify-center gap-3"
                       >
                         <span>Sync With Google Account</span>
                       </button>

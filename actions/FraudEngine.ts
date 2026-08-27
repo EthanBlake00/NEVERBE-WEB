@@ -240,7 +240,7 @@ export async function evaluateThirdPartyPhoneRisk(
     }
 
     const noticeMessage = isHighRisk
-      ? "Due to high return/spam risk on past network activity, delivery fee prepayment (Rs. 450) is required for COD orders."
+      ? "Due to high return/spam risk on past network activity, delivery fee prepayment is required for COD orders."
       : "";
 
     return {
@@ -511,7 +511,7 @@ export async function evaluateUnifiedFraudRisk(
   const allReasons = Array.from(new Set([...thirdPartyResult.reasons, ...localResult.reasons]));
 
   const noticeMessage = isHighRisk
-    ? "Due to high return/spam risk on past network activity, delivery fee prepayment (Rs. 450) is required for COD orders."
+    ? "Due to high return/spam risk on past network activity, delivery fee prepayment is required for COD orders."
     : "";
 
   return {

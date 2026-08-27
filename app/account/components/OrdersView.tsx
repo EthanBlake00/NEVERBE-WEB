@@ -109,7 +109,7 @@ const OrdersView: React.FC<OrdersViewProps> = ({ orders }) => {
                 </div>
 
                 {/* Arrow CTA */}
-                <div className="w-10 h-10 rounded-full bg-[var(--v2-glass-bg,rgba(255,255,255,0.04))] group-hover:bg-[var(--v2-accent,#2EE66A)] group-hover:text-[#0A0A0A] text-[var(--v2-text-primary,#F5F5F5)] flex items-center justify-center transition-all shrink-0">
+                <div className="w-10 h-10 rounded-full bg-[var(--v2-glass-bg,rgba(255,255,255,0.04))] group-hover:bg-[var(--v2-accent,#2EE66A)] group-hover:!text-[var(--v2-accent-text)] text-[var(--v2-text-primary,#F5F5F5)] flex items-center justify-center transition-all shrink-0">
                   <IoChevronForwardOutline size={18} />
                 </div>
               </motion.div>

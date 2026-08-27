@@ -21,6 +21,11 @@ export default async function Page(context: {
   try {
     const order = await getOrderById(orderId);
     if (!order) return redirect("/checkout/fail");
+    
+    // Prevent showing success page if order was cancelled by admin
+    if (order.status?.toUpperCase() === "CANCELLED" || order.status?.toUpperCase() === "CANCELED") {
+      return redirect("/checkout/fail");
+    }
 
     return <SuccessPageClient order={order} />;
   } catch (error) {

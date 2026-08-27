@@ -13,23 +13,23 @@ export default function PrepaidFeeBanner({ order, onPayNow }: PrepaidFeeBannerPr
   if (!order || order.deliveryFeePrepaid) return null;
 
   return (
-    <div className="w-full bg-amber-500/10 border-b border-amber-500/30 py-3 px-4 md:px-8 text-amber-200">
+    <div className="w-full bg-amber-500/10 border-b border-amber-500/30 py-3 px-4 md:px-8 text-[var(--v2-text-primary)]">
       <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
         <div className="flex items-center gap-2.5">
-          <FiAlertTriangle className="text-amber-400 shrink-0 animate-bounce" size={20} />
+          <FiAlertTriangle className="text-amber-600 shrink-0 animate-bounce" size={20} />
           <p className="text-xs font-semibold m-0">
-            <strong className="text-amber-400 font-bold">Action Required for Order #{order.orderId}:</strong>{" "}
-            Rs. 450 Delivery Fee Prepayment is pending before dispatch.
+            <strong className="text-amber-600 font-bold">Action Required for Order #{order.orderId}:</strong>{" "}
+            Rs. {order.shippingFee} Delivery Fee Prepayment is pending before dispatch.
           </p>
         </div>
 
         <button
           type="button"
           onClick={onPayNow}
-          className="shrink-0 py-2 px-4 bg-amber-500 hover:bg-amber-400 text-black font-black uppercase tracking-wider text-[11px] rounded-lg flex items-center justify-center gap-1.5 transition-all shadow-md cursor-pointer"
+          className="shrink-0 py-2 px-4 bg-amber-500 hover:bg-amber-400 text-white font-black uppercase tracking-wider text-[11px] rounded-lg flex items-center justify-center gap-1.5 transition-all shadow-md cursor-pointer"
         >
           <FiCreditCard size={14} />
-          <span>Pay LKR 450 Now</span>
+          <span>Pay LKR {order.shippingFee} Now</span>
         </button>
       </div>
     </div>

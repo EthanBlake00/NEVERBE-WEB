@@ -309,7 +309,7 @@ export const usePayment = (options: UsePaymentOptions): UsePaymentReturn => {
     const [firstName, ...lastNameParts] = customer.name.split(" ");
     const payload = {
       orderId: `${order.orderId}-FEE`,
-      amount: "450.00",
+      amount: (order.shippingFee || 450).toFixed(2),
       firstName,
       lastName: lastNameParts.join(" ") || firstName,
       email: customer.email,
@@ -412,23 +412,23 @@ export const usePayment = (options: UsePaymentOptions): UsePaymentReturn => {
 
         switch (options.paymentMethodId?.toUpperCase()) {
           case PAYMENT_METHOD_IDS.KOKO: {
-            const kokoPayload = await processKOKO(orderWithServerId, customer);
+            const kokoResponse = await processKOKO(orderWithServerId, customer);
             await addNewOrder(orderWithServerId, token);
             dispatch(clearBag());
             submitExternalForm(
-              process.env.NEXT_PUBLIC_KOKO_REDIRECT_URL || "",
-              kokoPayload,
+              kokoResponse.actionUrl,
+              kokoResponse.payload,
             );
             break;
           }
 
           case PAYMENT_METHOD_IDS.PAYHERE: {
-            const payherePayload = await processPayHere(orderWithServerId, customer);
+            const payhereResponse = await processPayHere(orderWithServerId, customer);
             await addNewOrder(orderWithServerId, token);
             dispatch(clearBag());
             submitExternalForm(
-              process.env.NEXT_PUBLIC_PAYHERE_URL || "",
-              payherePayload,
+              payhereResponse.actionUrl,
+              payhereResponse.payload,
             );
             break;
           }
@@ -473,7 +473,7 @@ export const usePayment = (options: UsePaymentOptions): UsePaymentReturn => {
         dispatch(clearBag());
 
         if (isHighRisk) {
-          toast("Order registered! Rs. 450 Delivery Fee Prepayment is required for dispatch.", {
+          toast(`Order registered! Rs. ${pendingOrderWithRisk.shippingFee} Delivery Fee Prepayment is required for dispatch.`, {
             duration: 6000,
             icon: 'ℹ️',
           });
@@ -550,10 +550,10 @@ export const usePayment = (options: UsePaymentOptions): UsePaymentReturn => {
   const payPrepaidFeeNow = useCallback(async (targetOrder: Order) => {
     if (!targetOrder) return;
     try {
-      const payherePayload = await processDeliveryFeePrepayment(targetOrder, targetOrder.customer);
+      const payhereResponse = await processDeliveryFeePrepayment(targetOrder, targetOrder.customer);
       submitExternalForm(
-        process.env.NEXT_PUBLIC_PAYHERE_URL || "",
-        payherePayload
+        payhereResponse.actionUrl,
+        payhereResponse.payload
       );
     } catch (err: any) {
       console.error("Delivery fee prepayment launch error:", err);

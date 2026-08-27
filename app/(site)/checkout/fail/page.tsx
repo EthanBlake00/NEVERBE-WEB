@@ -42,7 +42,7 @@ const Page = ({
         <div className="flex flex-col sm:flex-row gap-3 justify-center w-full">
           <Link
             href="/checkout"
-            className="flex-1 py-3.5 px-6 bg-[var(--v2-accent,#2EE66A)] text-[#0A0A0A] font-black uppercase tracking-widest text-xs rounded-full flex items-center justify-center gap-2 hover:opacity-90 transition-all shadow-lg"
+            className="flex-1 py-3.5 px-6 bg-[var(--v2-accent,#2EE66A)] !text-[var(--v2-accent-text)] font-black uppercase tracking-widest text-xs rounded-full flex items-center justify-center gap-2 hover:opacity-90 transition-all shadow-lg"
           >
             <IoRefresh size={16} />
             <span>Try Again</span>

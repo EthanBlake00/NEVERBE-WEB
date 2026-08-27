@@ -89,7 +89,7 @@ const ProfileOverview: React.FC<ProfileOverviewProps> = ({
               <span className="text-xs font-black uppercase tracking-widest text-[var(--v2-accent,#2EE66A)]">
                 {ordersCount} {ordersCount === 1 ? "Order" : "Orders"} Placed
               </span>
-              <div className="w-8 h-8 rounded-full bg-[var(--v2-glass-bg,rgba(255,255,255,0.05))] group-hover:bg-[var(--v2-accent,#2EE66A)] group-hover:text-[#0A0A0A] flex items-center justify-center transition-all text-[var(--v2-text-primary,#F5F5F5)]">
+              <div className="w-8 h-8 rounded-full bg-[var(--v2-glass-bg,rgba(255,255,255,0.05))] group-hover:bg-[var(--v2-accent,#2EE66A)] group-hover:!text-[var(--v2-accent-text)] flex items-center justify-center transition-all text-[var(--v2-text-primary,#F5F5F5)]">
                 <IoChevronForward size={16} />
               </div>
             </div>
@@ -123,7 +123,7 @@ const ProfileOverview: React.FC<ProfileOverviewProps> = ({
               <span className="text-xs font-black uppercase tracking-widest text-[var(--v2-accent,#2EE66A)]">
                 Manage Destinations
               </span>
-              <div className="w-8 h-8 rounded-full bg-[var(--v2-glass-bg,rgba(255,255,255,0.05))] group-hover:bg-[var(--v2-accent,#2EE66A)] group-hover:text-[#0A0A0A] flex items-center justify-center transition-all text-[var(--v2-text-primary,#F5F5F5)]">
+              <div className="w-8 h-8 rounded-full bg-[var(--v2-glass-bg,rgba(255,255,255,0.05))] group-hover:bg-[var(--v2-accent,#2EE66A)] group-hover:!text-[var(--v2-accent-text)] flex items-center justify-center transition-all text-[var(--v2-text-primary,#F5F5F5)]">
                 <IoChevronForward size={16} />
               </div>
             </div>
@@ -153,7 +153,7 @@ const ProfileOverview: React.FC<ProfileOverviewProps> = ({
               <span className="text-xs font-black uppercase tracking-widest text-[var(--v2-accent,#2EE66A)]">
                 Security &amp; Profile
               </span>
-              <div className="w-8 h-8 rounded-full bg-[var(--v2-glass-bg,rgba(255,255,255,0.05))] group-hover:bg-[var(--v2-accent,#2EE66A)] group-hover:text-[#0A0A0A] flex items-center justify-center transition-all text-[var(--v2-text-primary,#F5F5F5)]">
+              <div className="w-8 h-8 rounded-full bg-[var(--v2-glass-bg,rgba(255,255,255,0.05))] group-hover:bg-[var(--v2-accent,#2EE66A)] group-hover:!text-[var(--v2-accent-text)] flex items-center justify-center transition-all text-[var(--v2-text-primary,#F5F5F5)]">
                 <IoChevronForward size={16} />
               </div>
             </div>
@@ -183,7 +183,7 @@ const ProfileOverview: React.FC<ProfileOverviewProps> = ({
               <span className="text-xs font-black uppercase tracking-widest text-[var(--v2-accent,#2EE66A)]">
                 Saved Items
               </span>
-              <div className="w-8 h-8 rounded-full bg-[var(--v2-glass-bg,rgba(255,255,255,0.05))] group-hover:bg-[var(--v2-accent,#2EE66A)] group-hover:text-[#0A0A0A] flex items-center justify-center transition-all text-[var(--v2-text-primary,#F5F5F5)]">
+              <div className="w-8 h-8 rounded-full bg-[var(--v2-glass-bg,rgba(255,255,255,0.05))] group-hover:bg-[var(--v2-accent,#2EE66A)] group-hover:!text-[var(--v2-accent-text)] flex items-center justify-center transition-all text-[var(--v2-text-primary,#F5F5F5)]">
                 <IoChevronForward size={16} />
               </div>
             </div>

@@ -1,9 +1,7 @@
 "use client";
 import React from "react";
-import dynamic from "next/dynamic";
+import { Lottie } from "lottie-react";
 import { SuccessAnimation } from "@/assets/animation";
-
-const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 
 const SuccessAnimationComponents = () => {
   return (

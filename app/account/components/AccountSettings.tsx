@@ -91,7 +91,7 @@ const AccountSettings = ({ user, dispatch }: { user: any; dispatch: any }) => {
             type="primary"
             htmlType="submit"
             loading={isUpdating}
-            className="h-12 px-8 rounded-full bg-[var(--v2-accent,#2EE66A)]! text-[#0A0A0A]! font-black uppercase tracking-widest text-xs border-none mt-2 cursor-pointer shadow-md"
+            className="h-12 px-8 rounded-full bg-[var(--v2-accent,#2EE66A)]! !text-[var(--v2-accent-text)] font-black uppercase tracking-widest text-xs border-none mt-2 cursor-pointer shadow-md"
           >
             Update Details
           </Button>
@@ -170,7 +170,7 @@ const AccountSettings = ({ user, dispatch }: { user: any; dispatch: any }) => {
             type="primary"
             htmlType="submit"
             loading={isUpdating}
-            className="h-12 px-8 rounded-full bg-[var(--v2-accent,#2EE66A)]! text-[#0A0A0A]! font-black uppercase tracking-widest text-xs border-none mt-2 cursor-pointer shadow-md"
+            className="h-12 px-8 rounded-full bg-[var(--v2-accent,#2EE66A)]! !text-[var(--v2-accent-text)] font-black uppercase tracking-widest text-xs border-none mt-2 cursor-pointer shadow-md"
           >
             Update Password
           </Button>

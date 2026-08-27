@@ -18,7 +18,7 @@ import { Button } from "antd";
 import { Order } from "@/interfaces/Order";
 import { BusinessInfo } from "@/config/BusinessInfo";
 import { axiosInstance } from "@/actions/axiosInstance";
-import { initiatePayHerePayment, submitExternalForm } from "@/actions/orderAction";
+import { submitExternalForm, processDeliveryFeePrepayment } from "@/actions/orderAction";
 import toast from "react-hot-toast";
 
 import jsPDF from "jspdf";
@@ -104,21 +104,8 @@ const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
     if (!order) return;
     setProcessingFee(true);
     try {
-      const [firstName, ...lastNameParts] = (order.customer?.name || "Customer").split(" ");
-      const payload = {
-        orderId: `${order.orderId}-FEE`,
-        amount: "450.00",
-        firstName,
-        lastName: lastNameParts.join(" ") || firstName,
-        email: order.customer?.email || "",
-        phone: order.customer?.phone || "",
-        address: order.customer?.address || "",
-        city: order.customer?.city || "",
-        items: `Prepaid Delivery Fee for Order #${order.orderId}`,
-      };
-
-      const payherePayload = await initiatePayHerePayment(payload);
-      submitExternalForm(process.env.NEXT_PUBLIC_PAYHERE_URL || "", payherePayload);
+      const payhereResponse = await processDeliveryFeePrepayment(order, order.customer);
+      submitExternalForm(payhereResponse.actionUrl, payhereResponse.payload);
     } catch (err: any) {
       console.error("Delivery fee prepayment launch error:", err);
       toast.error("Failed to launch delivery fee prepayment.");
@@ -544,7 +531,7 @@ const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
                         Delivery Fee Paid
                       </h3>
                       <p className="text-muted text-sm mt-1">
-                        LKR 450 Delivery Fee has been confirmed. {(order as any).deliveryFeeTxnId ? `Transaction: ${(order as any).deliveryFeeTxnId}` : ""}
+                        LKR {order.shippingFee} Delivery Fee has been confirmed. {(order as any).deliveryFeeTxnId ? `Transaction: ${(order as any).deliveryFeeTxnId}` : ""}
                       </p>
                     </div>
                   </div>
@@ -556,7 +543,7 @@ const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
                       </div>
                       <div>
                         <h3 className="text-primary-dark font-display font-black uppercase text-lg">
-                          Delivery Fee Required (LKR 450)
+                          Delivery Fee Required (LKR {order.shippingFee})
                         </h3>
                         <p className="text-primary-dark/70 text-sm mt-1 max-w-lg">
                           To process this order and dispatch it immediately, please pay the prepaid delivery fee.
@@ -569,7 +556,7 @@ const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
                       disabled={processingFee}
                       className="bg-amber-500 hover:bg-amber-400 text-black border-none text-xs font-black uppercase tracking-widest rounded-full px-8 h-12 shadow-md shrink-0 transition-all"
                     >
-                      Pay LKR 450 Delivery Fee
+                      Pay LKR {order.shippingFee} Delivery Fee
                     </Button>
                   </div>
                 )}

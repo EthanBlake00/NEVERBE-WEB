@@ -148,7 +148,7 @@ const SavedAddresses: React.FC<SavedAddressesProps> = ({
                   type="primary"
                   htmlType="submit"
                   loading={isSaving}
-                  className="w-full h-12 rounded-full bg-[var(--v2-accent,#2EE66A)]! text-[#0A0A0A]! font-black uppercase text-xs tracking-widest border-none mt-2 cursor-pointer shadow-md"
+                  className="w-full h-12 rounded-full bg-[var(--v2-accent,#2EE66A)]! !text-[var(--v2-accent-text)] font-black uppercase text-xs tracking-widest border-none mt-2 cursor-pointer shadow-md"
                 >
                   Save Address
                 </Button>
